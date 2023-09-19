@@ -35,7 +35,7 @@ public class Board {
     public void setupBoard(Tile[][] brd){
         //Nothing here, this is extended in Rendering
 
-
+        //sup
 
 
         //Test scenario
