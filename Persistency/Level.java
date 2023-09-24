@@ -3,12 +3,12 @@ import java.util.ArrayList;
 import Domain.*;
 class Level{
 
-    private ArrayList<Tile> tiles;
+    private Board board;
     private ArrayList<Entity> entites;
     private Player player;
 
     public Level(){
-        tiles = new ArrayList<>();
+        tiles = new Board(1, new );
         entites = new ArrayList<>();
         player = new Player(new Coord(0,0));
     }

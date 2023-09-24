@@ -1,3 +1,4 @@
+package Domain;
 import javax.swing.*;
 
 public class WallTile extends Tile {

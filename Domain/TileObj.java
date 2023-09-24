@@ -1,3 +1,4 @@
+package Domain;
 public interface TileObj {
     Entity getEntity(); // Get the entity associated with the tile
     void setEntity(Entity entity); // Set the entity associated with the tile

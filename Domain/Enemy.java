@@ -1,3 +1,5 @@
+package Domain;
+
 import java.util.Queue;
 
 public class Enemy implements Entity{

@@ -1,3 +1,5 @@
+package Domain;
+
 public record Coord(int x, int y){
     //Storing location in an object.
 

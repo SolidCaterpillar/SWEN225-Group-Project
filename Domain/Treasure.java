@@ -1,8 +1,5 @@
-public class Key implements Entity{
-
-    protected Coord location;
-
-
+package Domain;
+public class Treasure implements Entity{
     @Override
     public Coord getLocation() {
         return null;

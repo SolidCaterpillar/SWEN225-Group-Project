@@ -1,3 +1,4 @@
+package Domain;
 public enum TileType {
     WALL,
     FREE,
