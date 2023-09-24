@@ -1,12 +1,14 @@
+
 package Persistency;
+
+
 class Persistency{
 
-    public Persistency (){
-        
+    public static Level loadLevel(String path){
+
+        return new Level();
     }
 
-    public void readJson(String path){
-        
 
-    } 
 }
+
