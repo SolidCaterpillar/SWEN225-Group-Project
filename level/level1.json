@@ -1,29 +1,6 @@
 {
 
-    "tiles" : {
-
-        "exit" : {},
-        "walls" : [],
-        "lockDoor" : [],
-        "exitLock" : [],
-        "questionBlock" : {}
-
-    },
-
-    "Entites" : {
-
-        "player" : {
-            "x" : 6,
-            "y" : 6,
-            "inventory" : []
-
-        },
-
-        "keys" : [],
-        
-        "treasure" : []
-
-    }
+    "x":0
 
 
 }

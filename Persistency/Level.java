@@ -8,13 +8,15 @@ class Level{
     private Player player;
 
     public Level(){
-        tiles = new Board(1, new );
+        Tile tiles[][] = new Tile[26][26];
+        
+        board = new Board(1, tiles);
         entites = new ArrayList<>();
         player = new Player(new Coord(0,0));
     }
 
-    public ArrayList<Tile> getItems(){
-        return  tiles;
+    public Board getBoard(){
+        return  board;
     }
 
     public ArrayList<Entity> getEntites(){
