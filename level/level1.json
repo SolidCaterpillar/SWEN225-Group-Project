@@ -1,6 +1,121 @@
 {
+    "dimension" : {
+        "width" : 20,
+        "length" : 20
+    },
 
-    "x":0
+    "tiles" : {
+
+        "exit" : {
+            "x" : 9,
+            "y" : 5
+        },
+        "walls" : [
+            {
+                "x" : 4,
+                "y" : 4,
+                "length_down" : 8,
+                "length_up" : 0,
+                "length_right" : 10,
+                "Length_left" : 0
+            },
+            {
+                "x" : 14,
+                "y" : 12,
+                "length_down" : 0,
+                "length_up" : 8,
+                "length_right" : 0,
+                "Length_left" : 10
+            },
+
+            {
+                "x" : 8,
+                "y" : 6,
+                "length_down" : 0,
+                "length_up" : 1,
+                "length_right" : 0,
+                "Length_left" : 0
+            },
+
+            {
+                "x" : 10,
+                "y" : 6,
+                "length_down" : 0,
+                "length_up" : 1,
+                "length_right" : 0,
+                "Length_left" : 0
+            },
+
+            {
+                "x" : 12,
+                "y" : 6,
+                "length_down" : 0,
+                "length_up" : 0,
+                "length_right" : 1,
+                "Length_left" : 0
+            }
+        ],
+        "lock_Door" : [
+            {
+                "x" : 9,
+                "y" : 6
+                
+            }
+        ],
+        "exit_Lock" : [
+            {
+                "x" : 11,
+                "y" : 6
+            }
+        ],
+        "question_Block" : [
+            {
+                "x" : 8,
+                "y" : 7,
+                "message" : ""
+            }
+        ]
+
+    },
+
+    "entites" : {
+
+        "player" : {
+            "x" : 9,
+            "y" : 9,
+            "inventory" : []
+
+        },
+
+        "keys" : [
+            {
+                "x" : 13,
+                "y" : 5
+            }
+        ],
+        
+        "treasures" : [
+            {
+                "x" : 7,
+                "y" : 8
+            },
+            {
+                "x" : 7,
+                "y" : 10
+            },
+            {
+                "x" : 11,
+                "y" : 8
+            },
+            {
+                "x" : 11,
+                "y" : 10
+            }
+        ],
+
+        "enemies" : []
+
+    }
 
 
 }

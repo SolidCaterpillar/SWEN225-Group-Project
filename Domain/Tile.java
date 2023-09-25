@@ -76,4 +76,8 @@ public class Tile implements TileObj{
                 .findFirst()
                 .orElse(null); // null if no match.
     }
+
+    public String toString(){
+        return objEntity == null ? "|_|" : "|"+objEntity+"|" ;
+    }
 }

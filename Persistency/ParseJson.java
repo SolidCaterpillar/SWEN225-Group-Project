@@ -111,8 +111,29 @@ public class ParseJson {
             if(o instanceof JSONObject wall){
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
+                int lengthDown = wall.getInt("length_down");
+                int lengthUp = wall.getInt("length_up");
+                int lengthRight = wall.getInt("length_right"); 
+                int lengthLeft = wall.getInt( "Length_left");
+
 
                 tiles.add(new WallTile(new Coord(x,y), WallTile.WallType.NORMAL ,null));
+
+                for(int down = 0; down <= lengthDown; down++){
+                    tiles.add(new WallTile(new Coord(x,y+down), WallTile.WallType.NORMAL ,null));
+                }
+
+                for(int up = 0; up <= lengthUp; up++){
+                    tiles.add(new WallTile(new Coord(x,y-up), WallTile.WallType.NORMAL ,null));
+                }
+
+                for(int right = 0; right <= lengthRight; right++){
+                    tiles.add(new WallTile(new Coord(x+right,y), WallTile.WallType.NORMAL ,null));
+                }
+                for(int left = 0; left <= lengthLeft; left++){
+                    tiles.add(new WallTile(new Coord(x-left,y), WallTile.WallType.NORMAL ,null));
+                }
+
             }
         }
         

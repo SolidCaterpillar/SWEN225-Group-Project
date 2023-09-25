@@ -30,7 +30,7 @@ public class Board {
         else{
             board = boardObj;
         }
-        setupBoard(board);
+        //setupBoard(board);
     }
 
     public void setupBoard(Tile[][] brd){
@@ -80,5 +80,16 @@ public class Board {
     public Tile[][] getBoard(){ //For returning game
         Tile[][] copy = board;
         return copy; //Unecessary copy was playing around
+    }
+
+    public String toString(){
+        String b = "";
+        for(int x = 0; x < board.length; x++){
+            for(int y = 0; y < board[0].length; y++){
+                b += board[x][y];
+            }
+            b += "\n";
+        }
+        return b;
     }
 }

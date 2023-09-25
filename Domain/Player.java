@@ -34,4 +34,8 @@ public class Player implements Entity{
     public Coord getLocation() {
         return location;
     }
+
+    public String toString(){
+        return "x";
+    }
 }

@@ -42,5 +42,23 @@ public class WallTile extends Tile {
         }
     }
 
+    public String toString(){
+         switch (wallType) {
+            case NORMAL:
+                // Handle interaction for a normal wall
+                    return "|#|";
+                
+            case EXIT_LOCK:
+                // Handle interaction for an exit lock
+                    return "|M|";
+                
+            case LOCKED_DOOR:
+                // Handle interaction for a locked door
+                    return "|D|";
+                
+        }
+        return "";
+    }
+
 }
 
