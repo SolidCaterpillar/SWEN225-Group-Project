@@ -6,7 +6,7 @@ import Domain.Entity.Key;
 import Domain.Entity.Player;
 import Domain.Entity.Treasure;
 
-record Level(Board board,Player player, ArrayList<Key> keys,ArrayList<Treasure> treasures,ArrayList<Enemy> enemies){
+public record Level(Board board,Player player, ArrayList<Key> keys,ArrayList<Treasure> treasures,ArrayList<Enemy> enemies){
 
 
 }

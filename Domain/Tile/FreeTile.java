@@ -8,6 +8,6 @@ public class FreeTile extends Tile{
     }
 
     public String toString(){
-        return "|_|";
+        return super.objEntity != null ? "|"+super.objEntity+"|" : "|_|";
     }
 }
