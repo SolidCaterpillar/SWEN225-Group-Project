@@ -1,6 +1,11 @@
+package nz.ac.wgtn.swen225.lc.renderer;
+
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *  class primarily responsible for creating a JPanel that serves as the canvas where the game's graphics are displayed.
+ */
 public class GameCanvas extends JPanel {
 
     public GameCanvas() {
