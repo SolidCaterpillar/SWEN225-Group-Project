@@ -10,7 +10,7 @@ import java.io.*;
 
 public class GUI {
     
-    private int currentLevel; // Current game level
+    private int currentLevel = 1; // Current game level
     private int keysCollected; // Number of keys collected
     private int treasuresRemaining; // Number of treasures remaining
     private int timeLeft; // Time left for the current level
@@ -92,12 +92,14 @@ public class GUI {
                             // CTRL-1: Start a new game at level 1
                             // Implement logic to start a new game at level 1
                             chipsText = "CTRL-1";
+                            currentLevel = 1;
                             redrawGUI();
                             break;
                         case KeyEvent.VK_2:
                             // CTRL-2: Start a new game at level 2
                             // Implement logic to start a new game at level 2
                             chipsText = "CTRL-2";
+                            currentLevel = 2;
                             redrawGUI();
                             break;
                     }
@@ -220,6 +222,22 @@ public class GUI {
                 }
             }
         });
+        
+        level1MenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentLevel = 1;
+                redrawGUI();
+            }
+        });
+        
+        level2MenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                currentLevel = 2;
+                redrawGUI();
+            }
+        });
     }
 
     public void createTiles() {
@@ -258,13 +276,17 @@ public class GUI {
         levelPanel.add(levelLabel, gbc);
     
         JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/000.png"));
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
     
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel slot = new JPanel();
             slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            
+            if(i == 2){
+                imageIcon = new ImageIcon(getClass().getResource("icons/" + currentLevel + ".png"));
+            }
     
             JLabel test = new JLabel();
             test.setIcon(imageIcon);
@@ -297,7 +319,7 @@ public class GUI {
         timePanel.add(timeLabel, gbc);
     
         JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/000.png"));
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
     
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
@@ -329,7 +351,7 @@ public class GUI {
         GridBagConstraints gbc = new GridBagConstraints();
         
         // Centered label at the first row
-        chipsLabel = new JLabel("Chips");
+        chipsLabel = new JLabel(chipsText);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span two columns
@@ -337,7 +359,7 @@ public class GUI {
         chipsPanel.add(chipsLabel, gbc);
     
         JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/000.png"));
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
     
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
