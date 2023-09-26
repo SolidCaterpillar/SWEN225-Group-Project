@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import Domain.Tile;
 import Domain.Entity;
-import Domain.Board;
 import Domain.Player;
 import Domain.Treasure;
 import Domain.Key;
