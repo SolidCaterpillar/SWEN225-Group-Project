@@ -13,7 +13,7 @@ public class GUI {
     private int currentLevel = 1; // Current game level
     private int keysCollected; // Number of keys collected
     private int treasuresRemaining; // Number of treasures remaining
-    private int maxTime = 2;
+    private int maxTime = 60;
     private int timeLeft = maxTime; // Time left for the current level
     private Timer timer; // Timer for counting down the time
     
@@ -78,12 +78,17 @@ public class GUI {
                             // Implement game state reset logic and exit
                             chipsText = "CTRL-X";
                             redrawGUI();
+                            int choice = JOptionPane.showConfirmDialog(mainFrame, "Custom JOptionPane: wanna leave bro?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+                            if (choice == JOptionPane.YES_OPTION) {
+                                System.exit(0);
+                            }
                             break;
                         case KeyEvent.VK_S:
                             // CTRL-S: Save the game state
                             // Implement game state save logic
                             chipsText = "CTRL-S";
                             redrawGUI();
+                            loadFile();
                             break;
                         case KeyEvent.VK_R:
                             // CTRL-R: Resume a saved game
@@ -171,6 +176,37 @@ public class GUI {
         
         mainFrame.pack();
         mainFrame.setVisible(true);
+    }
+    
+    public static void loadFile() {
+        // Create a file chooser
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Show the file chooser dialog
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        // Check if the user selected a file
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            // Get the selected file
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Read the contents of the file
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
+                String line;
+                System.out.println("Contents of " + selectedFile.getName() + ":");
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Error reading the file.");
+            }
+        } else {
+            System.out.println("No file selected.");
+        }
+        
     }
     
     public void resetTimer(){
@@ -278,7 +314,7 @@ public class GUI {
         if(timeLeft < 1){
             timer.stop();
             redrawGUI();
-            JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -325,6 +361,7 @@ public class GUI {
             JPanel slot = new JPanel();
             slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            slot.setBackground(Color.WHITE);
             
             if(i == 2){
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + currentLevel + ".png"));
@@ -368,6 +405,7 @@ public class GUI {
             JPanel slot = new JPanel();
             slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            slot.setBackground(Color.WHITE);
             
             if(i == 1){
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft / 10) + ".png"));
@@ -416,6 +454,7 @@ public class GUI {
             JPanel slot = new JPanel();
             slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            slot.setBackground(Color.WHITE);
     
             JLabel test = new JLabel();
             test.setIcon(imageIcon);
