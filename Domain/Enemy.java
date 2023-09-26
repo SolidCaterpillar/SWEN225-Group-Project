@@ -116,4 +116,5 @@ public class Enemy implements Entity{
     }
 
 }
->>>>>>> be607156458326e1027608d7cc99362c51633e05:Domain1/Enemy.java
+
+>>>>>>> be607156458326e1027608d7cc99362c51633e05:Domain1/Enemy.jav
