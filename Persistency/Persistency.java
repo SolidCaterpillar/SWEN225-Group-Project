@@ -2,6 +2,7 @@ package Persistency;
 
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -24,8 +25,23 @@ public class Persistency{
         return setupLevel(levelObjs);
     }
 
-    public static void saveLevel(Level curLevel, String filename){
+    public static boolean saveLevel(String filename, Level savedLevel){
+        JSONObject savedJson = SaveJson.saveAsJson(savedLevel.board());
+        try{
+            
+            File nFile = new File("level/"+filename);
 
+            FileWriter jsonLevel = new FileWriter(nFile);
+
+            System.out.println(savedJson.toString());
+            jsonLevel.write(savedJson.toString());
+
+            jsonLevel.close();
+        }catch(IOException e){
+            return false;
+        }
+
+        return true;
     }
 
     public static Level loadLevel1(){
