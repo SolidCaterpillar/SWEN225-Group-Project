@@ -13,7 +13,7 @@ public class GUI {
     private int currentLevel = 1; // Current game level
     private int keysCollected; // Number of keys collected
     private int treasuresRemaining; // Number of treasures remaining
-    private int timeLeft; // Time left for the current level
+    private int timeLeft = 60; // Time left for the current level
     private Timer timer; // Timer for counting down the time
     
     // Composed of a Main Frame which is then broken into Panels    
@@ -239,6 +239,10 @@ public class GUI {
             }
         });
     }
+    
+    public void decrementTime(){
+        timeLeft --;
+    }
 
     public void createTiles() {
         
@@ -261,7 +265,7 @@ public class GUI {
             }
         }
     }
-    
+
     
     public void createLevelPanel() {
         levelPanel = new JPanel(new GridBagLayout());
@@ -326,6 +330,14 @@ public class GUI {
             JPanel slot = new JPanel();
             slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            
+            if(i == 1){
+                imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft / 10) + ".png"));
+            }
+            
+            if(i == 2){
+                imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft % 10) + ".png"));
+            }
     
             JLabel test = new JLabel();
             test.setIcon(imageIcon);
