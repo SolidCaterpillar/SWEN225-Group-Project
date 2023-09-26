@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import java.lang.StringBuilder;
 
 import Domain.*;
+import Domain.Entity.Entity;
+import Domain.Tile.*;
 import Persistency.ParseJson.ReadJson;
 import Persistency.ParseJson.Entites;
 /** 
@@ -66,7 +68,7 @@ public class Persistency{
         //set up board
         for(int x = 0; x <= objs.length()-1; x++){
             for(int y = 0; y <= objs.width()-1; y++){
-                board[y][x] = new Tile(new Coord(x,y), TileType.FREE, null);
+                board[y][x] = new FreeTile(new Coord(x,y));
             }
         }
 

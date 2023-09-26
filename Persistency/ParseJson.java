@@ -4,14 +4,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
 
-import Domain.Tile;
-import Domain.Entity;
-import Domain.Player;
-import Domain.Treasure;
-import Domain.Key;
-import Domain.Enemy;
+import Domain.Entity.Enemy;
+import Domain.Entity.Entity;
+import Domain.Entity.Key;
+import Domain.Entity.Player;
+import Domain.Entity.Treasure;
 import Domain.Coord;
-import Domain.WallTile;
+import Domain.Tile.*;
 public class ParseJson {
     
         /**
@@ -116,21 +115,21 @@ public class ParseJson {
                 int lengthLeft = wall.getInt( "Length_left");
 
 
-                tiles.add(new WallTile(new Coord(x,y), WallTile.WallType.NORMAL ,null));
+                tiles.add(new Wall(new Coord(x,y)));
 
                 for(int down = 0; down <= lengthDown; down++){
-                    tiles.add(new WallTile(new Coord(x,y+down), WallTile.WallType.NORMAL ,null));
+                    tiles.add(new Wall(new Coord(x,y+down)));
                 }
 
                 for(int up = 0; up <= lengthUp; up++){
-                    tiles.add(new WallTile(new Coord(x,y-up), WallTile.WallType.NORMAL ,null));
+                    tiles.add(new Wall(new Coord(x,y-up)));
                 }
 
                 for(int right = 0; right <= lengthRight; right++){
-                    tiles.add(new WallTile(new Coord(x+right,y), WallTile.WallType.NORMAL ,null));
+                    tiles.add(new Wall(new Coord(x+right,y)));
                 }
                 for(int left = 0; left <= lengthLeft; left++){
-                    tiles.add(new WallTile(new Coord(x-left,y), WallTile.WallType.NORMAL ,null));
+                    tiles.add(new Wall(new Coord(x-left,y)));
                 }
 
             }
@@ -142,7 +141,7 @@ public class ParseJson {
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
 
-                tiles.add(new WallTile(new Coord(x,y), WallTile.WallType.LOCKED_DOOR ,null));
+                tiles.add(new LockedDoor(new Coord(x,y)));
             }
         }
 
@@ -152,7 +151,7 @@ public class ParseJson {
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
 
-                tiles.add(new WallTile(new Coord(x,y), WallTile.WallType.EXIT_LOCK ,null));
+                tiles.add(new ExitLock(new Coord(x,y)));
             }
         }
 

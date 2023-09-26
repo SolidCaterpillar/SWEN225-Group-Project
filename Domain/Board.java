@@ -1,5 +1,8 @@
 package Domain;
 import javax.swing.*;
+
+import Domain.Tile.*;
+
 import java.awt.*;
 
 public class Board {
@@ -21,7 +24,7 @@ public class Board {
                     cell.setPreferredSize(new Dimension(25, 25));
                     cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-                    board[i][j] = new Tile(new Coord(i, j), TileType.FREE, cell);
+                    board[i][j] = new FreeTile(new Coord(i, j));
 
                 }
             }
@@ -33,42 +36,42 @@ public class Board {
         //setupBoard(board);
     }
 
-    public void setupBoard(Tile[][] brd){
-        //Nothing here, this is extended in Rendering
+    // public void setupBoard(Tile[][] brd){
+    //     //Nothing here, this is extended in Rendering
 
-        //sup
-
-
-        //Test scenario
-        JFrame frame = new JFrame("Board");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            JPanel boardPanel = new JPanel(new GridLayout(26, 26));
-
-            //board = new Tile[26][26];
-
-            for (int i = 0; i < 26; i++) {
-                for (int j = 0; j < 26; j++) {
-                    Tile currentTile = brd[i][j];
-                    JPanel cell = new JPanel();
-                    cell.setPreferredSize(new Dimension(25, 25));
-                    cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+    //     //sup
 
 
-                    if (currentTile.getTileType() == TileType.FREE) {
-                        cell.setBackground(Color.WHITE);
-                    } else {
-                        cell.setBackground(Color.GRAY);
-                    }
+    //     //Test scenario
+    //     JFrame frame = new JFrame("Board");
+    //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-                    boardPanel.add(cell);
-                }
-            }
+    //         JPanel boardPanel = new JPanel(new GridLayout(26, 26));
 
-            frame.add(boardPanel);
-            frame.pack();
-            frame.setVisible(true);
-        }
+    //         //board = new Tile[26][26];
+
+    //         for (int i = 0; i < 26; i++) {
+    //             for (int j = 0; j < 26; j++) {
+    //                 Tile currentTile = brd[i][j];
+    //                 JPanel cell = new JPanel();
+    //                 cell.setPreferredSize(new Dimension(25, 25));
+    //                 cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+
+    //                 if (currentTile.getTileType() == TileType.FREE) {
+    //                     cell.setBackground(Color.WHITE);
+    //                 } else {
+    //                     cell.setBackground(Color.GRAY);
+    //                 }
+
+    //                 boardPanel.add(cell);
+    //             }
+    //         }
+
+    //         frame.add(boardPanel);
+    //         frame.pack();
+    //         frame.setVisible(true);
+    //     }
 
 
 
