@@ -1,4 +1,4 @@
-package nz.ac.wgtn.swen225.lc.app;
+package src.nz.ac.wgtn.swen225.lc.app;
  
 
 public class Main {

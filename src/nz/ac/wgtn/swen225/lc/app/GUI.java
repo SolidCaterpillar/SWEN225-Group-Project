@@ -1,4 +1,4 @@
-package nz.ac.wgtn.swen225.lc.app;
+package src.nz.ac.wgtn.swen225.lc.app;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +33,7 @@ public class GUI {
     
     private String chipsText = "Chips";
     
-    private final int tileSize = 50; // Adjust this size as needed
+    private final int tileSize = 44; // Adjust this size as needed
     private final int numRows = 9;
     private final int numCols = 9;
     private final int marginSize = 60; // Adjust this size for margins
@@ -163,6 +163,7 @@ public class GUI {
         
         backPanel = new JPanel(new BorderLayout());
         backPanel.setBorder(BorderFactory.createEmptyBorder(marginSize, marginSize * 2, marginSize, marginSize * 2));
+        //backPanel.setBackground(Color.GREEN.darker());
     
         mapPanel = new JPanel(new GridLayout(numRows, numCols));
         mapPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, marginSize));
@@ -223,6 +224,8 @@ public class GUI {
 
     public void createTiles() {
         
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/walltile3.png"));
+        
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 
@@ -230,7 +233,11 @@ public class GUI {
                 JPanel cell = new JPanel();
                 cell.setBackground(Color.WHITE);
                 cell.setPreferredSize(new Dimension(tileSize, tileSize));
-                cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                
+                JLabel test = new JLabel();
+                test.setIcon(imageIcon);
+                
+                cell.add(test);
                 mapPanel.add(cell);
                 
             }
@@ -274,10 +281,17 @@ public class GUI {
         inventoryPanel.setBackground(Color.WHITE);
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/key.png"));
+        
         for (int i = 0; i < 8; i++) {
             // below basically makes a small JPanel square which will contain the content of a Tile.
             JPanel slot = new JPanel();
             slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            
+            JLabel test = new JLabel();
+            test.setIcon(imageIcon);
+            slot.add(test);
+            
             inventoryPanel.add(slot);
         }
     }
