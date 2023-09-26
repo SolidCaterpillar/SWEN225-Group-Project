@@ -95,6 +95,7 @@ public class GUI {
                             // Implement game state loading logic using a file selector
                             chipsText = "CTRL-R";
                             redrawGUI();
+                            writeFile();
                             break;
                         case KeyEvent.VK_1:
                             // CTRL-1: Start a new game at level 1
@@ -209,6 +210,33 @@ public class GUI {
         
     }
     
+    public static void writeFile() {
+        // Create a file chooser
+        JFileChooser fileChooser = new JFileChooser();
+
+        // Show the file chooser dialog
+        int returnValue = fileChooser.showSaveDialog(null); // Use Save dialog to select a file to write to
+
+        // Check if the user selected a file
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            // Get the selected file
+            File selectedFile = fileChooser.getSelectedFile();
+
+            // Write "Hello, World!" to the file
+            try {
+                FileWriter writer = new FileWriter(selectedFile);
+                writer.write("Hello, World!");
+                writer.close();
+                System.out.println("Successfully wrote 'Hello, World!' to " + selectedFile.getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.err.println("Error writing to the file.");
+            }
+        } else {
+            System.out.println("No file selected.");
+        }
+    }
+    
     public void resetTimer(){
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -279,6 +307,20 @@ public class GUI {
                 if (choice == JOptionPane.YES_OPTION) {
                     System.exit(0);
                 }
+            }
+        });
+        
+        loadMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadFile();
+            }
+        });
+        
+        saveMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                writeFile();
             }
         });
         
