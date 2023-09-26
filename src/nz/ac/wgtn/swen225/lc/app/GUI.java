@@ -13,7 +13,7 @@ public class GUI {
     private int currentLevel = 1; // Current game level
     private int keysCollected; // Number of keys collected
     private int treasuresRemaining; // Number of treasures remaining
-    private int timeLeft = 60; // Time left for the current level
+    private int timeLeft = 10; // Time left for the current level
     private Timer timer; // Timer for counting down the time
     
     // Composed of a Main Frame which is then broken into Panels    
@@ -93,6 +93,7 @@ public class GUI {
                             // Implement logic to start a new game at level 1
                             chipsText = "CTRL-1";
                             currentLevel = 1;
+                            timeLeft = 10;
                             redrawGUI();
                             break;
                         case KeyEvent.VK_2:
@@ -100,6 +101,7 @@ public class GUI {
                             // Implement logic to start a new game at level 2
                             chipsText = "CTRL-2";
                             currentLevel = 2;
+                            timeLeft = 10;
                             redrawGUI();
                             break;
                     }
@@ -227,6 +229,7 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentLevel = 1;
+                timeLeft = 10;
                 redrawGUI();
             }
         });
@@ -235,13 +238,14 @@ public class GUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentLevel = 2;
+                timeLeft = 10;
                 redrawGUI();
             }
         });
     }
     
     public void decrementTime(){
-        timeLeft --;
+        timeLeft = timeLeft > 1 ? timeLeft -= 1 : 0;
     }
 
     public void createTiles() {
