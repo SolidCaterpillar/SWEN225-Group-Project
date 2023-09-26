@@ -29,7 +29,11 @@ public class Enemy implements Entity{
         // check if the new tile is walkable (implement a method like isWalkable() in Tile)
         if (newTile.isWalkable() && isAdjacent(location, newLocation)) {
             //remove last stored entity. This should be cleared everytime a character walks off it
-            newTile.tileAtLoc(location).setEntity(null);
+            if(newTile.tileAtLoc(location).isPresent()){
+                newTile.tileAtLoc(location).get().setEntity(null);
+            }
+            else{ throw new IllegalArgumentException("Tile was not found to set to null.");}
+
 
             // update the enemy's location
             location = newLocation;

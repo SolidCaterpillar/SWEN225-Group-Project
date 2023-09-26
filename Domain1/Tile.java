@@ -69,10 +69,9 @@ public class Tile implements TileObj{
         return false;
     }
 
-    public static Tile tileAtLoc(Coord loc) {
+    public static Optional<Tile> tileAtLoc(Coord loc) {
         return all.stream()
                 .filter(tile -> tile.getLoc().equals(loc))
-                .findFirst()
-                .orElse(null); // null if no match.
+                .findFirst();
     }
 }
