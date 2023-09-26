@@ -72,16 +72,6 @@ public class Main {
 
     public static void main(String[] args) {
         Main game = new Main();
-        
-        Timer timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.gui.decrementTime();
-                game.gui.redrawGUI();
-            }
-        });
-        
-        timer.start();
         //game.playGame(); // Start the game loop
     }
 }

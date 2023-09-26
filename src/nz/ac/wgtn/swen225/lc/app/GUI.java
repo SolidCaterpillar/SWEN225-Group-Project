@@ -52,6 +52,8 @@ public class GUI {
         createSideBar();
         createMenuBar();
         
+        resetTimer();
+        
         // Add the key listener to the panel. All of these lines are required
         mapPanel.setFocusable(true);
         mapPanel.requestFocus();
@@ -162,6 +164,17 @@ public class GUI {
         mainFrame.setVisible(true);
     }
     
+    public void resetTimer(){
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                decrementTime();
+                redrawGUI();
+            }
+        });        
+        timer.start();
+        
+    }
     
     public void drawBoard(){
         
@@ -230,6 +243,10 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 currentLevel = 1;
                 timeLeft = 10;
+                if (timer.isRunning()) {
+                    timer.stop();
+                }
+                resetTimer();
                 redrawGUI();
             }
         });
@@ -239,13 +256,20 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 currentLevel = 2;
                 timeLeft = 10;
+                if (timer.isRunning()) {
+                    timer.stop();
+                }
+                resetTimer();
                 redrawGUI();
             }
         });
     }
     
     public void decrementTime(){
-        timeLeft = timeLeft > 1 ? timeLeft -= 1 : 0;
+        timeLeft --;
+        if(timeLeft < 1){
+            timer.stop();
+        }
     }
 
     public void createTiles() {
