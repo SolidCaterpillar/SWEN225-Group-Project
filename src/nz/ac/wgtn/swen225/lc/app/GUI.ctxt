@@ -39,5 +39,5 @@ comment7.target=void\ actionPerformed(java.awt.event.ActionEvent)
 comment8.params=
 comment8.target=void\ createTiles()
 comment9.params=
-comment9.target=void\ createlevelPanel()
+comment9.target=void\ createLevelPanel()
 numComments=21

@@ -33,7 +33,7 @@ public class GUI {
     
     private String chipsText = "Chips";
     
-    private final int tileSize = 44; // Adjust this size as needed
+    private final int tileSize = 42; // Adjust this size as needed
     private final int numRows = 9;
     private final int numCols = 9;
     private final int marginSize = 60; // Adjust this size for margins
@@ -245,31 +245,118 @@ public class GUI {
     }
     
     
-    public void createlevelPanel(){
-        levelPanel = new JPanel();
+    public void createLevelPanel() {
+        levelPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
         
+        // Centered label at the first row
         levelLabel = new JLabel("Level");
-        levelPanel.add(levelLabel);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2; // Span two columns
+        gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
+        levelPanel.add(levelLabel, gbc);
+    
+        JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/000.png"));
+    
+        for (int i = 0; i < 3; i++) {
+            // Create a small JPanel square which will contain the content of a Tile.
+            JPanel slot = new JPanel();
+            slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+    
+            JLabel test = new JLabel();
+            test.setIcon(imageIcon);
+            slot.add(test);
+    
+            test2.add(slot);
+        }
+    
+        gbc.gridx = 0;
+        gbc.gridy = 1; // Start from the second row
+        gbc.gridwidth = 1; // Reset grid width to default
+        gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
+        levelPanel.add(test2, gbc);
         
-        levelPanel.setBackground(Color.WHITE);  // this is needed because the default color is not actually white
+        levelPanel.setBackground(Color.WHITE);
         levelPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
     
     public void createTimePanel(){
-        timePanel = new JPanel();
         
+        timePanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        
+        // Centered label at the first row
         timeLabel = new JLabel("Time");
-        timePanel.add(timeLabel);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2; // Span two columns
+        gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
+        timePanel.add(timeLabel, gbc);
+    
+        JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/000.png"));
+    
+        for (int i = 0; i < 3; i++) {
+            // Create a small JPanel square which will contain the content of a Tile.
+            JPanel slot = new JPanel();
+            slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+    
+            JLabel test = new JLabel();
+            test.setIcon(imageIcon);
+            slot.add(test);
+    
+            test2.add(slot);
+        }
+    
+        gbc.gridx = 0;
+        gbc.gridy = 1; // Start from the second row
+        gbc.gridwidth = 1; // Reset grid width to default
+        gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
+        timePanel.add(test2, gbc);
         
-        timePanel.setBackground(Color.WHITE);  // this is needed because the default color is not actually white
+        timePanel.setBackground(Color.WHITE);
         timePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        
     }
     
     public void createChipsPanel(){
-        chipsPanel = new JPanel();
         
-        chipsLabel = new JLabel(chipsText);
-        chipsPanel.add(chipsLabel);
+        chipsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        
+        // Centered label at the first row
+        chipsLabel = new JLabel("Chips");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2; // Span two columns
+        gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
+        chipsPanel.add(chipsLabel, gbc);
+    
+        JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/000.png"));
+    
+        for (int i = 0; i < 3; i++) {
+            // Create a small JPanel square which will contain the content of a Tile.
+            JPanel slot = new JPanel();
+            slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+    
+            JLabel test = new JLabel();
+            test.setIcon(imageIcon);
+            slot.add(test);
+    
+            test2.add(slot);
+        }
+    
+        gbc.gridx = 0;
+        gbc.gridy = 1; // Start from the second row
+        gbc.gridwidth = 1; // Reset grid width to default
+        gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
+        chipsPanel.add(test2, gbc);
         
         chipsPanel.setBackground(Color.WHITE);
         chipsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -301,7 +388,7 @@ public class GUI {
         sidePanel = new JPanel(new GridLayout(4, 1)); // 4 rows, 1 column
         sidePanel.setPreferredSize(new Dimension(200, mainFrame.getHeight()));
         
-        createlevelPanel();
+        createLevelPanel();
         sidePanel.add(levelPanel);
         
         createTimePanel();
@@ -324,7 +411,7 @@ public class GUI {
         
         // this is the method to redraw the side panel
         sidePanel.removeAll();
-        createlevelPanel();
+        createLevelPanel();
         sidePanel.add(levelPanel);
         
         createTimePanel();
