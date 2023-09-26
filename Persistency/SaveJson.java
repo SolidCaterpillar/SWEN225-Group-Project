@@ -25,7 +25,7 @@ public class SaveJson {
     }
 
         public static JSONObject saveTiles(){
-        JSONObject tiles = new JSONObject();
+        JSONObject Tiles = new JSONObject();
         return null;
     }
 }
