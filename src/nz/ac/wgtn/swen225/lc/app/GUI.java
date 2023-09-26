@@ -1,4 +1,5 @@
 package src.nz.ac.wgtn.swen225.lc.app;
+// Author: Emmanuel De Vera
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +12,6 @@ import java.io.*;
 public class GUI {
     
     private int currentLevel = 1; // Current game level
-    private int keysCollected; // Number of keys collected
     private int treasuresRemaining; // Number of treasures remaining
     private int maxTime = 60;
     private int timeLeft = maxTime; // Time left for the current level
@@ -32,14 +32,14 @@ public class GUI {
     private JLabel timeLabel;
     private JLabel chipsLabel;
     
+    private String levelText = "Level";
     private String chipsText = "Chips";
     
     private final int tileSize = 42; // Adjust this size as needed
     private final int numRows = 9;
     private final int numCols = 9;
     private final int marginSize = 60; // Adjust this size for margins
-    
-    private boolean gamePaused; // Flag to track if the game is paused
+    private boolean gamePaused = false; // Flag to track if the game is paused
     
     
     public GUI() {
@@ -124,7 +124,14 @@ public class GUI {
                     }
                 } else {
                     // Handle regular arrow key movements
-                    switch (keyCode) {
+                    if(!gamePaused){
+                        switch (keyCode) {
+                        case KeyEvent.VK_ESCAPE:
+                            chipsText = "Escape";
+                            gamePaused = true;
+                            levelText = "Paused";
+                            redrawGUI();
+                            break;
                         case KeyEvent.VK_UP:
                             // Handle UP arrow key press (e.g., move up)
                             chipsText = "UP";
@@ -165,6 +172,16 @@ public class GUI {
                             chipsText = "RIGHT";
                             redrawGUI();
                             break;
+                        }
+                    }else{
+                        switch (keyCode) {
+                        case KeyEvent.VK_ESCAPE:
+                            chipsText = "Escape";
+                            gamePaused = false;
+                            levelText = "Level";
+                            redrawGUI();
+                            break;
+                        }
                     }
                 }
             }
@@ -179,18 +196,17 @@ public class GUI {
         mainFrame.setVisible(true);
     }
     
+    
     public static void loadFile() {
+
         // Create a file chooser
         JFileChooser fileChooser = new JFileChooser();
-
-        // Show the file chooser dialog
         int returnValue = fileChooser.showOpenDialog(null);
 
         // Check if the user selected a file
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             // Get the selected file
             File selectedFile = fileChooser.getSelectedFile();
-
             // Read the contents of the file
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
@@ -200,6 +216,7 @@ public class GUI {
                     System.out.println(line);
                 }
                 reader.close();
+                
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Error reading the file.");
@@ -210,18 +227,17 @@ public class GUI {
         
     }
     
+    
     public static void writeFile() {
+        
         // Create a file chooser
         JFileChooser fileChooser = new JFileChooser();
-
-        // Show the file chooser dialog
         int returnValue = fileChooser.showSaveDialog(null); // Use Save dialog to select a file to write to
 
         // Check if the user selected a file
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             // Get the selected file
             File selectedFile = fileChooser.getSelectedFile();
-
             // Write "Hello, World!" to the file
             try {
                 FileWriter writer = new FileWriter(selectedFile);
@@ -241,8 +257,10 @@ public class GUI {
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                decrementTime();
-                redrawGUI();
+                if(!gamePaused){
+                    decrementTime();
+                    redrawGUI();
+                }
             }
         });        
         timer.start();
@@ -284,6 +302,7 @@ public class GUI {
         menuBar.add(menu4);
         
         JMenuItem pauseMenuItem = new JMenuItem("Pause");
+        JMenuItem resumeMenuItem = new JMenuItem("Resume");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         JMenuItem saveMenuItem = new JMenuItem("Save");
         JMenuItem loadMenuItem = new JMenuItem("Load");        
@@ -292,13 +311,32 @@ public class GUI {
         JMenuItem instructionsMenuItem = new JMenuItem("Game Rules");
         
         menu1.add(pauseMenuItem);
+        menu1.add(resumeMenuItem);
         menu1.add(exitMenuItem);
         menu2.add(saveMenuItem);
         menu2.add(loadMenuItem);
         menu3.add(level1MenuItem);
         menu3.add(level2MenuItem);
         menu4.add(instructionsMenuItem);
-    
+        
+        pauseMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamePaused = true;
+                levelText = "Paused";
+                redrawGUI();
+            }
+        });
+        
+        resumeMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamePaused = false;
+                levelText = "Level";
+                redrawGUI();
+            }
+        });
+        
         // Adding the JOptionPane alongside the MenuItem when clicked
         exitMenuItem.addActionListener(new ActionListener() {
             @Override
@@ -372,10 +410,10 @@ public class GUI {
                 cell.setBackground(Color.WHITE);
                 cell.setPreferredSize(new Dimension(tileSize, tileSize));
                 
-                JLabel test = new JLabel();
-                test.setIcon(imageIcon);
+                JLabel sprite = new JLabel();
+                sprite.setIcon(imageIcon);
                 
-                cell.add(test);
+                cell.add(sprite);
                 mapPanel.add(cell);
                 
             }
@@ -388,39 +426,39 @@ public class GUI {
         GridBagConstraints gbc = new GridBagConstraints();
         
         // Centered label at the first row
-        levelLabel = new JLabel("Level");
+        levelLabel = new JLabel(levelText);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span two columns
         gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
         levelPanel.add(levelLabel, gbc);
     
-        JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+        JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
     
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
-            JPanel slot = new JPanel();
-            slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
-            slot.setBackground(Color.WHITE);
+            JPanel cell = new JPanel();
+            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            cell.setBackground(Color.WHITE);
             
             if(i == 2){
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + currentLevel + ".png"));
             }
     
-            JLabel test = new JLabel();
-            test.setIcon(imageIcon);
-            slot.add(test);
+            JLabel sprite = new JLabel();
+            sprite.setIcon(imageIcon);
+            cell.add(sprite);
     
-            test2.add(slot);
+            sprite2.add(cell);
         }
     
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
         gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
-        levelPanel.add(test2, gbc);
+        levelPanel.add(sprite2, gbc);
         
         levelPanel.setBackground(Color.WHITE);
         levelPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -439,15 +477,15 @@ public class GUI {
         gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
         timePanel.add(timeLabel, gbc);
     
-        JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+        JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
     
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
-            JPanel slot = new JPanel();
-            slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
-            slot.setBackground(Color.WHITE);
+            JPanel cell = new JPanel();
+            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            cell.setBackground(Color.WHITE);
             
             if(i == 1){
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft / 10) + ".png"));
@@ -457,18 +495,18 @@ public class GUI {
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft % 10) + ".png"));
             }
     
-            JLabel test = new JLabel();
-            test.setIcon(imageIcon);
-            slot.add(test);
+            JLabel sprite = new JLabel();
+            sprite.setIcon(imageIcon);
+            cell.add(sprite);
     
-            test2.add(slot);
+            sprite2.add(cell);
         }
     
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
         gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
-        timePanel.add(test2, gbc);
+        timePanel.add(sprite2, gbc);
         
         timePanel.setBackground(Color.WHITE);
         timePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -488,28 +526,28 @@ public class GUI {
         gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
         chipsPanel.add(chipsLabel, gbc);
     
-        JPanel test2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+        JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
     
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
-            JPanel slot = new JPanel();
-            slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            slot.setPreferredSize(new Dimension(tileSize - 15, tileSize));
-            slot.setBackground(Color.WHITE);
+            JPanel cell = new JPanel();
+            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            cell.setBackground(Color.WHITE);
     
-            JLabel test = new JLabel();
-            test.setIcon(imageIcon);
-            slot.add(test);
+            JLabel sprite = new JLabel();
+            sprite.setIcon(imageIcon);
+            cell.add(sprite);
     
-            test2.add(slot);
+            sprite2.add(cell);
         }
     
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
         gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
-        chipsPanel.add(test2, gbc);
+        chipsPanel.add(sprite2, gbc);
         
         chipsPanel.setBackground(Color.WHITE);
         chipsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -525,14 +563,14 @@ public class GUI {
         
         for (int i = 0; i < 8; i++) {
             // below basically makes a small JPanel square which will contain the content of a Tile.
-            JPanel slot = new JPanel();
-            slot.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            JPanel cell = new JPanel();
+            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             
-            JLabel test = new JLabel();
-            test.setIcon(imageIcon);
-            slot.add(test);
+            JLabel sprite = new JLabel();
+            sprite.setIcon(imageIcon);
+            cell.add(sprite);
             
-            inventoryPanel.add(slot);
+            inventoryPanel.add(cell);
         }
     }
     
