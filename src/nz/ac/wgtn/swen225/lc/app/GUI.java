@@ -499,24 +499,34 @@ public class GUI {
     
     public void createTimePanel(){
         
-        timePanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
+        timePanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Load your background image
+                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield2.png"));
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
         
+        timePanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
         // Centered label at the first row
         timeLabel = new JLabel("Time");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span two columns
-        gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
+        gbc.insets = new Insets(0, 0, 12, 0); // Add some spacing
         timePanel.add(timeLabel, gbc);
     
         JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+        sprite2.setOpaque(false);
+        
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
-    
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
-            cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
+            cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
             cell.setBackground(Color.WHITE);
             
             if(i == 1){
@@ -530,6 +540,7 @@ public class GUI {
             JLabel sprite = new JLabel();
             sprite.setIcon(imageIcon);
             cell.add(sprite);
+            cell.setOpaque(false);
     
             sprite2.add(cell);
         }
@@ -537,7 +548,7 @@ public class GUI {
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
-        gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
+        gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
         timePanel.add(sprite2, gbc);
         
         timePanel.setBackground(Color.WHITE);
