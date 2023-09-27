@@ -1,10 +1,14 @@
 package nz.ac.wgtn.swen225.lc.renderer;
 
 import Domain.Board;
+import Domain.Entity.Chap;
 import Domain.Tile.*;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 import static Domain.Board.tileSize;
 
@@ -18,22 +22,15 @@ public class GameRenderer extends JPanel {
     private static final String ICONS_FOLDER = "gameicons/"; // Path to the icons folder
     private ImageIcon[][] tileIcons; // 2D array of ImageIcons for tiles
     private Tile[][] maze; // 2D array representing the maze
-    private ImageIcon wallTileIcon; // specific ImageIcons for display
-    private ImageIcon freeTileIcon;
-    private ImageIcon treasureIcon;
-
-    private ImageIcon chapIcon;
-    private ImageIcon exitIcon;
-    private ImageIcon exitLockIcon;
-
-    private ImageIcon infoFieldIcon;
-    private ImageIcon keyIcon;
-    private ImageIcon lockedDoorIcon;
-
-
+    private ImageIcon playerIcon;
+    private Clip playerMoveSoundClip;
+    private Clip treasureCollectSoundClip;
+    private Clip doorOpenSoundClip;
+    private Clip playerDeathSoundClip;
+    private Chap player;
     // Define game-related variables
     //private Board maze;
-    // private Chap player;
+
     // private List<Enemy> actors;
     //private KeyTile KEYTILE;
     // private Key KEY;
@@ -42,32 +39,57 @@ public class GameRenderer extends JPanel {
      * Constructor to initialize game-related variables
      * set up  game state and resources here
      */
-    public GameRenderer(Tile[][] maze) {
+    public GameRenderer(Tile[][] maze, Chap player) {
         this.maze = maze; // Initialize the maze
+        this.player = player; // Initialize the player
 
         tileIcons = new ImageIcon[maze.length][maze[0].length];
         loadTileIcons();
-
-                wallTileIcon = loadImageIcon("walltile.png");
-        freeTileIcon = loadImageIcon("freetile.png");
-        chapIcon = loadImageIcon("chap.png");
-        treasureIcon = loadImageIcon("treasure.png");
-        exitLockIcon = loadImageIcon("exitlock.png");
-        exitIcon = loadImageIcon("exit.png");
-        infoFieldIcon = loadImageIcon("infofield.png");
-        keyIcon = loadImageIcon("key.png");
-        lockedDoorIcon = loadImageIcon("lockeddoor.png");
         initializeRenderer();
+
+        playerIcon = loadImageIcon("chap.png");
+
+        playerMoveSoundClip = loadSoundEffect("player_move.wav");
+        treasureCollectSoundClip = loadSoundEffect("treasure_collect.wav");
+        doorOpenSoundClip = loadSoundEffect("door_open.wav");
+        playerDeathSoundClip = loadSoundEffect("player_death.wav");
+
     }
+    private Clip loadSoundEffect(String soundFilePath) {
+        try {
+            File soundFile = new File(soundFilePath);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            return clip;
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public void playPlayerMoveSound() {
+        if (playerMoveSoundClip != null) {
+            playerMoveSoundClip.setFramePosition(0); // Rewind to the beginning
+            playerMoveSoundClip.start();
+        }
+    }
+
+    public void playTreasureCollectSound() {
+        if (treasureCollectSoundClip != null) {
+            treasureCollectSoundClip.setFramePosition(0); // Rewind to the beginning
+            treasureCollectSoundClip.start();
+        }
+    }
+
 
     private void initializeRenderer() {
         // Set the preferred size of the rendering panel
-        // Adjust the width and height based on your game's requirements
         int panelWidth = 800; // Adjust as needed
         int panelHeight = 600; // Adjust as needed
         setPreferredSize(new Dimension(panelWidth, panelHeight));
 
-        // Add any additional initialization logic here
     }
     private void loadTileIcons() {
         for (int row = 0; row < maze.length; row++) {
@@ -124,6 +146,12 @@ public class GameRenderer extends JPanel {
                 }
             }
         }
+
+        // Draw the player
+        if (player != null) {
+            drawPlayer(g, player.getX() * tileSize, player.getY() * tileSize);
+        }
+
         // Debugging output
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
@@ -136,7 +164,7 @@ public class GameRenderer extends JPanel {
                     System.out.println("No icon found for this tile.");
                 }
 
-                // Render the tile (similar to your existing code)
+                // Render the tile
                 if (tileIcons[row][col] != null) {
                     tileIcons[row][col].paintIcon(this, g, col * tileSize, row * tileSize);
                 }
@@ -147,7 +175,11 @@ public class GameRenderer extends JPanel {
     }
 
 
-
+    private void drawPlayer(Graphics g, int x, int y) {
+        if (playerIcon != null) {
+            playerIcon.paintIcon(this, g, x, y);
+        }
+    }
 
     // Add methods to update and render the game view
     public void updateGameView() {
@@ -157,8 +189,41 @@ public class GameRenderer extends JPanel {
         // updateActors(); // Update actor positions
     }
 
-    public void renderGameView() {
-        // Trigger a repaint to render the updated game state
-        repaint();
+    public void renderGameView(Graphics g) {
+        // Determine player's position in the 5x5 grid
+        int playerRow = player.getY();
+        int playerCol = player.getX();
+        int startRow = playerRow - 2;
+        int startCol = playerCol - 2;
+
+        // Ensure starting row and column are within bounds
+        startRow = Math.max(0, startRow);
+        startCol = Math.max(0, startCol);
+
+        // Calculate the rendering coordinates for each tile
+        for (int row = startRow; row < startRow + 5 && row < maze.length; row++) {
+            for (int col = startCol; col < startCol + 5 && col < maze[0].length; col++) {
+                if (tileIcons[row][col] != null) {
+                    int x = (col - startCol) * tileSize;
+                    int y = (row - startRow) * tileSize;
+                    tileIcons[row][col].paintIcon(this, g, x, y);
+                }
+            }
+        }
+
+        // Render the player
+        int playerX = (playerCol - startCol) * tileSize;
+        int playerY = (playerRow - startRow) * tileSize;
+        // Draw the player icon at (playerX, playerY) on the canvas
+        playerIcon.paintIcon(this, g, playerX, playerY);
+
+        /*// Render the actors
+        for (Actor actor : actors) {
+            int actorX = (actor.getX() - startCol) * tileSize;
+            int actorY = (actor.getY() - startRow) * tileSize;
+            // Draw the actor icon at (actorX, actorY) on the canvas
+            // Assuming you have an actorIcon
+            actorIcon.paintIcon(this, g, actorX, actorY);
+        }*/
     }
 }

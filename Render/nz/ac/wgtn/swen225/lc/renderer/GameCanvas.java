@@ -4,47 +4,24 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- *  class primarily responsible for creating a JPanel that serves as the canvas where the game's graphics are displayed.
+ * This class represents the canvas where the game is displayed.
  */
 public class GameCanvas extends JPanel {
 
-    public GameCanvas() {
-        // Allow the canvas to resize with the window
-        setPreferredSize(new Dimension(800, 600)); // Default size (can be changed)
+    private GameRenderer renderer; // Renderer instance
+
+    public GameCanvas(GameRenderer renderer) {
+        this.renderer = renderer;
+
+        // Set the preferred size of the canvas based on the renderer's size
+        setPreferredSize(renderer.getPreferredSize());
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //  rendering logic here to draw the game elements
-        //  use the Graphics object 'g' to draw shapes, images, etc.
-        // For example:
-        // g.drawRect(x, y, width, height);
-        // g.drawImage(image, x, y, this);
+
+        // Delegate the rendering to the Renderer instance
+        renderer.renderGameView(g);
     }
-
-    /**
-     *  Update the canvas size based on the window size
-     * @return
-     */
-    @Override
-    public Dimension getPreferredSize() {
-        return getParent() != null ? getParent().getSize() : super.getPreferredSize();
-    }
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Game Canvas Example");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            GameCanvas canvas = new GameCanvas();
-            frame.add(canvas);
-
-            frame.pack();
-            frame.setVisible(true);
-        });
-    }
-
-
 }
