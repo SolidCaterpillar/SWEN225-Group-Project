@@ -272,7 +272,7 @@ public class GUI {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load your background image
-                ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/background.jpg"));
+                ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/background.png"));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -410,7 +410,7 @@ public class GUI {
         if(timeLeft < 1){
             timer.stop();
             redrawGUI();
-            JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -445,7 +445,18 @@ public class GUI {
 
     
     public void createLevelPanel() {
-        levelPanel = new JPanel(new GridBagLayout());
+        levelPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Load your background image
+                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield2.png"));
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        
+        // Set the background of levelPanel to be transparent
+        levelPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         
         // Centered label at the first row
@@ -453,36 +464,36 @@ public class GUI {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span two columns
-        gbc.insets = new Insets(10, 0, 10, 0); // Add some spacing
+        gbc.insets = new Insets(0, 0, 12, 0); // Add some spacing
         levelPanel.add(levelLabel, gbc);
     
         JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
+        sprite2.setOpaque(false);
     
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
-            cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
-            cell.setBackground(Color.WHITE);
-            
-            if(i == 2){
+            cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
+    
+            if (i == 2) {
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + currentLevel + ".png"));
             }
     
             JLabel sprite = new JLabel();
             sprite.setIcon(imageIcon);
-            cell.add(sprite);
     
+            cell.setOpaque(false);
+            cell.add(sprite);
             sprite2.add(cell);
         }
     
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
-        gbc.insets = new Insets(0, 10, 10, 10); // Add some spacing
+        gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
         levelPanel.add(sprite2, gbc);
-        
-        levelPanel.setBackground(Color.WHITE);
+    
         levelPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
     
@@ -579,17 +590,18 @@ public class GUI {
         inventoryPanel.setBackground(Color.WHITE);
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/key.png"));
-        
         for (int i = 0; i < 8; i++) {
             // below basically makes a small JPanel square which will contain the content of a Tile.
-            JPanel cell = new JPanel();
-            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-            
-            JLabel sprite = new JLabel();
-            sprite.setIcon(imageIcon);
-            cell.add(sprite);
-            
+            JPanel cell = new JPanel(new BorderLayout()) {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    // Load your background image
+                    ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/key.png"));
+                    g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));            
             inventoryPanel.add(cell);
         }
     }
@@ -597,7 +609,8 @@ public class GUI {
     public void createSideBar(){
         // Create the header panels
         sidePanel = new JPanel(new GridLayout(4, 1)); // 4 rows, 1 column
-        sidePanel.setPreferredSize(new Dimension(220, mainFrame.getHeight()));
+        sidePanel.setPreferredSize(new Dimension(300, mainFrame.getHeight()));
+        sidePanel.setOpaque(false);
         
         createLevelPanel();
         sidePanel.add(levelPanel);
