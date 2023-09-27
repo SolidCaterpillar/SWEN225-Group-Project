@@ -35,7 +35,7 @@ public class GUI {
     private String levelText = "Level";
     private String chipsText = "Chips";
     
-    private final int tileSize = 42; // Adjust this size as needed
+    private final int tileSize = 68; // Adjust this size as needed
     private final int numRows = 9;
     private final int numCols = 9;
     private final int marginSize = 60; // Adjust this size for margins
@@ -266,22 +266,27 @@ public class GUI {
         timer.start();
     }
     
-    public void drawBoard(){
-        
-        backPanel = new JPanel(new BorderLayout());
-        backPanel.setBorder(BorderFactory.createEmptyBorder(marginSize, marginSize * 2, marginSize, marginSize * 2));
-        //backPanel.setBackground(Color.GREEN.darker());
-    
+    public void drawBoard() {
+        backPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                // Load your background image
+                ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/background.jpg"));
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+
+        backPanel.setBorder(BorderFactory.createEmptyBorder(marginSize, marginSize * 3, marginSize, marginSize * 3));
+
         mapPanel = new JPanel(new GridLayout(numRows, numCols));
         mapPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, marginSize));
         mapPanel.setOpaque(false);
-        
+
         // This method will initialize the positions of specific Tiles. Use this to link to Tile, Estate, and Player
         createTiles();
-        
-        //backPanel.setBackground(Color.GRAY);
-        //mapPanel.setBackground(Color.RED);
-        backPanel.add(mapPanel);
+
+        backPanel.add(mapPanel, BorderLayout.CENTER);
         mainFrame.add(backPanel);
     }
     
@@ -318,6 +323,10 @@ public class GUI {
         menu3.add(level1MenuItem);
         menu3.add(level2MenuItem);
         menu4.add(instructionsMenuItem);
+        
+        
+        
+        
         
         pauseMenuItem.addActionListener(new ActionListener() {
             @Override
@@ -387,6 +396,13 @@ public class GUI {
                 redrawGUI();
             }
         });
+        
+        instructionsMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawInstructions();
+            }
+        });
     }
     
     public void decrementTime(){
@@ -394,7 +410,7 @@ public class GUI {
         if(timeLeft < 1){
             timer.stop();
             redrawGUI();
-            //JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -406,14 +422,21 @@ public class GUI {
             for (int col = 0; col < numCols; col++) {
                 
                 // below basically makes a small JPanel square which will contain the content of a Tile.
-                JPanel cell = new JPanel();
-                cell.setBackground(Color.WHITE);
+                JPanel cell = new JPanel(new BorderLayout()) {
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        super.paintComponent(g);
+                        // Load your background image
+                        ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/walltile3.png"));
+                        g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                    }
+                };
                 cell.setPreferredSize(new Dimension(tileSize, tileSize));
                 
-                JLabel sprite = new JLabel();
-                sprite.setIcon(imageIcon);
+                //JLabel sprite = new JLabel();
+                //sprite.setIcon(imageIcon);
                 
-                cell.add(sprite);
+                //cell.add(sprite);
                 mapPanel.add(cell);
                 
             }
@@ -439,7 +462,6 @@ public class GUI {
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
-            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
             cell.setBackground(Color.WHITE);
             
@@ -483,7 +505,6 @@ public class GUI {
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
-            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
             cell.setBackground(Color.WHITE);
             
@@ -532,7 +553,6 @@ public class GUI {
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
-            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             cell.setPreferredSize(new Dimension(tileSize - 15, tileSize));
             cell.setBackground(Color.WHITE);
     
@@ -577,7 +597,7 @@ public class GUI {
     public void createSideBar(){
         // Create the header panels
         sidePanel = new JPanel(new GridLayout(4, 1)); // 4 rows, 1 column
-        sidePanel.setPreferredSize(new Dimension(200, mainFrame.getHeight()));
+        sidePanel.setPreferredSize(new Dimension(220, mainFrame.getHeight()));
         
         createLevelPanel();
         sidePanel.add(levelPanel);
@@ -613,6 +633,20 @@ public class GUI {
         
         createinventoryPanel();
         sidePanel.add(inventoryPanel);
+        
+        // this is needed to confirm the changes
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+    
+    public void drawInstructions() {
+        
+        // this is the only method to redraw the board
+        mapPanel.removeAll();
+        createTiles();
+        
+        // this is the method to redraw the side panel
+        sidePanel.removeAll();
         
         // this is needed to confirm the changes
         mainFrame.revalidate();
