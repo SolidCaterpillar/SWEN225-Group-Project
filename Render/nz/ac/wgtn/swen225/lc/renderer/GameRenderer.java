@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen225.lc.renderer;
 
 import Domain.Board;
 import Domain.Entity.Chap;
+import Domain.Entity.Player;
 import Domain.Tile.*;
 
 import javax.sound.sampled.*;
@@ -27,7 +28,7 @@ public class GameRenderer extends JPanel {
     private Clip treasureCollectSoundClip;
     private Clip doorOpenSoundClip;
     private Clip playerDeathSoundClip;
-    private Chap player;
+    private Player player;
     // Define game-related variables
     //private Board maze;
 
@@ -39,7 +40,7 @@ public class GameRenderer extends JPanel {
      * Constructor to initialize game-related variables
      * set up  game state and resources here
      */
-    public GameRenderer(Tile[][] maze, Chap player) {
+    public GameRenderer(Tile[][] maze, Player player) {
         this.maze = maze; // Initialize the maze
         this.player = player; // Initialize the player
 
@@ -55,6 +56,7 @@ public class GameRenderer extends JPanel {
         playerDeathSoundClip = loadSoundEffect("player_death.wav");
 
     }
+
     private Clip loadSoundEffect(String soundFilePath) {
         try {
             File soundFile = new File(soundFilePath);
@@ -91,6 +93,7 @@ public class GameRenderer extends JPanel {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
 
     }
+
     private void loadTileIcons() {
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
@@ -138,21 +141,40 @@ public class GameRenderer extends JPanel {
         super.paintComponent(g);
         // Place rendering logic here to draw the game elements using ImageIcon
 
+
         // Draw the maze with different tile types
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
                 if (tileIcons[row][col] != null) {
-                    tileIcons[row][col].paintIcon(this, g, col * tileSize, row * tileSize);
+                    // Calculate the destination rectangle for the image
+                    int x = col * tileSize;
+                    int y = row * tileSize;
+                    int width = tileSize;
+                    int height = tileSize;
+
+                    // Draw the border around the tile
+                    g.setColor(Color.BLACK); // You can change the border color
+                    g.drawRect(x, y, width, height);
+
+                    // Draw the image scaled to the tile size within the border
+                    g.drawImage(tileIcons[row][col].getImage(), x + 1, y + 1, width - 2, height - 2, this);
                 }
             }
         }
 
         // Draw the player
         if (player != null) {
-            drawPlayer(g, player.getX() * tileSize, player.getY() * tileSize);
+            int playerX = player.getX() * tileSize;
+            int playerY = player.getY() * tileSize;
+            // Draw the border around the player tile
+            g.setColor(Color.BLACK); // You can change the border color
+            g.drawRect(playerX, playerY, tileSize, tileSize);
+            // Draw the player icon scaled to the tile size within the border
+            g.drawImage(playerIcon.getImage(), playerX + 1, playerY + 1, tileSize - 2, tileSize - 2, this);
         }
 
-        // Debugging output
+
+      /*  // Debugging output
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
                 Tile tile = maze[row][col];
@@ -169,10 +191,11 @@ public class GameRenderer extends JPanel {
                     tileIcons[row][col].paintIcon(this, g, col * tileSize, row * tileSize);
                 }
             }
-        }
+        }*/
 
 
     }
+
 
 
     private void drawPlayer(Graphics g, int x, int y) {
@@ -204,9 +227,18 @@ public class GameRenderer extends JPanel {
         for (int row = startRow; row < startRow + 5 && row < maze.length; row++) {
             for (int col = startCol; col < startCol + 5 && col < maze[0].length; col++) {
                 if (tileIcons[row][col] != null) {
+                    // Calculate the destination rectangle for the image
                     int x = (col - startCol) * tileSize;
                     int y = (row - startRow) * tileSize;
-                    tileIcons[row][col].paintIcon(this, g, x, y);
+                    int width = tileSize;
+                    int height = tileSize;
+
+                    // Draw the tile image
+                    g.drawImage(tileIcons[row][col].getImage(), x, y, width, height, this);
+
+                    // Draw a border around the tile
+                    g.setColor(Color.BLACK); // Set border color
+                    g.drawRect(x, y, width - 1, height - 1); // Draw border
                 }
             }
         }
@@ -214,16 +246,18 @@ public class GameRenderer extends JPanel {
         // Render the player
         int playerX = (playerCol - startCol) * tileSize;
         int playerY = (playerRow - startRow) * tileSize;
-        // Draw the player icon at (playerX, playerY) on the canvas
-        playerIcon.paintIcon(this, g, playerX, playerY);
+        // Draw the player icon scaled to the tile size
+        g.drawImage(playerIcon.getImage(), playerX, playerY, tileSize, tileSize, this);
 
-        /*// Render the actors
-        for (Actor actor : actors) {
-            int actorX = (actor.getX() - startCol) * tileSize;
-            int actorY = (actor.getY() - startRow) * tileSize;
-            // Draw the actor icon at (actorX, actorY) on the canvas
-            // Assuming you have an actorIcon
-            actorIcon.paintIcon(this, g, actorX, actorY);
-        }*/
+    /*// Render the actors
+    for (Actor actor : actors) {
+        int actorX = (actor.getX() - startCol) * tileSize;
+        int actorY = (actor.getY() - startRow) * tileSize;
+        // Draw the actor icon at (actorX, actorY) on the canvas
+        // Assuming you have an actorIcon
+        actorIcon.paintIcon(this, g, actorX, actorY);
+    }*/
     }
+
+
 }

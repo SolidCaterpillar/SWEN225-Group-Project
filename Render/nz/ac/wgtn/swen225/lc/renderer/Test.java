@@ -1,26 +1,30 @@
 package nz.ac.wgtn.swen225.lc.renderer;
 
+import Domain.Entity.Player;
 import Domain.Tile.Tile;
 
 import javax.swing.*;
 import Persistency.*;
 public class Test {
-
+static Level play = Persistency.loadLevel1();
     public static void main(String[] args) {
-        Tile[][] maze = Persistency.loadLevel1().board().getBoard() ;
+        Tile[][] maze = play.board().getBoard() ;
+        Player ch =play.player();
+        System.out.println(ch.getX() + " " + ch.getY());
+
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Chip's Challenge Game");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             // Create instances of your game components
-            GameRenderer renderer = new GameRenderer(maze);
-            //GameCanvas canvas = new GameCanvas();
+           GameRenderer renderer = new GameRenderer(maze, ch);
+            GameCanvas canvas = new GameCanvas(renderer);
             // Add any other game components here
 
             // Add the renderer and canvas to the frame
-            frame.add(renderer);
-            //frame.add(canvas);
+            //frame.add(renderer);
+            frame.add(canvas);
 
             // Set up the game loop or event handling here
 
