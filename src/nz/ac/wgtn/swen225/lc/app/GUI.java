@@ -36,7 +36,7 @@ public class GUI {
     private JLabel chipsLabel;
 
     private String levelText = "Level";
-    private String timeText = "time";
+    private String timeText = "Time";
     private String chipsText = "Chips";
 
 
@@ -211,7 +211,7 @@ public class GUI {
 
 
 
-    public static void loadFile() {
+    public void loadFile() {    //static
 
         // Create a file chooser
         String currentDirectory = System.getProperty("user.dir");
@@ -226,11 +226,13 @@ public class GUI {
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
                 String line;
+                timeText = selectedFile.getName();
                 System.out.println("Contents of " + selectedFile.getName() + ":");
                 while ((line = reader.readLine()) != null) {
                     System.out.println(line);
                 }
                 reader.close();
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -243,7 +245,7 @@ public class GUI {
     }
 
 
-    public static void writeFile() {
+    public void writeFile() {   // static
 
         // Create a file chooser
         String currentDirectory = System.getProperty("user.dir");
@@ -260,6 +262,7 @@ public class GUI {
                 writer.write("Hello, World!");
                 writer.close();
                 System.out.println("Successfully wrote 'Hello, World!' to " + selectedFile.getName());
+                timeText = selectedFile.getName();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Error writing to the file.");
@@ -326,6 +329,7 @@ public class GUI {
         JMenuItem resumeMenuItem = new JMenuItem("Resume");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         JMenuItem saveMenuItem = new JMenuItem("Save");
+        JMenuItem replayMenuItem = new JMenuItem("Replay");
         JMenuItem loadMenuItem = new JMenuItem("Load");
         JMenuItem level1MenuItem = new JMenuItem("Level 1");
         JMenuItem level2MenuItem = new JMenuItem("Level 2");
@@ -336,6 +340,7 @@ public class GUI {
         menu1.add(exitMenuItem);
         menu2.add(saveMenuItem);
         menu2.add(loadMenuItem);
+        menu2.add(replayMenuItem);
         menu3.add(level1MenuItem);
         menu3.add(level2MenuItem);
         menu4.add(instructionsMenuItem);
