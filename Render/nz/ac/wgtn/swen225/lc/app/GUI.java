@@ -6,7 +6,7 @@ import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 import nz.ac.wgtn.swen225.lc.persistency.*;
 import nz.ac.wgtn.swen225.lc.renderer.*;
-//import nz.ac.wgtn.swen225.lc.recorder.*;
+import nz.ac.wgtn.swen225.lc.recorder.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,6 +47,8 @@ public class GUI {
     private Player ch =play.player();
     private GameRenderer renderer = new GameRenderer(maze, ch);
     private GameCanvas canvas = new GameCanvas(renderer);
+    private Recorder rec = new Recorder();
+
 
 
     private String levelText = "Level";
@@ -721,9 +723,7 @@ public class GUI {
         mainFrame.repaint();
 
 
-        //rec.saveGameStateFile(timeLeft, currentLevel, chipsText);
-
-        //int timer, int currentLevel, String chipsText
+        rec.saveGameStateFile(timeLeft, currentLevel, chipsText);
     }
 
 

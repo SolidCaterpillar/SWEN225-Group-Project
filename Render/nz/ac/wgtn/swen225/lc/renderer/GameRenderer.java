@@ -28,7 +28,7 @@ public class GameRenderer extends JPanel {
     private Clip playerDeathSoundClip;
     private Player player;
 
-    private int tileSize = 122;
+    private int tileSize = 87;
     // Define game-related variables
     //private Board maze;
 
@@ -216,16 +216,16 @@ public class GameRenderer extends JPanel {
         // Determine player's position in the 5x5 grid
         int playerRow = player.getY();
         int playerCol = player.getX();
-        int startRow = playerRow - 2;
-        int startCol = playerCol - 2;
+        int startRow = playerRow - 3;
+        int startCol = playerCol - 3;
 
         // Ensure starting row and column are within bounds
         startRow = Math.max(0, startRow);
         startCol = Math.max(0, startCol);
 
         // Calculate the rendering coordinates for each tile
-        for (int row = startRow; row < startRow + 5 && row < maze.length; row++) {
-            for (int col = startCol; col < startCol + 5 && col < maze[0].length; col++) {
+        for (int row = startRow; row < startRow + 7 && row < maze.length; row++) {
+            for (int col = startCol; col < startCol + 7 && col < maze[0].length; col++) {
                 if (tileIcons[row][col] != null) {
                     // Calculate the destination rectangle for the image
                     int x = (col - startCol) * tileSize;
