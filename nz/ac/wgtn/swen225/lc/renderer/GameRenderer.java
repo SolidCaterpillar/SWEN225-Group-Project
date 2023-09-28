@@ -24,7 +24,7 @@ public class GameRenderer extends JPanel {
 
     // Define  game-related variables here
 
-    private static final String ICONS_FOLDER = "src/nz/ac/wgtn/swen225/lc/app/icons/"; // Path to the icons folder
+    private static final String ICONS_FOLDER = "nz/ac/wgtn/swen225/lc/app/icons/"; // Path to the icons folder
     private ImageIcon[][] tileIcons; // 2D array of ImageIcons for tiles
     private Tile[][] maze; // 2D array representing the maze
     private ImageIcon playerIcon;

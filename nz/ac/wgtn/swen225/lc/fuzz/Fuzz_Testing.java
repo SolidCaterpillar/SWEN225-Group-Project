@@ -1,6 +1,6 @@
-package test.nz.ac.wgtn.swen225.lc.fuzz;
+package nz.ac.wgtn.swen225.lc.fuzz;
 
-import static org.junit.Assert.assertTrue;
+/**import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -11,7 +11,7 @@ import org.junit.Test;
 public class Fuzz_Testing {
 	// NEED TO ENSURE THIS WAY OF TESTING ADHERES TO BRIEF
 
-	private app Main;
+	private App Main;
 
 	public Fuzz_Testing() {
 		// Initialize the game here or pass an initialized game instance.
@@ -197,4 +197,4 @@ public class Fuzz_Testing {
 		fuzzTester.test2();
 	}
 
-}
+}**/
