@@ -6,1187 +6,562 @@
     },
     {
         "currentLevel": 1,
-        "timer": 58,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 57,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 56,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 55,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 54,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 53,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 52,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 51,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 50,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 49,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 48,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 47,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 46,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 45,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 44,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 43,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 42,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 41,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 40,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 39,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 38,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 37,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 36,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 35,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 34,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 33,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 32,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 31,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 30,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 29,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 28,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 27,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 26,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 25,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 24,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 23,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 22,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 21,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 20,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 19,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 18,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 17,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 16,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 15,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 14,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 13,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 12,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 11,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 10,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 9,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 8,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 7,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 6,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 5,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 4,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 3,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 2,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 1,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 0,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 0,
-        "chipsText": "Chips"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 60,
-        "chipsText": "CTRL-2"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 60,
-        "chipsText": "CTRL-1"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 60,
-        "chipsText": "CTRL-2"
-    },
-    {
-        "currentLevel": 1,
-        "timer": 60,
-        "chipsText": "CTRL-1"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 60,
-        "chipsText": "CTRL-2"
-    },
-    {
-        "currentLevel": 2,
         "timer": 59,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 59,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 59,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 59,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 58,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 58,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 58,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 58,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 58,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 58,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 58,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 57,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 57,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 57,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 57,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 57,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 56,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 56,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 56,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 55,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 55,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 55,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 54,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 54,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 54,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 53,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 53,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 53,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 53,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 53,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 52,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 52,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 52,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 52,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 52,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 51,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 51,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 51,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 51,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 51,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 51,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 51,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 50,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 50,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 50,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 50,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 50,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 49,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 48,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 48,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 48,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 48,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 48,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 48,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 48,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 47,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 47,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 47,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 46,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 46,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 46,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 45,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 44,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 43,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 42,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 41,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 40,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 39,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 38,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 37,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 36,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 35,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
+        "timer": 35,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 35,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 35,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
+        "timer": 35,
+        "chipsText": "Chips"
+    },
+    {
+        "currentLevel": 1,
         "timer": 34,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 33,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 32,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 31,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 30,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 29,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 28,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 27,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 26,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 25,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 24,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 23,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 22,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 21,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 20,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 19,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 18,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 17,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 16,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 15,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 14,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 13,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 12,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 11,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 10,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 9,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 8,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 7,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 6,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 5,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 4,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 3,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 2,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 1,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 0,
-        "chipsText": "CTRL-2"
+        "chipsText": "Chips"
     },
     {
-        "currentLevel": 2,
+        "currentLevel": 1,
         "timer": 0,
-        "chipsText": "CTRL-2"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "DOWN"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "RIGHT"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "UP"
-    },
-    {
-        "currentLevel": 2,
-        "timer": 0,
-        "chipsText": "LEFT"
+        "chipsText": "Chips"
     }
 ]

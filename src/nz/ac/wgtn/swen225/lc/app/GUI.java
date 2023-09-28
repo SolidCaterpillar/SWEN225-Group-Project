@@ -60,8 +60,9 @@ public class GUI {
     private final int tileSize = 68; // Adjust this size as needed
     private final int numRows = 9;
     private final int numCols = 9;
-    private final int marginSize = 60; // Adjust this size for margins
     private boolean gamePaused = false; // Flag to track if the game is paused
+
+    private boolean showInstructions = false;
 
 
     public GUI() {
@@ -145,6 +146,13 @@ public class GUI {
                             resetTimer();
                             redrawGUI();
                             break;
+                        case KeyEvent.VK_E:
+                            // CTRL-2: Start a new game at level 2
+                            // Implement logic to start a new game at level 2
+                            showInstructions = showInstructions ? false : true;
+                            gamePaused = showInstructions;
+                            redrawGUI();
+                            break;
                     }
                 } else {
                     // Handle regular arrow key movements
@@ -201,7 +209,7 @@ public class GUI {
                         switch (keyCode) {
                             case KeyEvent.VK_ESCAPE:
                                 chipsText = "Escape";
-                                gamePaused = false;
+                                gamePaused = showInstructions;
                                 levelText = "Level";
                                 redrawGUI();
                                 break;
@@ -438,7 +446,9 @@ public class GUI {
         instructionsMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawInstructions();
+                showInstructions = showInstructions ? false : true;
+                gamePaused = showInstructions;
+                redrawGUI();
             }
         });
     }
@@ -483,12 +493,15 @@ public class GUI {
 
 
     public void createLevelPanel() {
+
+        int n = !showInstructions ? 2 : 1;
+
         levelPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load your background image
-                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield2.png"));
+                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield" + n + ".png"));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -498,6 +511,9 @@ public class GUI {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // Centered label at the first row
+        if(!showInstructions){
+
+
         levelLabel = new JLabel(levelText);
         Font font = new Font("Arial", Font.BOLD, 20);
         levelLabel.setFont(font);
@@ -534,18 +550,20 @@ public class GUI {
         gbc.gridwidth = 1; // Reset grid width to default
         gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
         levelPanel.add(sprite2, gbc);
+        }
 
-        levelPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
     public void createTimePanel(){
+
+        int n = !showInstructions ? 2 : 3;
 
         timePanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load your background image
-                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield2.png"));
+                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield" + n + ".png"));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -554,61 +572,64 @@ public class GUI {
         GridBagConstraints gbc = new GridBagConstraints();
         // Centered label at the first row
 
-        timeLabel = new JLabel(timeText);
-        Font font = new Font("Arial", Font.BOLD, 20);
-        timeLabel.setFont(font);
+        if(!showInstructions) {
+            timeLabel = new JLabel(timeText);
+            Font font = new Font("Arial", Font.BOLD, 20);
+            timeLabel.setFont(font);
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2; // Span two columns
-        gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
-        timePanel.add(timeLabel, gbc);
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.gridwidth = 2; // Span two columns
+            gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
+            timePanel.add(timeLabel, gbc);
 
-        JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
-        sprite2.setOpaque(false);
+            JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+            sprite2.setOpaque(false);
 
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
-        for (int i = 0; i < 3; i++) {
-            // Create a small JPanel square which will contain the content of a Tile.
-            JPanel cell = new JPanel();
-            cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
-            cell.setBackground(Color.WHITE);
+            ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
+            for (int i = 0; i < 3; i++) {
+                // Create a small JPanel square which will contain the content of a Tile.
+                JPanel cell = new JPanel();
+                cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
+                cell.setBackground(Color.WHITE);
 
-            if(i == 1){
-                imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft / 10) + ".png"));
+                if (i == 1) {
+                    imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft / 10) + ".png"));
+                }
+
+                if (i == 2) {
+                    imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft % 10) + ".png"));
+                }
+
+                JLabel sprite = new JLabel();
+                sprite.setIcon(imageIcon);
+                cell.add(sprite);
+                cell.setOpaque(false);
+
+                sprite2.add(cell);
             }
 
-            if(i == 2){
-                imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft % 10) + ".png"));
-            }
+            gbc.gridx = 0;
+            gbc.gridy = 1; // Start from the second row
+            gbc.gridwidth = 1; // Reset grid width to default
+            gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
+            timePanel.add(sprite2, gbc);
 
-            JLabel sprite = new JLabel();
-            sprite.setIcon(imageIcon);
-            cell.add(sprite);
-            cell.setOpaque(false);
-
-            sprite2.add(cell);
+            timePanel.setBackground(Color.WHITE);
         }
-
-        gbc.gridx = 0;
-        gbc.gridy = 1; // Start from the second row
-        gbc.gridwidth = 1; // Reset grid width to default
-        gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
-        timePanel.add(sprite2, gbc);
-
-        timePanel.setBackground(Color.WHITE);
-        timePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
     }
 
     public void createChipsPanel(){
+
+        int n = !showInstructions ? 2 : 4;
 
         chipsPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load your background image
-                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield2.png"));
+                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield" + n + ".png"));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -616,43 +637,44 @@ public class GUI {
         chipsPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Centered label at the first row
-        chipsLabel = new JLabel(chipsText);
-        Font font = new Font("Arial", Font.BOLD, 20);
-        chipsLabel.setFont(font);
+        if(!showInstructions) {
+            // Centered label at the first row
+            chipsLabel = new JLabel(chipsText);
+            Font font = new Font("Arial", Font.BOLD, 20);
+            chipsLabel.setFont(font);
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2; // Span two columns
-        gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
-        chipsPanel.add(chipsLabel, gbc);
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.gridwidth = 2; // Span two columns
+            gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
+            chipsPanel.add(chipsLabel, gbc);
 
-        JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
-        sprite2.setOpaque(false);
+            JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
+            sprite2.setOpaque(false);
 
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
-        for (int i = 0; i < 3; i++) {
-            // Create a small JPanel square which will contain the content of a Tile.
-            JPanel cell = new JPanel();
-            cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
-            cell.setBackground(Color.WHITE);
+            ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
+            for (int i = 0; i < 3; i++) {
+                // Create a small JPanel square which will contain the content of a Tile.
+                JPanel cell = new JPanel();
+                cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
+                cell.setBackground(Color.WHITE);
 
-            JLabel sprite = new JLabel();
-            sprite.setIcon(imageIcon);
-            cell.add(sprite);
-            cell.setOpaque(false);
+                JLabel sprite = new JLabel();
+                sprite.setIcon(imageIcon);
+                cell.add(sprite);
+                cell.setOpaque(false);
 
-            sprite2.add(cell);
+                sprite2.add(cell);
+            }
+
+            gbc.gridx = 0;
+            gbc.gridy = 1; // Start from the second row
+            gbc.gridwidth = 1; // Reset grid width to default
+            gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
+            chipsPanel.add(sprite2, gbc);
+
+            chipsPanel.setBackground(Color.WHITE);
         }
-
-        gbc.gridx = 0;
-        gbc.gridy = 1; // Start from the second row
-        gbc.gridwidth = 1; // Reset grid width to default
-        gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
-        chipsPanel.add(sprite2, gbc);
-
-        chipsPanel.setBackground(Color.WHITE);
-        chipsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
     public void createinventoryPanel(){
@@ -730,6 +752,8 @@ public class GUI {
 
 
     public void drawInstructions() {
+
+
 
         // this is the only method to redraw the board
         mapPanel.removeAll();
