@@ -1,14 +1,19 @@
 package nz.ac.wgtn.swen225.lc.app;
 // Author: Emmanuel De Vera
 
+import nz.ac.wgtn.swen225.lc.domain.*;
+import nz.ac.wgtn.swen225.lc.domain.Tile.*;
+import nz.ac.wgtn.swen225.lc.domain.Entity.*;
+import nz.ac.wgtn.swen225.lc.persistency.*;
+import nz.ac.wgtn.swen225.lc.renderer.*;
+//import nz.ac.wgtn.swen225.lc.recorder.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Enumeration;
 import javax.imageio.ImageIO;
 import java.io.*;
-
-//import nz.ac.wgtn.swen225.lc.recorder.*;
 
 public class GUI {
 
@@ -20,20 +25,29 @@ public class GUI {
     private int timeLeft = maxTime; // Time left for the current level
     private Timer timer; // Timer for counting down the time
 
+
+
     // Composed of a Main Frame which is then broken into Panels
     private JFrame mainFrame;
     private JPanel backPanel;
     private JPanel mapPanel;
-
     private JPanel sidePanel;
     private JPanel levelPanel;
     private JPanel timePanel;
     private JPanel chipsPanel;
     private JPanel inventoryPanel;
-
     private JLabel levelLabel;
     private JLabel timeLabel;
     private JLabel chipsLabel;
+
+
+
+    private Level play = Persistency.loadLevel1();
+    private Tile[][] maze = play.board().getBoard() ;
+    private Player ch =play.player();
+    private GameRenderer renderer = new GameRenderer(maze, ch);
+    private GameCanvas canvas = new GameCanvas(renderer);
+
 
     private String levelText = "Level";
     private String timeText = "Time";
@@ -296,14 +310,15 @@ public class GUI {
             }
         };
 
-        backPanel.setBorder(BorderFactory.createEmptyBorder(marginSize, marginSize * 3, marginSize, marginSize * 3));
+        backPanel.setBorder(BorderFactory.createEmptyBorder(60, 150, 60, 150));
+        backPanel.setPreferredSize(new Dimension(1280, 720));
 
-        mapPanel = new JPanel(new GridLayout(numRows, numCols));
-        mapPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, marginSize));
+        mapPanel = canvas;
+        mapPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mapPanel.setOpaque(false);
 
         // This method will initialize the positions of specific Tiles. Use this to link to Tile, Estate, and Player
-        createTiles();
+        //createTiles();
 
         backPanel.add(mapPanel, BorderLayout.CENTER);
         mainFrame.add(backPanel);
@@ -685,7 +700,7 @@ public class GUI {
 
         // this is the only method to redraw the board
         mapPanel.removeAll();
-        createTiles();
+        //createTiles();
 
         // this is the method to redraw the side panel
         sidePanel.removeAll();
@@ -716,7 +731,7 @@ public class GUI {
 
         // this is the only method to redraw the board
         mapPanel.removeAll();
-        createTiles();
+        //createTiles();
 
         // this is the method to redraw the side panel
         sidePanel.removeAll();

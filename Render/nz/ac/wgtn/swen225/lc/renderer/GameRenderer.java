@@ -28,7 +28,7 @@ public class GameRenderer extends JPanel {
     private Clip playerDeathSoundClip;
     private Player player;
 
-    private int tileSize = 68;
+    private int tileSize = 122;
     // Define game-related variables
     //private Board maze;
 
