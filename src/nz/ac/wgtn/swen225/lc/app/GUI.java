@@ -658,21 +658,23 @@ public class GUI {
     public void createinventoryPanel(){
         inventoryPanel = new JPanel(new GridLayout(2, 4));
 
-        inventoryPanel.setBackground(Color.WHITE);
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        inventoryPanel.setOpaque(false);
 
         for (int i = 0; i < 8; i++) {
             // below basically makes a small JPanel square which will contain the content of a Tile.
+            int num = i > 3 ? (i % 4) + 1 : ((3 - i) % 4) + 1;
             JPanel cell = new JPanel(new BorderLayout()) {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     // Load your background image
-                    ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/key.png"));
+
+                    ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/key" + num + ".png"));
                     g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 }
             };
-            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+            cell.setOpaque(false);
             inventoryPanel.add(cell);
         }
     }

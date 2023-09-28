@@ -119,9 +119,11 @@ public class GameRenderer extends JPanel {
             return "exit.png";
         } else if (tile instanceof KeyTile) {
             return "key.png";
+        } else if (tile instanceof LockedDoor) {
+            return "lockeddoor.png";
         } else {
             // Default icon for unknown tile types
-            return "unknown.png";
+            return "walltile.png";
         }
     }
 
