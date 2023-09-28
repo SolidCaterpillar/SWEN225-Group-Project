@@ -1,6 +1,10 @@
 package nz.ac.wgtn.swen225.lc.app;
 // Author: Emmanuel De Vera
 
+import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
+import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
+import nz.ac.wgtn.swen225.lc.renderer.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,9 +12,12 @@ import java.util.Enumeration;
 import javax.imageio.ImageIO;
 import java.io.*;
 
-//import nz.ac.wgtn.swen225.lc.recorder.*;
+import nz.ac.wgtn.swen225.lc.renderer.*;
+import nz.ac.wgtn.swen225.lc.domain.*;
 
 public class GUI {
+
+
 
     private int currentLevel = 1; // Current game level
     private int treasuresRemaining; // Number of treasures remaining
@@ -39,7 +46,10 @@ public class GUI {
     private String timeText = "Time";
     private String chipsText = "Chips";
 
+    private Tile[][] maze;
 
+    private GameRenderer renderer;
+    private GameCanvas canvas;
 
     private final int tileSize = 68; // Adjust this size as needed
     private final int numRows = 9;
@@ -47,8 +57,18 @@ public class GUI {
     private final int marginSize = 60; // Adjust this size for margins
     private boolean gamePaused = false; // Flag to track if the game is paused
 
+    private boolean gameInstructions = false;
+
 
     public GUI() {
+
+        Domain domain = new Domain();
+        domain.picKLevel(LevelE.LEVEL_ONE);
+
+        Player ch = domain.getPlayer();
+        renderer = new GameRenderer(domain.getBoard().getBoard(), ch, domain);
+        canvas = new GameCanvas(renderer);
+
 
         // Frame is the overall GUI JFrame that contains pannels.
         mainFrame = new JFrame("Larry Croft’s Adventures");
@@ -306,7 +326,8 @@ public class GUI {
         createTiles();
 
         backPanel.add(mapPanel, BorderLayout.CENTER);
-        mainFrame.add(backPanel);
+        //mainFrame.add(backPanel);
+        mainFrame.add(canvas);
     }
 
     public void createMenuBar(){
@@ -677,8 +698,6 @@ public class GUI {
 
         createinventoryPanel();
         sidePanel.add(inventoryPanel);
-
-        backPanel.add(sidePanel, BorderLayout.EAST);
     }
 
     public void redrawGUI() {
@@ -724,6 +743,7 @@ public class GUI {
         // this is needed to confirm the changes
         mainFrame.revalidate();
         mainFrame.repaint();
+
     }
 
 

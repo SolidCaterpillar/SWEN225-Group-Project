@@ -5,13 +5,17 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Chap;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 
+import nz.ac.wgtn.swen225.lc.renderer.*;
+import nz.ac.wgtn.swen225.lc.domain.*;
+
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-import static Domain.Board.tileSize;
+
+//import static Domain.Board.tileSize;
 
 /**
  * responsible for handling the rendering logic for the game.
@@ -20,7 +24,7 @@ public class GameRenderer extends JPanel {
 
     // Define  game-related variables here
 
-    private static final String ICONS_FOLDER = "gameicons/"; // Path to the icons folder
+    private static final String ICONS_FOLDER = "src/nz/ac/wgtn/swen225/lc/app/icons/"; // Path to the icons folder
     private ImageIcon[][] tileIcons; // 2D array of ImageIcons for tiles
     private Tile[][] maze; // 2D array representing the maze
     private ImageIcon playerIcon;
@@ -29,6 +33,8 @@ public class GameRenderer extends JPanel {
     private Clip doorOpenSoundClip;
     private Clip playerDeathSoundClip;
     private Player player;
+
+    Domain domOb;
     // Define game-related variables
     //private Board maze;
 
@@ -40,10 +46,10 @@ public class GameRenderer extends JPanel {
      * Constructor to initialize game-related variables
      * set up  game state and resources here
      */
-    public GameRenderer(Tile[][] maze, Player player) {
-        this.maze = nz.ac.wgtn.swen225.lc.domain.getBoard(); // Initialize the maze
-        this.player = nz.ac.wgtn.swen225.lc.domain.getPlayer(); // Initialize the player
-
+    public GameRenderer(Tile[][] maze, Player player, Domain dom) {
+        this.maze = dom.getBoard().getBoard(); // Initialize the maze
+        this.player = dom.getPlayer(); // Initialize the player
+        this.domOb = dom;
         tileIcons = new ImageIcon[maze.length][maze[0].length];
         loadTileIcons();
         initializeRenderer();
@@ -141,16 +147,17 @@ public class GameRenderer extends JPanel {
         super.paintComponent(g);
         // Place rendering logic here to draw the game elements using ImageIcon
 
+        int tileSize = domOb.getBoard().getSize();
 
         // Draw the maze with different tile types
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
                 if (tileIcons[row][col] != null) {
                     // Calculate the destination rectangle for the image
-                    int x = col * tileSize;
-                    int y = row * tileSize;
-                    int width = tileSize;
-                    int height = tileSize;
+                    int x = col * domOb.getBoard().getSize();
+                    int y = row * domOb.getBoard().getSize();
+                    int width = domOb.getBoard().getSize();
+                    int height = domOb.getBoard().getSize();
 
                     // Draw the border around the tile
                     g.setColor(Color.BLACK); // You can change the border color
@@ -164,8 +171,8 @@ public class GameRenderer extends JPanel {
 
         // Draw the player
         if (player != null) {
-            int playerX = player.getX() * tileSize;
-            int playerY = player.getY() * tileSize;
+            int playerX = player.getX() * domOb.getBoard().getSize();
+            int playerY = player.getY() * domOb.getBoard().getSize();
             // Draw the border around the player tile
             g.setColor(Color.BLACK); // You can change the border color
             g.drawRect(playerX, playerY, tileSize, tileSize);
@@ -219,6 +226,7 @@ public class GameRenderer extends JPanel {
         int startRow = playerRow - 2;
         int startCol = playerCol - 2;
 
+        int tileSize = domOb.getBoard().getSize();
         // Ensure starting row and column are within bounds
         startRow = Math.max(0, startRow);
         startCol = Math.max(0, startCol);

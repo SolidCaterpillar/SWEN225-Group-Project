@@ -110,4 +110,7 @@ public class Board {
         return board[x][y];
     }
 
+    public int getSize(){
+        return tileSize;
+    }
 }

@@ -42,4 +42,12 @@ public class Player implements Entity{
         return "x";
     }
 
+    public int getX(){
+        return location.x();
+    }
+
+    public int getY(){
+        return location.y();
+    }
+
 }
