@@ -1,4 +1,4 @@
-package src.nz.ac.wgtn.swen225.lc.app;
+package nz.ac.wgtn.swen225.lc.app;
 
 
 import javax.swing.*;
@@ -14,22 +14,22 @@ public class Main {
     private boolean hasChip; // Indicates whether the player has collected the chip
     private boolean gameOver; // Indicates whether the game is over
     private GUI gui;
-    
+
     public Main() {
         // Initialize the game board, player position, and other fields
         // You would typically load the board from a file or create it programmatically.
         // For simplicity, let's assume a 2D char array for the board.
         // 'W' represents walls, 'K' represents keys, 'D' represents doors, 'C' represents the chip, etc.
-        
+
         playerX = 4; // Initial player X-coordinate
         playerY = 4; // Initial player Y-coordinate
         keysCollected = 0;
         hasChip = false;
         gameOver = false;
         gui = new GUI();
-        
+
     }
-    
+
     // Method to move the player in a given direction (e.g., "up", "down", "left", "right")
     private void movePlayer(String direction) {
         // Implement logic to move the player, check for collisions, and update the game state
@@ -72,7 +72,7 @@ public class Main {
 
     public static void main(String[] args) {
         Main game = new Main();
-        
+
         //game.playGame(); // Start the game loop
     }
 }

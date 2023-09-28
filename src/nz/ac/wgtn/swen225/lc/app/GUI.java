@@ -1,4 +1,4 @@
-package src.nz.ac.wgtn.swen225.lc.app;
+package nz.ac.wgtn.swen225.lc.app;
 // Author: Emmanuel De Vera
 
 import javax.swing.*;
@@ -8,68 +8,76 @@ import java.util.Enumeration;
 import javax.imageio.ImageIO;
 import java.io.*;
 
+//import nz.ac.wgtn.swen225.lc.recorder.*;
 
 public class GUI {
-    
+
     private int currentLevel = 1; // Current game level
     private int treasuresRemaining; // Number of treasures remaining
     private int maxTime = 60;
+
+    //private Recorder rec;
     private int timeLeft = maxTime; // Time left for the current level
     private Timer timer; // Timer for counting down the time
-    
-    // Composed of a Main Frame which is then broken into Panels    
+
+    // Composed of a Main Frame which is then broken into Panels
     private JFrame mainFrame;
     private JPanel backPanel;
     private JPanel mapPanel;
-    
-    private JPanel sidePanel;  
+
+    private JPanel sidePanel;
     private JPanel levelPanel;
     private JPanel timePanel;
     private JPanel chipsPanel;
     private JPanel inventoryPanel;
-    
+
     private JLabel levelLabel;
     private JLabel timeLabel;
     private JLabel chipsLabel;
-    
+
     private String levelText = "Level";
+    private String timeText = "time";
     private String chipsText = "Chips";
-    
+
+
+
     private final int tileSize = 68; // Adjust this size as needed
     private final int numRows = 9;
     private final int numCols = 9;
     private final int marginSize = 60; // Adjust this size for margins
     private boolean gamePaused = false; // Flag to track if the game is paused
-    
-    
+
+
     public GUI() {
-        
-        // Frame is the overall GUI JFrame that contains pannels. 
+
+        // Frame is the overall GUI JFrame that contains pannels.
         mainFrame = new JFrame("Larry Croft’s Adventures");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setResizable(false);
-        
+
+        //rec = new Recorder();
+
         drawBoard();
         createSideBar();
         createMenuBar();
-        
+
         resetTimer();
-        
+
         // Add the key listener to the panel. All of these lines are required
         mapPanel.setFocusable(true);
         mapPanel.requestFocus();
-        
+
         mapPanel.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
                 // This method is called when a key is typed
             }
-        
+
             @Override
             public void keyPressed(KeyEvent e) {
                 // This method is called when a key is pressed
                 int keyCode = e.getKeyCode();
-                
+
                 if (e.isControlDown()) {
                     // Handle Ctrl key combinations
                     switch (keyCode) {
@@ -126,81 +134,88 @@ public class GUI {
                     // Handle regular arrow key movements
                     if(!gamePaused){
                         switch (keyCode) {
-                        case KeyEvent.VK_ESCAPE:
-                            chipsText = "Escape";
-                            gamePaused = true;
-                            levelText = "Paused";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_UP:
-                            // Handle UP arrow key press (e.g., move up)
-                            chipsText = "UP";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_LEFT:
-                            // Handle LEFT arrow key press (e.g., move left)
-                            chipsText = "LEFT";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_DOWN:
-                            // Handle DOWN arrow key press (e.g., move down)
-                            chipsText = "DOWN";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_RIGHT:
-                            // Handle RIGHT arrow key press (e.g., move right)
-                            chipsText = "RIGHT";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_W:
-                            // Handle UP arrow key press (e.g., move up)
-                            chipsText = "UP";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_A:
-                            // Handle LEFT arrow key press (e.g., move left)
-                            chipsText = "LEFT";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_S:
-                            // Handle DOWN arrow key press (e.g., move down)
-                            chipsText = "DOWN";
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_D:
-                            // Handle RIGHT arrow key press (e.g., move right)
-                            chipsText = "RIGHT";
-                            redrawGUI();
-                            break;
+                            case KeyEvent.VK_ESCAPE:
+                                chipsText = "Escape";
+                                gamePaused = true;
+                                levelText = "Paused";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_UP:
+                                // Handle UP arrow key press (e.g., move up)
+                                chipsText = "UP";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_LEFT:
+                                // Handle LEFT arrow key press (e.g., move left)
+                                chipsText = "LEFT";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_DOWN:
+                                // Handle DOWN arrow key press (e.g., move down)
+                                chipsText = "DOWN";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_RIGHT:
+                                // Handle RIGHT arrow key press (e.g., move right)
+                                chipsText = "RIGHT";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_W:
+                                // Handle UP arrow key press (e.g., move up)
+                                chipsText = "UP";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_A:
+                                // Handle LEFT arrow key press (e.g., move left)
+                                chipsText = "LEFT";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_S:
+                                // Handle DOWN arrow key press (e.g., move down)
+                                chipsText = "DOWN";
+                                redrawGUI();
+                                break;
+                            case KeyEvent.VK_D:
+                                // Handle RIGHT arrow key press (e.g., move right)
+                                chipsText = "RIGHT";
+                                redrawGUI();
+                                break;
                         }
                     }else{
                         switch (keyCode) {
-                        case KeyEvent.VK_ESCAPE:
-                            chipsText = "Escape";
-                            gamePaused = false;
-                            levelText = "Level";
-                            redrawGUI();
-                            break;
+                            case KeyEvent.VK_ESCAPE:
+                                chipsText = "Escape";
+                                gamePaused = false;
+                                levelText = "Level";
+                                redrawGUI();
+                                break;
                         }
                     }
                 }
             }
-        
+
             @Override
             public void keyReleased(KeyEvent e) {
                 // This method is called when a key is released
             }
         });
-        
+
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
-    
-    
+
+    public int getTime(){
+        return timeLeft;
+    }
+
+
+
+
     public static void loadFile() {
 
         // Create a file chooser
-        JFileChooser fileChooser = new JFileChooser();
+        String currentDirectory = System.getProperty("user.dir");
+        JFileChooser fileChooser = new JFileChooser(currentDirectory + "/src/nz/ac/wgtn/swen225/lc/app");
         int returnValue = fileChooser.showOpenDialog(null);
 
         // Check if the user selected a file
@@ -216,7 +231,7 @@ public class GUI {
                     System.out.println(line);
                 }
                 reader.close();
-                
+
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Error reading the file.");
@@ -224,14 +239,15 @@ public class GUI {
         } else {
             System.out.println("No file selected.");
         }
-        
+
     }
-    
-    
+
+
     public static void writeFile() {
-        
+
         // Create a file chooser
-        JFileChooser fileChooser = new JFileChooser();
+        String currentDirectory = System.getProperty("user.dir");
+        JFileChooser fileChooser = new JFileChooser(currentDirectory + "/src/nz/ac/wgtn/swen225/lc/app");
         int returnValue = fileChooser.showSaveDialog(null); // Use Save dialog to select a file to write to
 
         // Check if the user selected a file
@@ -252,7 +268,7 @@ public class GUI {
             System.out.println("No file selected.");
         }
     }
-    
+
     public void resetTimer(){
         timer = new Timer(1000, new ActionListener() {
             @Override
@@ -262,10 +278,10 @@ public class GUI {
                     redrawGUI();
                 }
             }
-        });        
+        });
         timer.start();
     }
-    
+
     public void drawBoard() {
         backPanel = new JPanel(new BorderLayout()) {
             @Override
@@ -289,32 +305,32 @@ public class GUI {
         backPanel.add(mapPanel, BorderLayout.CENTER);
         mainFrame.add(backPanel);
     }
-    
+
     public void createMenuBar(){
         // Create the menu bar
         JMenuBar menuBar = new JMenuBar();
         mainFrame.setJMenuBar(menuBar);
-    
+
         // Create a menu
         JMenu menu1 = new JMenu("Game");
         JMenu menu2 = new JMenu("Options");
         JMenu menu3 = new JMenu("Level");
         JMenu menu4 = new JMenu("Help");
-        
+
         menuBar.add(menu1);
         menuBar.add(menu2);
         menuBar.add(menu3);
         menuBar.add(menu4);
-        
+
         JMenuItem pauseMenuItem = new JMenuItem("Pause");
         JMenuItem resumeMenuItem = new JMenuItem("Resume");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
         JMenuItem saveMenuItem = new JMenuItem("Save");
-        JMenuItem loadMenuItem = new JMenuItem("Load");        
+        JMenuItem loadMenuItem = new JMenuItem("Load");
         JMenuItem level1MenuItem = new JMenuItem("Level 1");
         JMenuItem level2MenuItem = new JMenuItem("Level 2");
         JMenuItem instructionsMenuItem = new JMenuItem("Game Rules");
-        
+
         menu1.add(pauseMenuItem);
         menu1.add(resumeMenuItem);
         menu1.add(exitMenuItem);
@@ -323,11 +339,11 @@ public class GUI {
         menu3.add(level1MenuItem);
         menu3.add(level2MenuItem);
         menu4.add(instructionsMenuItem);
-        
-        
-        
-        
-        
+
+
+
+
+
         pauseMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -336,7 +352,7 @@ public class GUI {
                 redrawGUI();
             }
         });
-        
+
         resumeMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -345,7 +361,7 @@ public class GUI {
                 redrawGUI();
             }
         });
-        
+
         // Adding the JOptionPane alongside the MenuItem when clicked
         exitMenuItem.addActionListener(new ActionListener() {
             @Override
@@ -356,21 +372,21 @@ public class GUI {
                 }
             }
         });
-        
+
         loadMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadFile();
             }
         });
-        
+
         saveMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 writeFile();
             }
         });
-        
+
         level1MenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -383,7 +399,7 @@ public class GUI {
                 redrawGUI();
             }
         });
-        
+
         level2MenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -396,7 +412,7 @@ public class GUI {
                 redrawGUI();
             }
         });
-        
+
         instructionsMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -404,7 +420,7 @@ public class GUI {
             }
         });
     }
-    
+
     public void decrementTime(){
         timeLeft --;
         if(timeLeft < 1){
@@ -415,12 +431,12 @@ public class GUI {
     }
 
     public void createTiles() {
-        
+
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/walltile3.png"));
-        
+
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
-                
+
                 // below basically makes a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel(new BorderLayout()) {
                     @Override
@@ -432,18 +448,18 @@ public class GUI {
                     }
                 };
                 cell.setPreferredSize(new Dimension(tileSize, tileSize));
-                
+
                 //JLabel sprite = new JLabel();
                 //sprite.setIcon(imageIcon);
-                
+
                 //cell.add(sprite);
                 mapPanel.add(cell);
-                
+
             }
         }
     }
 
-    
+
     public void createLevelPanel() {
         levelPanel = new JPanel(new GridBagLayout()) {
             @Override
@@ -454,54 +470,54 @@ public class GUI {
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-        
+
         // Set the background of levelPanel to be transparent
         levelPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-        
+
         // Centered label at the first row
         levelLabel = new JLabel(levelText);
         Font font = new Font("Arial", Font.BOLD, 20);
         levelLabel.setFont(font);
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span two columns
         gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
         levelPanel.add(levelLabel, gbc);
-    
+
         JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
         sprite2.setOpaque(false);
-    
+
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
             cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
-    
+
             if (i == 2) {
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + currentLevel + ".png"));
             }
-    
+
             JLabel sprite = new JLabel();
             sprite.setIcon(imageIcon);
-    
+
             cell.setOpaque(false);
             cell.add(sprite);
             sprite2.add(cell);
         }
-    
+
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
         gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
         levelPanel.add(sprite2, gbc);
-    
+
         levelPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
-    
+
     public void createTimePanel(){
-        
+
         timePanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -511,60 +527,60 @@ public class GUI {
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-        
+
         timePanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         // Centered label at the first row
-        
-        timeLabel = new JLabel("Time");
+
+        timeLabel = new JLabel(timeText);
         Font font = new Font("Arial", Font.BOLD, 20);
         timeLabel.setFont(font);
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span two columns
         gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
         timePanel.add(timeLabel, gbc);
-    
+
         JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
         sprite2.setOpaque(false);
-        
+
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
             cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
             cell.setBackground(Color.WHITE);
-            
+
             if(i == 1){
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft / 10) + ".png"));
             }
-            
+
             if(i == 2){
                 imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft % 10) + ".png"));
             }
-    
+
             JLabel sprite = new JLabel();
             sprite.setIcon(imageIcon);
             cell.add(sprite);
             cell.setOpaque(false);
-    
+
             sprite2.add(cell);
         }
-    
+
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
         gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
         timePanel.add(sprite2, gbc);
-        
+
         timePanel.setBackground(Color.WHITE);
         timePanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
     }
-    
+
     public void createChipsPanel(){
-        
+
         chipsPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -574,55 +590,55 @@ public class GUI {
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-        
+
         chipsPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-        
+
         // Centered label at the first row
         chipsLabel = new JLabel(chipsText);
         Font font = new Font("Arial", Font.BOLD, 20);
         chipsLabel.setFont(font);
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2; // Span two columns
         gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
         chipsPanel.add(chipsLabel, gbc);
-    
+
         JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
         sprite2.setOpaque(false);
-        
+
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
         for (int i = 0; i < 3; i++) {
             // Create a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel();
             cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
             cell.setBackground(Color.WHITE);
-    
+
             JLabel sprite = new JLabel();
             sprite.setIcon(imageIcon);
             cell.add(sprite);
             cell.setOpaque(false);
-    
+
             sprite2.add(cell);
         }
-    
+
         gbc.gridx = 0;
         gbc.gridy = 1; // Start from the second row
         gbc.gridwidth = 1; // Reset grid width to default
         gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
         chipsPanel.add(sprite2, gbc);
-        
+
         chipsPanel.setBackground(Color.WHITE);
         chipsPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
-    
+
     public void createinventoryPanel(){
         inventoryPanel = new JPanel(new GridLayout(2, 4));
-        
+
         inventoryPanel.setBackground(Color.WHITE);
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        
+
         for (int i = 0; i < 8; i++) {
             // below basically makes a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel(new BorderLayout()) {
@@ -634,72 +650,78 @@ public class GUI {
                     g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 }
             };
-            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));            
+            cell.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
             inventoryPanel.add(cell);
         }
     }
-    
+
     public void createSideBar(){
         // Create the header panels
         sidePanel = new JPanel(new GridLayout(4, 1)); // 4 rows, 1 column
         sidePanel.setPreferredSize(new Dimension(300, mainFrame.getHeight()));
         sidePanel.setOpaque(false);
-        
+
         createLevelPanel();
         sidePanel.add(levelPanel);
-        
+
         createTimePanel();
         sidePanel.add(timePanel);
-        
+
         createChipsPanel();
         sidePanel.add(chipsPanel);
-        
+
         createinventoryPanel();
         sidePanel.add(inventoryPanel);
-    
+
         backPanel.add(sidePanel, BorderLayout.EAST);
     }
-        
+
     public void redrawGUI() {
-        
+
         // this is the only method to redraw the board
         mapPanel.removeAll();
         createTiles();
-        
+
         // this is the method to redraw the side panel
         sidePanel.removeAll();
         createLevelPanel();
         sidePanel.add(levelPanel);
-        
+
         createTimePanel();
         sidePanel.add(timePanel);
-        
+
         createChipsPanel();
         sidePanel.add(chipsPanel);
-        
+
         createinventoryPanel();
         sidePanel.add(inventoryPanel);
-        
+
         // this is needed to confirm the changes
         mainFrame.revalidate();
         mainFrame.repaint();
+
+
+        //rec.saveGameStateFile(timeLeft, currentLevel, chipsText);
+
+        //int timer, int currentLevel, String chipsText
     }
-    
+
+
     public void drawInstructions() {
-        
+
         // this is the only method to redraw the board
         mapPanel.removeAll();
         createTiles();
-        
+
         // this is the method to redraw the side panel
         sidePanel.removeAll();
-        
+
         // this is needed to confirm the changes
         mainFrame.revalidate();
         mainFrame.repaint();
     }
-    
-    
+
+
     private void exitGame() {
         // Implement game exit logic, potentially saving the game state
         // and resuming from the last unfinished level next time
