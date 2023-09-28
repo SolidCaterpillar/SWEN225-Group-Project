@@ -22,4 +22,9 @@ public class Wall extends Tile{
     public String toString(){
         return "|#|";
     }
+
+    public static boolean checkWall(Coord loc){
+
+        return false;
+    }
 }
