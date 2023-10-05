@@ -208,6 +208,7 @@ public class GUI {
                             case KeyEvent.VK_W:
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_A:
