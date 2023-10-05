@@ -50,6 +50,7 @@ public class Player implements Entity{
                 newPos = optionalTile.get();
                 if (newPos instanceof FreeTile) { //Currently only movement add interaction later too
 
+                    Player.interact(this, loc); //Static interaction method will expand to encompass tile interactions with locked doors etc.
 
                     Tile oldPos = Tile.tileAtLoc(this.location).orElseThrow(
                             () -> new IllegalArgumentException("OG player position not found")
@@ -116,4 +117,35 @@ public class Player implements Entity{
     public String toString(){
         return "PP";
     }
+
+    public static void interact(Player player, Coord loc) {
+        // get the tile at the player's current location
+        Optional<Tile> currentTileOptional = Tile.tileAtLoc(loc);
+
+        if (currentTileOptional.isPresent()) {
+            Tile currentTile = currentTileOptional.get();
+            Optional<Entity> entityOptional = currentTile.getEntity();
+
+            // check if the tile contains an entity
+            entityOptional.ifPresent(entity -> {
+
+                if (entity instanceof Treasure) {
+
+                    player.treasures.add((Treasure) entity);
+
+                    // remove Entity
+                    currentTile.setEntity(null);
+                }
+
+                else if (entity instanceof Key) {
+
+                    player.keys.add((Key) entity);
+
+                    // rem oveentity
+                    currentTile.setEntity(null);
+                }
+            });
+        }
+    }
+
 }
