@@ -20,8 +20,8 @@ public class Board {
         //Test board constructor
         if(level == 0) {
             //Test scenario
-            for (int i = 0; i < 26; i++) {
-                for (int j = 0; j < 26; j++) {
+            for (int i = 0; i < 20; i++) {
+                for (int j = 0; j < 20; j++) {
 
                     JPanel cell = new JPanel();
                     cell.setPreferredSize(new Dimension(25, 25));
@@ -53,8 +53,8 @@ public class Board {
 
              //board = new Tile[26][26];
 
-             for (int i = 0; i < 26; i++) {
-                 for (int j = 0; j < 26; j++) {
+             for (int i = 0; i < 20; i++) {
+                 for (int j = 0; j < 20; j++) {
                      Tile currentTile = brd[i][j];
                      JPanel cell = new JPanel();
                      cell.setPreferredSize(new Dimension(25, 25));
@@ -113,4 +113,21 @@ public class Board {
     public int getSize(){
         return tileSize;
     }
+
+
+    //String tester
+    public static void buildString(Tile[][] stringBoard) {
+        StringBuilder ret = new StringBuilder();
+        for (int i = 0; i < stringBoard.length; i++) {
+            for (int j = 0; j < stringBoard[0].length; j++) {
+                ret.append(stringBoard[i][j].toString());
+                if (j == stringBoard[0].length - 1) {
+                    ret.append("\n");
+                }
+            }
+        }
+        System.out.println(ret.toString());
+    }
+
+
 }

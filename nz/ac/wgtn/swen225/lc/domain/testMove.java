@@ -12,5 +12,12 @@ public class testMove {
         domain.picKLevel(LevelE.LEVEL_ONE);
 
         Player ch = domain.getPlayer();
+
+        Board curr = domain.getBoard();
+
+
+        while(true) {
+            Board.buildString(curr.getBoard());
+        }
     }
 }

@@ -28,7 +28,7 @@ public class Domain {
          }
 
         curBoard = curLevel.board();
-        curPlayer =curLevel.player();
+        curPlayer = curLevel.player();
 
         ArrayList<Treasure> treasures = curLevel.treasures();
         ArrayList<Key> keys = curLevel.keys();

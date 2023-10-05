@@ -78,7 +78,7 @@ public class Persistency{
         return new JSONObject(json.toString());
     }  
 
-    private static Level  setupLevel(ReadJson objs){
+    private static Level setupLevel(ReadJson objs){
 
         Entites gameEntites = objs.entites();
         ArrayList<Tile> gameTiles = objs.tiles();
