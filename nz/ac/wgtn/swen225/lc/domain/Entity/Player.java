@@ -124,27 +124,27 @@ public class Player implements Entity{
 
         if (currentTileOptional.isPresent()) {
             Tile currentTile = currentTileOptional.get();
-            Optional<Entity> entityOptional = currentTile.getEntity();
+            Entity entityOptional = currentTile.getEntity();
 
             // check if the tile contains an entity
-            entityOptional.ifPresent(entity -> {
+            if(entityOptional != null){
 
-                if (entity instanceof Treasure) {
+                if (entityOptional instanceof Treasure) {
 
-                    player.treasures.add((Treasure) entity);
+                    player.treasures.add((Treasure) entityOptional);
 
                     // remove Entity
                     currentTile.setEntity(null);
                 }
 
-                else if (entity instanceof Key) {
+                else if (entityOptional instanceof Key) {
 
-                    player.keys.add((Key) entity);
+                    player.keys.add((Key) entityOptional);
 
                     // rem oveentity
                     currentTile.setEntity(null);
                 }
-            });
+            }
         }
     }
 

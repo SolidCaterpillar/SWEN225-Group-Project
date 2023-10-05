@@ -29,8 +29,8 @@ public class Tile {
         
     }; // Define how the tile interacts with an entity
 
-    public Optional<Entity> getEntity() {
-        return Optional.of(objEntity);
+    public Entity getEntity() {
+        return objEntity;
     }
     
     public void setEntity(Entity entity) {
@@ -51,7 +51,7 @@ public class Tile {
     //Entity was mov
     public void moveEntity(Tile swap){
         if(swap != null) {
-            Entity toSwap = swap.getEntity().get(); //if null set it to null anyway
+            Entity toSwap = swap.getEntity(); //if null set it to null anyway
             this.setEntity(toSwap);
             swap.setEntity(null);
         }
