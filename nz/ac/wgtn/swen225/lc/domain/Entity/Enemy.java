@@ -6,7 +6,9 @@ import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 public class Enemy implements Entity{
 
-    public Coord location;
+    protected Orientation direction = Orientation.SOUTH;
+
+    protected Coord location;
 
     Queue<Tile> movementRoute; // set of moves this enemy will make.
 

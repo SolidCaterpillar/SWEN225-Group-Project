@@ -1,18 +1,16 @@
 package nz.ac.wgtn.swen225.lc.domain.Entity;
-import javax.swing.*;
 
 import nz.ac.wgtn.swen225.lc.domain.Coord;
-import nz.ac.wgtn.swen225.lc.domain.Orientation;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.*;
 
 import static nz.ac.wgtn.swen225.lc.domain.Board.getDim;
 
 public class Chap extends Player{
-
+    //starting Orientation is South
+    protected Orientation direction = Orientation.SOUTH;
     protected ArrayList<Treasure> treasures;
     protected Coord location;
 
@@ -25,18 +23,19 @@ public class Chap extends Player{
     }
 
 
-
+    //MAKE THIS A STATIC MOVE LATER IN ENTITY FOR BOTH ENEMY AND PLAYER
     public void checkMove(KeyEvent keyEvent) {
-        int keyCode = keyEvent.getKeyCode();
+        char keyCode = keyEvent.getKeyChar(); //convert to char for switch
+        this.changeDir(keyCode); //Change orientations
 
         Coord loc = null;
         Tile newPos = null;
 
         loc = switch (keyCode) {
-            case KeyEvent.VK_W -> loc = this.location.moveUp();
-            case KeyEvent.VK_A -> loc = this.location.moveLeft();
-            case KeyEvent.VK_S -> loc = this.location.moveDown();
-            case KeyEvent.VK_D -> loc = this.location.moveRight();
+            case 'w'-> loc = this.location.moveUp();
+            case 'a' -> loc = this.location.moveLeft();
+            case 's' -> loc = this.location.moveDown();
+            case 'd' -> loc = this.location.moveRight();
             default -> throw new IllegalArgumentException("Invalid key pressed!");
         };
 
@@ -44,7 +43,7 @@ public class Chap extends Player{
                 Optional<Tile> optionalTile = Tile.tileAtLoc(loc); //get new tile
                 if (optionalTile.isPresent()) { //if new tile presen
                     newPos = optionalTile.get();
-                    if (newPos instanceof FreeTile) {
+                    if (newPos instanceof FreeTile) { //Currently only movement add interaction later too
 
 
                         Tile oldPos = Tile.tileAtLoc(this.location).orElseThrow(
@@ -90,5 +89,22 @@ public class Chap extends Player{
 
     public int getY(){
         return this.location.y();
+    }
+
+
+
+
+    //Change orientation for sprites
+    public void changeDir(char keyCode) {
+        switch (keyCode) {
+            case 'w' -> this.direction = Orientation.NORTH;
+            case 'a' -> this.direction = Orientation.WEST;
+            case 's' -> this.direction = Orientation.SOUTH;
+            case 'd' -> this.direction = Orientation.EAST;
+        }
+    }
+
+    public Orientation getDirection(){
+        return this.direction;
     }
 }

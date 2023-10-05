@@ -55,5 +55,10 @@ public class Tile {
             this.setEntity(toSwap);
             swap.setEntity(null);
         }
+        else{
+            throw new IllegalArgumentException("No tile to be swapped with");
+        }
     }
+
+
 }
