@@ -28,8 +28,9 @@ public class Player implements Entity{
 
 
     //MAKE THIS A STATIC MOVE LATER IN ENTITY FOR BOTH ENEMY AND PLAYER
-    public void checkMove(KeyEvent keyEvent) {
-        char keyCode = keyEvent.getKeyChar(); //convert to char for switch
+    public void checkMove(char keyEvent) {
+        //char keyCode = keyEvent.getKeyChar(); //convert to char for switch
+        char keyCode = keyEvent;
         this.changeDir(keyCode); //Change orientations
 
         Coord loc = null;
@@ -112,4 +113,7 @@ public class Player implements Entity{
         return this.direction;
     }
 
+    public String toString(){
+        return "PP";
+    }
 }
