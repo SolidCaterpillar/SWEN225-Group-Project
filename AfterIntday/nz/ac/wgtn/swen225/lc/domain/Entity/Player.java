@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen225.lc.domain.Entity;
 import javax.swing.*;
 
 import nz.ac.wgtn.swen225.lc.domain.Coord;
+import nz.ac.wgtn.swen225.lc.domain.Domain;
 import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 
@@ -27,10 +28,9 @@ public class Player implements Entity{
     }
 
 
-    //MAKE THIS A STATIC MOVE LATER IN ENTITY FOR BOTH ENEMY AND PLAYER
-    public void checkMove(KeyEvent keyEvent) {
-        char keyCode = keyEvent.getKeyChar(); //convert to char for switch
-        //char keyCode = keyEvent;
+    public void checkMove(char keyEvent) {
+        //char keyCode = keyEvent.getKeyChar(); //convert to char for switch
+        char keyCode = keyEvent;
         this.changeDir(keyCode); //Change orientations
 
         System.out.println(keyCode);
@@ -46,28 +46,35 @@ public class Player implements Entity{
             default -> throw new IllegalArgumentException("Invalid key pressed!");
         };
 
-        if (checkInBound(loc)) { //if new loc in bound
-            Optional<Tile> optionalTile = Tile.tileAtLoc(loc); //get new tile
-            if (optionalTile.isPresent()) { //if new tile presen
-                newPos = optionalTile.get();
-                if (newPos instanceof FreeTile) { //Currently only movement add interaction later too
+        if (!checkInBound(loc)) {return;} //if new loc in bound
 
-                    Player.interact(this, loc); //Static interaction method will expand to encompass tile interactions with locked doors etc.
+        //get new tile
+        Optional<Tile> optionalTile = Tile.tileAtLoc(loc);
 
-                    Tile oldPos = Tile.tileAtLoc(this.location).orElseThrow(
-                            () -> new IllegalArgumentException("OG player position not found")
-                    );
+        //if no tile present
+        if (!optionalTile.isPresent()) { throw new IllegalArgumentException("No tile at the target location!");}
 
-                    newPos.moveEntity(oldPos);
-                    this.location = loc;
-                } else {
-                    //Play sound
-                    System.out.println("Invalid move");
-                }
-            } else {
-                throw new IllegalArgumentException("No tile at the target location!");
-            }
-        }
+        newPos = optionalTile.get();
+
+        //Currently only movement add interaction later too
+        if (!(newPos instanceof FreeTile)) {System.out.println("Invalid move"); }
+
+        //Static interaction method will expand to encompass tile interactions with locked doors etc.
+        Player.interact(this, loc);
+
+        Tile oldPos = Tile.tileAtLoc(this.location).orElseThrow(
+                () -> new IllegalArgumentException("OG player position not found")
+        );
+
+        newPos.moveEntity(oldPos);
+        this.location = loc;
+        //Check treasure count here and when its all taken unlock exitlock
+
+        boolean checkTreasures = Domain.getTreasure().equals(this.getTreasure()); //check if player contains all treasures
+        boolean checkKeys;
+
+        if(checkTreasures) {}//unlock Exit TIles.
+
     }
 
 
@@ -148,6 +155,17 @@ public class Player implements Entity{
                 }
             }
         }
+    }
+
+
+    //FOR TESTING
+    public String getTresDisplay(){
+        String s = "";
+
+        for(var x: this.getTreasure()){
+            s+= "$";
+        }
+        return s;
     }
 
 }

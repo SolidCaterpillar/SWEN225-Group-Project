@@ -9,12 +9,12 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 
 public class Domain {
 
-    Board curBoard;
-    Player curPlayer;
+    protected static Board curBoard;
+    protected static Player curPlayer;
 
-    ArrayList<Treasure> treasures;
-    ArrayList<Key> keys;
-    ArrayList<Enemy> enemies;
+    static ArrayList<Treasure> treasures;
+    static ArrayList<Key> keys;
+    static ArrayList<Enemy> enemies;
 
     public void picKLevel(LevelE level){
                 Level curLevel = null;
@@ -30,9 +30,9 @@ public class Domain {
         curBoard = curLevel.board();
         curPlayer = curLevel.player();
 
-        ArrayList<Treasure> treasures = curLevel.treasures();
-        ArrayList<Key> keys = curLevel.keys();
-        ArrayList<Enemy> enemies = curLevel.enemies();
+        treasures = curLevel.treasures(); //Initialize the class-level ArrayLists
+        keys = curLevel.keys();
+        enemies = curLevel.enemies();
     }
 
     public Board getBoard(){
@@ -43,5 +43,8 @@ public class Domain {
         return curPlayer;
     }
 
+    public static ArrayList<Treasure> getTreasure(){
+        return treasures;
+    }
 
 }

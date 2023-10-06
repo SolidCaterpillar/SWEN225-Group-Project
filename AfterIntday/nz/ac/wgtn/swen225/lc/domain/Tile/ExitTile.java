@@ -6,4 +6,8 @@ public class ExitTile extends Tile{
     public ExitTile(Coord loc) {
         super(loc);
     }
+
+    public String toString(){
+        return "EX";
+    }
 }

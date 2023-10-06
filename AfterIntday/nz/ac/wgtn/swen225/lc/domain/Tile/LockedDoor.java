@@ -1,14 +1,28 @@
 package nz.ac.wgtn.swen225.lc.domain.Tile;
 
 import nz.ac.wgtn.swen225.lc.domain.*;
+import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 
 public class LockedDoor extends Tile {
-    
-    public LockedDoor(Coord loc){
+
+    protected Colour colour;
+    private Key unlockKey;
+    public LockedDoor(Coord loc /*,Key unlockKey, Colour col */){
         super(loc);
+        //this.unlockKey = unlockKey;
+        //colour = col;
     }
 
     public String toString(){
         return "|L|";
     }
+
+    public Key checkKey(){
+        return unlockKey;
+    }
+
+    public Colour getColour(){
+        return colour;
+    }
+
 }

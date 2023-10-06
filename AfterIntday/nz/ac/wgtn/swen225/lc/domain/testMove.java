@@ -1,4 +1,4 @@
-/*package nz.ac.wgtn.swen225.lc.domain;
+package nz.ac.wgtn.swen225.lc.domain;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 
@@ -13,6 +13,7 @@ public class testMove {
     //tester method for player movement on the board
     public static void main(String[] args){
         Domain domain = new Domain();
+
         domain.picKLevel(LevelE.LEVEL_ONE);
 
         Player ch = domain.getPlayer();
@@ -22,7 +23,7 @@ public class testMove {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
-                drawB(curr); //call drawB method to display the board
+                drawB(curr, ch); //call drawB method to display the board
 
                 // Read user input
                 System.out.print("Enter WASD to move (Q to quit): ");
@@ -60,9 +61,9 @@ public class testMove {
 
     }
 
-    public static void drawB(Board curr){
+    public static void drawB(Board curr, Player player){
         Board.buildString(curr.getBoard());
+        System.out.println("Treasures: " + player.getTresDisplay());
     }
 
 }
-*/

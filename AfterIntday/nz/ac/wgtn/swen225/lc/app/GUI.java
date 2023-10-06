@@ -1,4 +1,4 @@
-package nz.ac.wgtn.swen225.lc.app;
+/*package nz.ac.wgtn.swen225.lc.app;
 // Author: Emmanuel De Vera
 
 import nz.ac.wgtn.swen225.lc.domain.*;
@@ -826,4 +826,4 @@ public class GUI {
 
 }
 
-
+*/
