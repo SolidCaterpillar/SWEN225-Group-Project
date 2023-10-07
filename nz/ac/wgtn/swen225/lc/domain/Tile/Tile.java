@@ -60,5 +60,9 @@ public class Tile {
         }
     }
 
+    public boolean enemyWalkeable(){
+        Entity check = this.getEntity();
+        return check == null || check instanceof Player;
+    }
 
 }

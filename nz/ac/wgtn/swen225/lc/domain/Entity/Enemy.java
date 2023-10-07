@@ -15,7 +15,7 @@ public class Enemy implements Entity{
     //Takes random moves and if the last 2 tiles contain next tile in moves doesn't take it.
     private Queue<Coord> movementHistory = new LinkedList<>();
 
-    public Enemy(Coord loc, Queue<Tile> movementRoute){
+    public Enemy(Coord loc){
         location = loc; //starting pos
     }
 
@@ -25,15 +25,6 @@ public class Enemy implements Entity{
     }
 
 
-
- //Kind of unecessary
-    private boolean isAdjacent(Coord coord1, Coord coord2) {
-        int dx = Math.abs(coord1.x() - coord2.x());
-        int dy = Math.abs(coord1.y() - coord2.y());
-
-        //if diff is 1 for x or y its adjacent
-        return (dx == 1 && dy == 0) || (dx == 0 && dy == 1);
-    }
 
     public void updateEnemy() {
         //set or random m0ves
@@ -85,12 +76,12 @@ public class Enemy implements Entity{
         }
 
         // Check if the coordinate is adjacent and not one of the last two visited
-        if (!isAdjacent(coord, location) || movementHistory.contains(coord)) {
+        if (movementHistory.contains(coord)) {
             return false;
         }
 
         Tile destinationTile = Tile.tileAtLoc(coord).orElseThrow(()-> new IllegalArgumentException("Tile to move to does not exist!"));
-        return destinationTile instanceof FreeTile;
+        return destinationTile instanceof FreeTile && destinationTile.enemyWalkeable();
     }
 
 
@@ -106,7 +97,9 @@ public class Enemy implements Entity{
         }
     }
 
-
-
+    @Override
+    public String toString() {
+        return "QX";
+    }
 }
 

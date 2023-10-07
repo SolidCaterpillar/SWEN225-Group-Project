@@ -156,9 +156,13 @@ public class Player implements Entity{
     }
 
 
-    public boolean isDead(){
-        if(!alive)return true;
-        return false;
+    public boolean isAlive(){
+        if(!alive) return false;
+        return true;
+    }
+
+    public void kill(){
+        alive = false;
     }
 
     //FOR TESTING
@@ -170,5 +174,6 @@ public class Player implements Entity{
         }
         return s;
     }
+
 
 }

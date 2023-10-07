@@ -1,6 +1,7 @@
 package nz.ac.wgtn.swen225.lc.domain;
 import javax.swing.*;
 
+import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.*;
 import java.awt.*;
@@ -27,43 +28,6 @@ public class Board {
         }
         //setupBoard(board);
     }
-
-    public void setupBoard(Tile[][] brd){
-    //     Nothing here, this is extended in Rendering
-
-
-
-
-         //Test scenario
-         JFrame frame = new JFrame("Board");
-             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-             JPanel boardPanel = new JPanel(new GridLayout(26, 26));
-
-             //board = new Tile[26][26];
-
-             for (int i = 0; i < 20; i++) {
-                 for (int j = 0; j < 20; j++) {
-                     Tile currentTile = brd[i][j];
-                     JPanel cell = new JPanel();
-                     cell.setPreferredSize(new Dimension(25, 25));
-                     cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-
-                     if (currentTile instanceof FreeTile) {
-                         cell.setBackground(Color.WHITE);
-                     } else {
-                         cell.setBackground(Color.GRAY);
-                     }
-
-                     boardPanel.add(cell);
-                 }
-             }
-
-             frame.add(boardPanel);
-             frame.pack();
-             frame.setVisible(true);
-         }
 
 
 
@@ -141,5 +105,14 @@ public class Board {
         }
     }
 
+
+    //TEST METHOD
+    public void addEntityToGame(Entity entity, Coord loc){
+        int x = loc.x();
+        int y = loc.y();
+
+        Tile curr = board[x][y];
+        curr.setEntity(entity);
+    }
 
 }

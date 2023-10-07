@@ -18,4 +18,9 @@ public class InformationTile extends Tile{
     public String toString(){
         return "I";
     }
+
+
+    public void display(){
+        //Overridable for Renderer not sure rn
+    }
 }

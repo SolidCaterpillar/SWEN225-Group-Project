@@ -1,10 +1,13 @@
 package nz.ac.wgtn.swen225.lc.domain;
 
+import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class testMove {
 
@@ -21,8 +24,26 @@ public class testMove {
         Board curr = domain.getBoard();
 
 
+        //add enemy for test
+        Coord enemyCoord = new Coord(5,5);
+        Enemy enemy =  new Enemy(enemyCoord);
+        curr.addEntityToGame(enemy,enemyCoord);
+
+        //Here put other tiles for tests
+        Coord ExitTile =  new Coord(0,0);
+
+        //Here put other tiles for LockedDoor
+        Coord LockedDoor = new Coord(0,0);
+
+
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
+                Domain.StateClass.isPlayerDead();
+                ArrayList<Enemy> TEST = new ArrayList<>(List.of(enemy));
+                Domain.StateClass.checkGameState(ch, curr, TEST); //DEATH CHECK NOT WORKING RIGHT NOW
+
+
                 drawB(curr, ch); //call drawB method to display the board
 
                 // Read user input
@@ -53,6 +74,7 @@ public class testMove {
                             break;
                     }
                 }
+                enemy.updateEnemy(); //TEST ENEMY MOVEMENT WORKS!
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -54,15 +54,72 @@ public class Domain {
 
 
 
-    public static class StateClass {
-        private int currentLevel = 1; //starting level
-        private boolean gameOver = false;
-        private boolean gameWon = false;
 
-        public void checkGameState(Domain d) {
+
+
+
+    public static class StateClass {
+        private static int currentLevel = 1; //starting level
+
+
+
+
+        //Run in app to check every tick.
+        //then run checkGameState
+        public static boolean isPlayerDead() {
+            Coord playerLocation = curPlayer.getLocation();
+
+            for (Enemy enemy : enemies) {
+                if (enemy.getLocation().equals(playerLocation)) {
+                    curPlayer.kill();
+                }
+            }
+
+            return false; // Player is not dead
+        }
+
+
+
+        public static void checkGameState(Player player, Board board, ArrayList<Enemy> enemyList) {
             // Check if the player is still alive
-            if (curPlayer.isDead()) {
+            if (!player.isAlive()) {
                 System.out.println("Player has died. Reloading current level...");
+
+                try {
+                    Thread.sleep(2000); // Sleep for 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                reloadCurrentLevel();
+                return;
+            }
+
+            // Check if the player is on an exit tile
+            if (board.getTileAtLocation(player.getLocation()) instanceof ExitTile) {
+                if (currentLevel == 1) {
+                    System.out.println("Player reached the exit on level 1. Advancing to level 2...");
+                    currentLevel = 2;
+                    loadLevel(LevelE.LEVEL_TWO);
+                } else if (currentLevel == 2) {
+                    System.out.println("Player reached the exit on level 2. You win!");
+                    winState();
+                }
+            }
+        }
+
+
+        /* public void checkGameState(Domain d) {
+            // Check if the player is still alive
+            if (!curPlayer.isAlive()) {
+                System.out.println("Player has died. Reloading current level...");
+
+                try {
+                    Thread.sleep(2000); // Sleep for 2 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 reloadCurrentLevel();
                 return;
             }
@@ -75,17 +132,16 @@ public class Domain {
                     loadLevel(LevelE.LEVEL_TWO);
                 } else if (currentLevel == 2) {
                     System.out.println("Player reached the exit on level 2. You win!");
-                    gameWon = true;
-                    gameOver = true;
+                    winState();
                 }
             }
-        }
+        } */
 
-        private void reloadCurrentLevel() {
+        private static void reloadCurrentLevel() {
             loadLevel(currentLevel == 1 ? LevelE.LEVEL_ONE : LevelE.LEVEL_TWO);
         }
 
-        private void loadLevel(LevelE level) {
+        private static void loadLevel(LevelE level) {
             picKLevel(level);
 
         }
@@ -93,14 +149,14 @@ public class Domain {
         private void loadLevel1() {
             currentLevel = 1;
             picKLevel(LevelE.LEVEL_ONE);
-
         }
 
         private void loadLevel2() {
             currentLevel = 2;
             picKLevel(LevelE.LEVEL_TWO);
-
         }
+
+        private static void winState(){}
     }
 
 
