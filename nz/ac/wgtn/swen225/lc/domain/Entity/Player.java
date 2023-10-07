@@ -1,6 +1,7 @@
 package nz.ac.wgtn.swen225.lc.domain.Entity;
 import javax.swing.*;
 
+import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Domain;
 import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
@@ -46,7 +47,7 @@ public class Player implements Entity{
             default -> throw new IllegalArgumentException("Invalid key pressed!");
         };
 
-        if (!checkInBound(loc)) {return;} //if new loc in bound
+        if (!Board.checkInBound(loc)) {return;} //if new loc in bound
 
         //get new tile
         Optional<Tile> optionalTile = Tile.tileAtLoc(loc);
@@ -78,13 +79,7 @@ public class Player implements Entity{
     }
 
 
-    public boolean checkInBound(Coord check) {
-        int x = check.x();
-        int y = check.y();
-        int dim = getDim();
 
-        return x >= 0 && x < dim && y >= 0 && y < dim;
-    }
 
     public ArrayList<Key> getKeys() { //Keygetter
         return new ArrayList<>(Collections.unmodifiableCollection(keys));

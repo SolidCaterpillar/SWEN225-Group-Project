@@ -115,6 +115,17 @@ public class Board {
     }
 
 
+
+
+    public static boolean checkInBound(Coord check) {
+        int x = check.x();
+        int y = check.y();
+        int dim = board.length;
+
+        return x >= 0 && x < dim && y >= 0 && y < dim;
+    }
+
+
     //String tester
     public static void buildString(Tile[][] stringBoard) {
         StringBuilder ret = new StringBuilder();
@@ -128,6 +139,5 @@ public class Board {
         }
         System.out.println(ret.toString());
     }
-
 
 }
