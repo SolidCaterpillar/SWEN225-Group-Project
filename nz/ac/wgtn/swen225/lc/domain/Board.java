@@ -19,18 +19,7 @@ public class Board {
 
         //Test board constructor
         if(level == 0) {
-            //Test scenario
-            for (int i = 0; i < 20; i++) {
-                for (int j = 0; j < 20; j++) {
 
-                    JPanel cell = new JPanel();
-                    cell.setPreferredSize(new Dimension(25, 25));
-                    cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-                    board[i][j] = new FreeTile(new Coord(i,j));
-
-                }
-            }
         }
 
         else{
@@ -139,5 +128,18 @@ public class Board {
         }
         System.out.println(ret.toString());
     }
+
+
+    public Tile getTileAtLocation(Coord location) {
+        int x = location.x();
+        int y = location.y();
+
+        if (checkInBound(location)) {
+            return board[x][y];
+        } else {
+            throw new IllegalArgumentException("Invalid location: " + location);
+        }
+    }
+
 
 }

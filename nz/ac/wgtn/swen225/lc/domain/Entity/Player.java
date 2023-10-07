@@ -22,10 +22,13 @@ public class Player implements Entity{
 
     protected ArrayList<Key> keys;
 
+    protected boolean alive;
+
     public Player(Coord loc){
         this.location = loc;
         treasures = new ArrayList<>();
         keys = new ArrayList<>();
+        alive = true;
     }
 
 
@@ -152,6 +155,11 @@ public class Player implements Entity{
         }
     }
 
+
+    public boolean isDead(){
+        if(!alive)return true;
+        return false;
+    }
 
     //FOR TESTING
     public String getTresDisplay(){
