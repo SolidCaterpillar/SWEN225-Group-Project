@@ -1,14 +1,15 @@
-package Persistency;
+package nz.ac.wgtn.swen225.lc.persistency;
 
-import org.json.JSONObject;
-import Domain.Board;
-import Persistency.ParseJson.Entites;
+import nz.ac.wgtn.swen225.lc.persistency.plugin.main.java.org.json.*;
+
+import nz.ac.wgtn.swen225.lc.domain.Board;
+import nz.ac.wgtn.swen225.lc.persistency.ParseJson.Entites;
 public class SaveJson {
-    
+
     public static JSONObject saveAsJson(Board board){
         JSONObject json = new JSONObject();
         JSONObject dimension = new JSONObject();
-        
+
         //saves the dimension of the board
         dimension.put("width", 20);
         dimension.put("length", 20);
@@ -29,3 +30,4 @@ public class SaveJson {
         return null;
     }
 }
+

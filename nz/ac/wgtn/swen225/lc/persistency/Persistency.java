@@ -1,19 +1,20 @@
-package Persistency;
+package nz.ac.wgtn.swen225.lc.persistency;
 
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-import org.json.JSONObject;
+import nz.ac.wgtn.swen225.lc.persistency.plugin.main.java.org.json.*;
 
 import java.lang.StringBuilder;
 
-import Domain.*;
-import Persistency.ParseJson.ReadJson;
-import Persistency.ParseJson.Entites;
+import nz.ac.wgtn.swen225.lc.domain.*;
+import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
+import nz.ac.wgtn.swen225.lc.domain.Tile.*;
+import nz.ac.wgtn.swen225.lc.persistency.ParseJson.*;
 /** 
  * A class that saves/loads
  * **/
@@ -25,10 +26,26 @@ public class Persistency{
         return setupLevel(levelObjs);
     }
 
+    public static void saveLevel(Level curLevel, String filename){
+
+    }
+
+    public static Level loadLevel1(){
+        //Might need to change these paths, they're pretty wonky
+        return loadLevel("level/level1.json");
+
+    }
+
+    public static Level loadLevel2(){
+        //Might need to change these paths, they're pretty wonky
+        return loadLevel("level/level2.json");
+    }
+
+
     public static boolean saveLevel(String filename, Level savedLevel){
         JSONObject savedJson = SaveJson.saveAsJson(savedLevel.board());
         try{
-            
+
             File nFile = new File("level/"+filename);
 
             FileWriter jsonLevel = new FileWriter(nFile);
@@ -44,17 +61,6 @@ public class Persistency{
         return true;
     }
 
-    public static Level loadLevel1(){
-        //Might need to change these paths, they're pretty wonky
-        return loadLevel("level/level1.json");
-
-    }
-
-    public static Level loadLevel2(){
-        //Might need to change these paths, they're pretty wonky
-        return loadLevel("level/level2.json");
-    }
-    
     private static JSONObject getJson(String path){
         StringBuilder json = new StringBuilder();
         try{
@@ -82,13 +88,13 @@ public class Persistency{
         //set up board
         for(int x = 0; x <= objs.length()-1; x++){
             for(int y = 0; y <= objs.width()-1; y++){
-                board[y][x] = new Tile(new Coord(x,y), TileType.FREE, null);
+                board[y][x] = new FreeTile(new Coord(x,y));
             }
         }
 
         //put speical tiles on the board
         for(Tile tile : gameTiles){
-            Coord tileCo = tile.getLoc();
+            Coord tileCo = tile.getLocation();
             board[tileCo.y()][tileCo.x()] = tile;
         }
 
