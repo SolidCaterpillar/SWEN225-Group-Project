@@ -129,10 +129,6 @@ public class Domain {
     }
 
 
-
-
-
-
     //FOLLOWING TESTING ONLY
     public void setEnemies(ArrayList<Enemy> en){
         for(Enemy enemy: en){

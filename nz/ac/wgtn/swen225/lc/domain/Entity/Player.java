@@ -5,6 +5,7 @@ import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Domain;
 import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 
 import java.awt.event.KeyEvent;
@@ -57,12 +58,34 @@ public class Player implements Entity{
 
         newPos = optionalTile.get();
 
+        boolean checkDoor = tryOpenLockedDoor(newPos);//check if next position is a lockedDoor
+
+        //If door existed and player has key then player can move onto it.
+        if(checkDoor){movePlayer(newPos, loc);}
+
         //Currently only movement add interaction later too
         if (!(newPos instanceof FreeTile)) {System.out.println("Invalid move"); }
 
-        //Static interaction method will expand to encompass tile interactions with locked doors etc.
+        //If player is moving onto freetile then interact with its object
         Player.interact(this, loc);
 
+        movePlayer(newPos, loc);
+
+        this.checkTreasures(); //Unlocks ExitTiles which open when player has all treasure
+
+
+    }
+
+    //check if player has key for locked door
+    public boolean tryOpenLockedDoor(Tile lockedDoor) {
+        if(lockedDoor instanceof LockedDoor){
+            LockedDoor lock = (LockedDoor) lockedDoor;
+            return this.keys.contains(lock.getUnlockKey());
+        }
+        return false;
+    }
+
+    public void movePlayer(Tile newPos, Coord loc){
         Tile oldPos = Tile.tileAtLoc(this.location).orElseThrow(
                 () -> new IllegalArgumentException("OG player position not found")
         );
@@ -70,13 +93,6 @@ public class Player implements Entity{
         newPos.moveEntity(oldPos);
 
         this.location = loc;
-
-        this.checkTreasures(); //Unlocks ExitTiles which open when player has all treasure
-
-        boolean checkKeys;
-
-
-
     }
 
 

@@ -17,7 +17,7 @@ public class LockedDoor extends Tile {
         return "|L|";
     }
 
-    public Key checkKey(){
+    public Key getUnlockKey(){
         return unlockKey;
     }
 

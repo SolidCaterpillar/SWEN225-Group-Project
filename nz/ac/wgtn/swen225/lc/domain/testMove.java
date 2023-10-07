@@ -3,6 +3,7 @@ package nz.ac.wgtn.swen225.lc.domain;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.InformationTile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +38,8 @@ public class testMove {
         Coord LockedDoor = new Coord(0,0);
 
         domain.createTileAtLoc(new ExitTile(new Coord(11,5)));
+        domain.createTileAtLoc(new InformationTile(new Coord(11,10),""));
+
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
