@@ -19,7 +19,7 @@ public class Tile {
         all.add(this);
     }
 
-    public Coord getLoc(){
+    public Coord getLocation(){
         return loc;
     }
 
@@ -40,7 +40,7 @@ public class Tile {
 
     public static Optional<Tile> tileAtLoc(Coord loc) {
         return all.stream()
-                .filter(tile -> tile.getLoc().equals(loc))
+                .filter(tile -> tile.getLocation().equals(loc))
                 .findFirst();
     }
 

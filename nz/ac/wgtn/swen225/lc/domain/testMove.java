@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen225.lc.domain;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
+import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class testMove {
         //Here put other tiles for LockedDoor
         Coord LockedDoor = new Coord(0,0);
 
-
+        domain.createTileAtLoc(new ExitTile(new Coord(11,5)));
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
@@ -47,7 +48,7 @@ public class testMove {
                 Domain.StateClass.isPlayerDead();
                 Domain.StateClass.checkGameState(); //DEATH CHECK FIXED
 
-                if(!ch.isAlive()){ System.exit(0);}
+                if(Domain.StateClass.isPlayerDead()){ System.exit(0);}
 
                 drawB(curr, ch); //call drawB method to display the board
 

@@ -1,8 +1,9 @@
 package nz.ac.wgtn.swen225.lc.domain.Tile;
 
 import nz.ac.wgtn.swen225.lc.domain.Coord;
+import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 
-public class InformationTile extends Tile{
+public class InformationTile extends FreeTile{
 
     protected String information;
 
@@ -20,7 +21,10 @@ public class InformationTile extends Tile{
     }
 
 
-    public void display(){
-        //Overridable for Renderer not sure rn
+    public boolean isChapOn(Player player){
+        return player.getLocation().equals(this.loc);
+        //If chap is on then Renderer can use this to do stuff
     }
+
+
 }

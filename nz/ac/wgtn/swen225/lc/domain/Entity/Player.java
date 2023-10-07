@@ -11,8 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 
 import static nz.ac.wgtn.swen225.lc.domain.Board.getDim;
-
-//REDUNDANT CLASS REPLACED WITH CHAP
+import static nz.ac.wgtn.swen225.lc.domain.Board.openExitTile;
 
 public class Player implements Entity{
     //starting Orientation is South
@@ -22,13 +21,11 @@ public class Player implements Entity{
 
     protected ArrayList<Key> keys;
 
-    protected boolean alive;
 
     public Player(Coord loc){
         this.location = loc;
         treasures = new ArrayList<>();
         keys = new ArrayList<>();
-        alive = true;
     }
 
 
@@ -50,7 +47,7 @@ public class Player implements Entity{
             default -> throw new IllegalArgumentException("Invalid key pressed!");
         };
 
-        if (!Board.checkInBound(loc)) {return;} //if new loc in bound
+        if (!Board.checkInBound(loc)) { throw new IllegalArgumentException("Tile not in board boundary");} //if new loc in bound
 
         //get new tile
         Optional<Tile> optionalTile = Tile.tileAtLoc(loc);
@@ -71,17 +68,22 @@ public class Player implements Entity{
         );
 
         newPos.moveEntity(oldPos);
-        this.location = loc;
-        //Check treasure count here and when its all taken unlock exitlock
 
-        boolean checkTreasures = Domain.getTreasure().equals(this.getTreasure()); //check if player contains all treasures
+        this.location = loc;
+
+        this.checkTreasures(); //Unlocks ExitTiles which open when player has all treasure
+
         boolean checkKeys;
 
-        if(checkTreasures) {}//unlock Exit TIles.
+
 
     }
 
 
+    public void checkTreasures(){
+        boolean checkTreasures = this.treasures.containsAll(Domain.getTreasure()); //check if player contains all treasures
+        if(checkTreasures) {Board.openExitTile(Domain.staticBoard());} //Unlock all openTiles
+    }
 
 
     public ArrayList<Key> getKeys() { //Keygetter
@@ -155,15 +157,6 @@ public class Player implements Entity{
         }
     }
 
-
-    public boolean isAlive(){
-        if(!alive) return false;
-        return true;
-    }
-
-    public void kill(){
-        alive = false;
-    }
 
     //FOR TESTING
     public String getTresDisplay(){

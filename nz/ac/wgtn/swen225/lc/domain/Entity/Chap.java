@@ -9,6 +9,9 @@ import java.util.*;
 
 import static nz.ac.wgtn.swen225.lc.domain.Board.getDim;
 
+//REDUNDANT CLASS REPLACED WITH PLAYER
+
+
 public class Chap extends Player{
     //starting Orientation is South
     protected Orientation direction = Orientation.SOUTH;

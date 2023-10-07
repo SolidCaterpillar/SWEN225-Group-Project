@@ -30,12 +30,6 @@ public class Board {
     }
 
 
-
-    public void updateCamera(){
-        //Shift row or column +- in direction of player movement
-
-    }
-
     public Tile[][] getBoard(){ //For returning game
         Tile[][] copy = board;
         return copy; //Unecessary copy was playing around
@@ -102,6 +96,35 @@ public class Board {
             return board[x][y];
         } else {
             throw new IllegalArgumentException("Invalid location: " + location);
+        }
+    }
+
+    //REMOVE EXIT TILES IF PLAYER HAS ALL OF THE TREASURE
+    public static void openExitTile(Board b) {
+        Tile[][] currentboard = b.getBoard();
+        int dim = currentboard.length;
+
+        for (int x = 0; x < dim; x++) {
+            for (int y = 0; y < dim; y++) {
+                Tile currentTile = currentboard[x][y];
+
+                if (currentTile instanceof ExitTile) {
+                    // Replace the ExitTile with a FreeTile at the same location
+                    currentboard[x][y] = new FreeTile(new Coord(x, y));
+                }
+            }
+        }
+    }
+
+
+    public void replaceTileAt(Coord coord, Tile newTile) {
+        int x = coord.x();
+        int y = coord.y();
+
+        if (checkInBound(coord)) {
+            board[x][y] = newTile;
+        } else {
+            throw new IllegalArgumentException("Invalid location: " + coord);
         }
     }
 

@@ -2,7 +2,9 @@ package nz.ac.wgtn.swen225.lc.domain;
 
 import java.util.ArrayList;
 
+import nz.ac.wgtn.swen225.lc.domain.Tile.ExitLock;
 import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 import nz.ac.wgtn.swen225.lc.persistency.Persistency;
 import nz.ac.wgtn.swen225.lc.persistency.Level;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
@@ -44,15 +46,12 @@ public class Domain {
         return curPlayer;
     }
 
-
+    public static Board staticBoard(){return curBoard;}
     public static ArrayList<Enemy> getEnemies(){return enemies;}
 
     public static ArrayList<Treasure> getTreasure(){
         return treasures;
     }
-
-
-
 
 
 
@@ -69,7 +68,7 @@ public class Domain {
 
             for (Enemy enemy : enemies) {
                 if (enemy.getLocation().equals(playerLocation)) {
-                    curPlayer.kill();
+                    return true;
                 }
             }
 
@@ -80,7 +79,7 @@ public class Domain {
 
         public static void checkGameState() {
             // Check if the player is still alive
-            if (!curPlayer.isAlive()) {
+            if (isPlayerDead()) {
                 System.out.println("Player has died. Reloading current level...");
 
                 try {
@@ -134,10 +133,16 @@ public class Domain {
 
 
 
-    //TESTING ONLY
+    //FOLLOWING TESTING ONLY
     public void setEnemies(ArrayList<Enemy> en){
         for(Enemy enemy: en){
             enemies.add(enemy);
+        }
+    }
+
+    public void createTileAtLoc(Tile tile) {
+        if (Board.checkInBound(tile.getLocation())) {
+            curBoard.replaceTileAt(tile.getLocation(), tile); // Replace the old tile with the new
         }
     }
 
