@@ -10,8 +10,8 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 
 public class Domain {
 
-    protected static Board curBoard;
-    protected static Player curPlayer;
+    static Board curBoard;
+    static Player curPlayer;
 
     static ArrayList<Treasure> treasures;
     static ArrayList<Key> keys;
@@ -62,8 +62,6 @@ public class Domain {
         private static int currentLevel = 1; //starting level
 
 
-
-
         //Run in app to check every tick.
         //then run checkGameState
         public static boolean isPlayerDead() {
@@ -80,36 +78,7 @@ public class Domain {
 
 
 
-        public static void checkGameState(Player player, Board board, ArrayList<Enemy> enemyList) {
-            // Check if the player is still alive
-            if (!player.isAlive()) {
-                System.out.println("Player has died. Reloading current level...");
-
-                try {
-                    Thread.sleep(2000); // Sleep for 2 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                reloadCurrentLevel();
-                return;
-            }
-
-            // Check if the player is on an exit tile
-            if (board.getTileAtLocation(player.getLocation()) instanceof ExitTile) {
-                if (currentLevel == 1) {
-                    System.out.println("Player reached the exit on level 1. Advancing to level 2...");
-                    currentLevel = 2;
-                    loadLevel(LevelE.LEVEL_TWO);
-                } else if (currentLevel == 2) {
-                    System.out.println("Player reached the exit on level 2. You win!");
-                    winState();
-                }
-            }
-        }
-
-
-        /* public void checkGameState(Domain d) {
+        public static void checkGameState() {
             // Check if the player is still alive
             if (!curPlayer.isAlive()) {
                 System.out.println("Player has died. Reloading current level...");
@@ -135,7 +104,8 @@ public class Domain {
                     winState();
                 }
             }
-        } */
+        }
+
 
         private static void reloadCurrentLevel() {
             loadLevel(currentLevel == 1 ? LevelE.LEVEL_ONE : LevelE.LEVEL_TWO);
@@ -160,6 +130,16 @@ public class Domain {
     }
 
 
+
+
+
+
+    //TESTING ONLY
+    public void setEnemies(ArrayList<Enemy> en){
+        for(Enemy enemy: en){
+            enemies.add(enemy);
+        }
+    }
 
 }
 

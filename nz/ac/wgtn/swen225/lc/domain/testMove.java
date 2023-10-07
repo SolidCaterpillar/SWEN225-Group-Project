@@ -39,12 +39,19 @@ public class testMove {
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
-                Domain.StateClass.isPlayerDead();
-                ArrayList<Enemy> TEST = new ArrayList<>(List.of(enemy));
-                Domain.StateClass.checkGameState(ch, curr, TEST); //DEATH CHECK NOT WORKING RIGHT NOW
 
+                ArrayList<Enemy> TEST = new ArrayList<>(List.of(enemy));
+                domain.setEnemies(TEST);
+
+
+                Domain.StateClass.isPlayerDead();
+                Domain.StateClass.checkGameState(); //DEATH CHECK FIXED
+
+                if(!ch.isAlive()){ System.exit(0);}
 
                 drawB(curr, ch); //call drawB method to display the board
+
+
 
                 // Read user input
                 System.out.print("Enter WASD to move (Q to quit): ");
