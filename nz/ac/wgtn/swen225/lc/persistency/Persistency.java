@@ -15,7 +15,7 @@ import nz.ac.wgtn.swen225.lc.domain.*;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.persistency.ParseJson.*;
-/** 
+/**
  * A class that saves/loads
  * **/
 public class Persistency{
@@ -64,19 +64,19 @@ public class Persistency{
     private static JSONObject getJson(String path){
         StringBuilder json = new StringBuilder();
         try{
-            
+
             File jsonFile = new File(path);
             Scanner sc = new Scanner (jsonFile);
-            
+
             while(sc.hasNextLine()){
                 json.append(sc.nextLine());
             }
-  
+
         }catch (IOException e){
             System.out.println(e.toString());
         }
         return new JSONObject(json.toString());
-    }  
+    }
 
     private static Level  setupLevel(ReadJson objs){
 
@@ -94,7 +94,7 @@ public class Persistency{
 
         //put speical tiles on the board
         for(Tile tile : gameTiles){
-            Coord tileCo = tile.getLoc();
+            Coord tileCo = tile.getLocation();
             board[tileCo.y()][tileCo.x()] = tile;
         }
 

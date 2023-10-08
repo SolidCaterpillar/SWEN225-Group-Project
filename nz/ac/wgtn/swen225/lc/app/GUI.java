@@ -184,49 +184,49 @@ public class GUI {
                             case KeyEvent.VK_UP:
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_LEFT:
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_DOWN:
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_RIGHT:
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_W:
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_A:
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_S:
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_D:
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                ch.checkMove(e);
+                                ch.checkMove(e.getKeyChar());
                                 redrawGUI();
                                 break;
                         }

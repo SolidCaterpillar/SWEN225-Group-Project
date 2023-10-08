@@ -14,15 +14,15 @@ import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 
 public class ParseJson {
-    
-        /**
+
+    /**
      * Parses the json file into usable objects
-     * @param JSONObject 
+     * @param JSONObject
      * @return Entites
-     * 
+     *
      *  **/
     public static ReadJson parse(JSONObject json){
-        
+
         JSONObject dimensions = json.getJSONObject("dimension");
         JSONObject tilesJson = json.getJSONObject("tiles");
         JSONObject entitesJson = json.getJSONObject("entites");
@@ -35,9 +35,9 @@ public class ParseJson {
     }
     /**
      * Parses the entity objects from the json
-     * @param JSONObject 
+     * @param JSONObject
      * @return Entites
-     * 
+     *
      *  **/
     private static Entites parseEntites(JSONObject entites){
 
@@ -45,7 +45,7 @@ public class ParseJson {
         JSONArray jsonKeys = entites.getJSONArray("keys");
         JSONArray jsonTreasure = entites.getJSONArray("treasures");
         JSONArray jsonEnemies = entites.getJSONArray("enemies");
-        
+
         Player player = null;
         ArrayList<Entity> allEntity = new ArrayList<>();
         ArrayList<Key> keys = new ArrayList<>();
@@ -81,7 +81,8 @@ public class ParseJson {
                 int x = enemy.getInt("x");
                 int y = enemy.getInt("y");
 
-                enemies.add(new Enemy(new Coord(x,y), null));
+                //enemies.add(new Enemy(new Coord(x,y), null));
+                enemies.add(new Enemy(new Coord(x,y)));
             }
         }
         allEntity.add(player);
@@ -96,7 +97,7 @@ public class ParseJson {
      * Parses the tile objects from the json
      * @param JSONObject
      * @return ArrayList<Tile>
-     * 
+     *
      *  **/
     private static ArrayList<Tile> parseTiles(JSONObject jsonTiles){
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -113,7 +114,7 @@ public class ParseJson {
                 int y = wall.getInt("y");
                 int lengthDown = wall.getInt("length_down");
                 int lengthUp = wall.getInt("length_up");
-                int lengthRight = wall.getInt("length_right"); 
+                int lengthRight = wall.getInt("length_right");
                 int lengthLeft = wall.getInt( "Length_left");
 
 
@@ -136,7 +137,7 @@ public class ParseJson {
 
             }
         }
-        
+
         //parses lock doors
         for(Object o : lockDoor){
             if(o instanceof JSONObject wall){
@@ -148,7 +149,7 @@ public class ParseJson {
         }
 
         //parses exit lock
-            for(Object o : exitLock){
+        for(Object o : exitLock){
             if(o instanceof JSONObject wall){
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
