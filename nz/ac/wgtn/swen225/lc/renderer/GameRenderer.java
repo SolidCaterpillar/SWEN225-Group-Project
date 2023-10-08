@@ -19,6 +19,10 @@ public class GameRenderer extends JPanel {
     private Player player;
     private Domain domOb;
     private int tileSize;
+    private ImageIcon playerUpIcon;
+    private ImageIcon playerDownIcon;
+    private ImageIcon playerLeftIcon;
+    private ImageIcon playerRightIcon;
 
 
     /**
@@ -34,6 +38,10 @@ public class GameRenderer extends JPanel {
         loadTileIcons();
         initializeRenderer();
         playerIcon = loadImageIcon("playerup1.png");
+        playerUpIcon = loadImageIcon("playerup1.png");
+        playerDownIcon = loadImageIcon("playerdown1.png");
+        playerLeftIcon = loadImageIcon("playerleft1.png");
+        playerRightIcon = loadImageIcon("playerright1.png");
     }
 
 
@@ -51,7 +59,7 @@ public class GameRenderer extends JPanel {
                 if (maze[row][col] != null) {
                     String iconName = getIconNameForTile(maze[row][col]);
                     tileIcons[row][col] = loadImageIcon(iconName);
-                   System.out.println("Loaded tile icon for row " + row + ", col " + col + ": " + iconName); // Add this line for debugging                }
+                   System.out.println("Loaded tile icon for row " + row + ", col " + col + ": " + iconName);
            }}
         }
     }
@@ -95,7 +103,6 @@ public class GameRenderer extends JPanel {
     }
     private void drawMaze(Graphics g) {
 
-
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
                 if (tileIcons[row][col] != null) {
@@ -112,9 +119,8 @@ public class GameRenderer extends JPanel {
             }
         }
 
-
-
     }
+
     private void drawPlayer(Graphics g) {
         if (player != null) {
             int playerX = player.getX() * domOb.getBoard().getSize();
@@ -123,19 +129,31 @@ public class GameRenderer extends JPanel {
             g.setColor(Color.BLACK);
             g.drawRect(playerX, playerY, tileSize, tileSize);
 
+            // Determine the player's direction and select the appropriate icon
+            ImageIcon playerIcon = getPlayerIcon();
+
+
+            // Draw the player icon scaled to the tile size
             g.drawImage(playerIcon.getImage(), playerX + 1, playerY + 1, tileSize - 2, tileSize - 2, this);
+        }
+
+
+    }
+    private ImageIcon getPlayerIcon() {
+        switch (player.getDirection()) {
+            case SOUTH:
+                return playerUpIcon;
+            case NORTH:
+                return playerDownIcon;
+            case WEST:
+                return playerLeftIcon;
+            case EAST:
+                return playerRightIcon;
+            default:
+                return playerUpIcon;
         }
     }
 
-
-
-    // Add methods to update and render the game view
-    public void updateGameView() {
-        // Update the game state (e.g., position of game elements)
-        // Example:
-        // player.move(); // Move the player based on user input
-        // updateActors(); // Update actor positions
-    }
 
     public void renderGameView(Graphics g) {
         // Determine player's position in the 5x5 grid
@@ -169,13 +187,14 @@ public class GameRenderer extends JPanel {
             }
         }
 
+        // Determine the player's direction and select the appropriate icon
+        ImageIcon playerIcon = getPlayerIcon();
+
         // Render the player
         int playerX = (playerCol - startCol) * tileSize;
         int playerY = (playerRow - startRow) * tileSize;
         // Draw the player icon scaled to the tile size
         g.drawImage(playerIcon.getImage(), playerX, playerY, tileSize, tileSize, this);
-
     }
-
 
 }
