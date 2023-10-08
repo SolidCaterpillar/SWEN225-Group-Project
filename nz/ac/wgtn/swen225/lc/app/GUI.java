@@ -777,6 +777,10 @@ public class GUI {
 
 
         rec.setRecord(currentLevel, timeLeft, maze);
+        //try{
+            //rec.saveAsFile("game_state.json");
+        //}catch(IOException e){}
+
     }
 
 
@@ -794,20 +798,41 @@ public class GUI {
         mainFrame.repaint();
     }
 
-    public int keyInfo(){
-        return 0;
+    public int[] keyInfo(){
+        int x = ch.getKeys().size();
+        //int y = Domain.getKeys().size();
+        int y = 5;
+
+        int[] keyInfo = {x, y};
+        return keyInfo;
     }
 
-    public int trasureInfo(){
-        return 0;
+    public int[] treasureInfo(){
+        int x = ch.getTreasure().size();
+        int y = Domain.getTreasure().size();
+
+        int[] treasureInfo = {x, y};
+        return treasureInfo;
     }
 
-    public int doorInfo(){
-        return 0;
+    public int[] doorInfo(){
+        int x = 0;
+        int y = 0;
+
+        int[] doorInfo = {x, y};
+        return doorInfo;
     }
 
-    public int playerCoords(){
-        return 0;
+    public int[] playerCoords(){
+        int x = ch.getLocation().x();
+        int y = ch.getLocation().y();
+
+        int[] coordinates = {x, y};
+        return coordinates;
+    }
+
+    public Player getPlayer(){
+        return ch;
     }
 
 }
