@@ -1,4 +1,4 @@
-/*package nz.ac.wgtn.swen225.lc.app;
+package nz.ac.wgtn.swen225.lc.app;
 
 
 import javax.swing.*;
@@ -27,7 +27,7 @@ public class Main {
         //game.playGame(); // Start the game loop
     }
 }
-*/
+
 
 
 
