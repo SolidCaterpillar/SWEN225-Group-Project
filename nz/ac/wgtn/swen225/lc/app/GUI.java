@@ -322,12 +322,16 @@ public class GUI {
     }
 
     public void resetTimer(){
-        timer = new Timer(1000, new ActionListener() {
+        timer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!gamePaused){
                     decrementTime();
                     redrawGUI();
+                    Domain.StateClass.checkGameState();
+                    for(Enemy enemy : Domain.getEnemies()){
+                        enemy.updateEnemy();
+                    }
                 }
             }
         });
@@ -772,13 +776,11 @@ public class GUI {
         mainFrame.repaint();
 
 
-        //rec.saveGameStateFile(timeLeft, currentLevel, chipsText);
+        rec.setRecord(currentLevel, timeLeft, maze);
     }
 
 
     public void drawInstructions() {
-
-
 
         // this is the only method to redraw the board
         mapPanel.removeAll();
@@ -792,38 +794,21 @@ public class GUI {
         mainFrame.repaint();
     }
 
-
-    private void exitGame() {
-        // Implement game exit logic, potentially saving the game state
-        // and resuming from the last unfinished level next time
-        // Close the application
-        System.exit(0);
+    public int keyInfo(){
+        return 0;
     }
 
-    private void saveGame() {
-        // Implement logic to save the current game state
-        // Show a message indicating that the game is saved
+    public int trasureInfo(){
+        return 0;
     }
 
-    private void resumeGame() {
-        // Implement logic to resume a saved game
-        // Show a file selector to load a saved game
+    public int doorInfo(){
+        return 0;
     }
 
-    private void startNewGame(int level) {
-        // Implement logic to start a new game at the specified level
-        // Reset game state and initialize the maze for the new level
-    }
-
-    private void pauseGame() {
-        // Implement logic to pause the game
-        // Display a "game is paused" dialog
-    }
-
-    private void moveChap(String direction) {
-        // Implement logic to move Chap within the maze
+    public int playerCoords(){
+        return 0;
     }
 
 }
-
 
