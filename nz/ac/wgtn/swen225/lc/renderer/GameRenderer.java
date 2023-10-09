@@ -217,7 +217,9 @@ public class GameRenderer extends JPanel {
             int enemyY = (enemy.getLocation().y() - startRow) * tileSize;
 
             // Draw the enemy icon scaled to the tile size
+            if (enemyX >= 0 && enemyX < 5 * tileSize && enemyY >= 0 && enemyY < 5 * tileSize) {
             g.drawImage(enemyIcon.getImage(), enemyX, enemyY, tileSize, tileSize, this);
+        }
         }
     }
 
