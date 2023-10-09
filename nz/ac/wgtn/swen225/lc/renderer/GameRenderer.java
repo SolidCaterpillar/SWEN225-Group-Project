@@ -174,17 +174,23 @@ public class GameRenderer extends JPanel {
         // Determine player's position in the 5x5 grid
         int playerRow = player.getY();
         int playerCol = player.getX();
-        int startRow = playerRow - 2;
-        int startCol = playerCol - 2;
-
         int tileSize = domOb.getBoard().getSize();
-        // Ensure starting row and column are within bounds
-        startRow = Math.max(0, startRow);
-        startCol = Math.max(0, startCol);
+
+        // Calculate the starting row and column based on player's position
+        int startRow = Math.max(0, Math.min(playerRow - 2, maze.length - 5));
+        int startCol = Math.max(0, Math.min(playerCol - 2, maze[0].length - 5));
+
+        // Calculate the ending row and column based on starting position
+        int endRow = startRow + 5;
+        int endCol = startCol + 5;
+
+        // Ensure the ending row and column are within bounds
+        endRow = Math.min(endRow, maze.length);
+        endCol = Math.min(endCol, maze[0].length);
 
         // Calculate the rendering coordinates for each tile
-        for (int row = startRow; row < startRow + 5 && row < maze.length; row++) {
-            for (int col = startCol; col < startCol + 5 && col < maze[0].length; col++) {
+        for (int row = startRow; row < endRow; row++) {
+            for (int col = startCol; col < endCol; col++) {
                 if (tileIcons[row][col] != null) {
                     // Calculate the destination rectangle for the image
                     int x = (col - startCol) * tileSize;
@@ -196,13 +202,13 @@ public class GameRenderer extends JPanel {
                     g.drawImage(tileIcons[row][col].getImage(), x, y, width, height, this);
 
                     // Draw a border around the tile
-                    g.setColor(Color.BLACK); // Set border color
-                    g.drawRect(x, y, width - 1, height - 1); // Draw border
+                    g.setColor(Color.BLACK);
+                    g.drawRect(x, y, width - 1, height - 1);
                 }
             }
         }
 
-        // Determine the player's direction and select the appropriate icon
+        // Determine the player's direction and select the appropriate player icon
         ImageIcon playerIcon = getPlayerIcon();
 
         // Render the player
@@ -216,10 +222,11 @@ public class GameRenderer extends JPanel {
             int enemyX = (enemy.getLocation().x() - startCol) * tileSize;
             int enemyY = (enemy.getLocation().y() - startRow) * tileSize;
 
-            // Draw the enemy icon scaled to the tile size
+            // Check if the enemy is within the focus region
             if (enemyX >= 0 && enemyX < 5 * tileSize && enemyY >= 0 && enemyY < 5 * tileSize) {
-            g.drawImage(enemyIcon.getImage(), enemyX, enemyY, tileSize, tileSize, this);
-        }
+                // Draw the enemy icon scaled to the tile size
+                g.drawImage(enemyIcon.getImage(), enemyX, enemyY, tileSize, tileSize, this);
+            }
         }
     }
 
