@@ -3,35 +3,67 @@ package nz.ac.wgtn.swen225.lc.renderer;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SoundManager {
+    private Map<String, Clip> soundClips;
+    private static final String ICONS_FOLDER = "nz/ac/wgtn/swen225/lc/renderer/gamesounds/";
 
-    private Clip clip;
+    public SoundManager() {
+        soundClips = new HashMap<>();
+        loadSound("footsteps", "footsteps.wav");
+        loadSound("pickup", "pickup.wav");
+        loadSound("door", "door.wav");
+        loadSound("levelchange", "levelchange.wav");
+        loadSound("death", "death.wav");
+        loadSound("gamestart", "gamestart.wav");
+    }
 
-    public SoundManager(String soundFilePath) {
+    private void loadSound(String key, String FilePath) {
+       String soundFilePath= ICONS_FOLDER+ FilePath;
         try {
-            // Load the audio file
             File soundFile = new File(soundFilePath);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
-
-            // Get a Clip to play the audio
-            clip = AudioSystem.getClip();
+            Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            soundClips.put(key, clip);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
         }
     }
 
-    public void play() {
-        if (clip != null) {
-            clip.setFramePosition(0); // Rewind to the beginning
-            clip.start();
-        }
+    public void playPlayerMoveSound() {
+        playSound("footsteps");
     }
 
-    public void stop() {
+    public void playKeyCollectSound() {
+        playSound("pickup");
+    }
+
+    public void playDoorOpenSound() {
+        playSound("door");
+    }
+
+    public void playLevelCompleteSound() {
+        playSound("levelchange");
+    }
+    public void playGameStartSound() {
+        playSound("gamestart");
+    }
+
+    public void playDeathSound() {
+        playSound("death");
+    }
+
+    private void playSound(String key) {
+        Clip clip = soundClips.get(key);
         if (clip != null) {
-            clip.stop();
+            if (clip.isRunning()) {
+                clip.stop();
+            }
+            clip.setFramePosition(0);
+            clip.start();
         }
     }
 }

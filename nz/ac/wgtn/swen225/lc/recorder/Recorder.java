@@ -1,4 +1,5 @@
 package nz.ac.wgtn.swen225.lc.recorder;
+import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
@@ -38,8 +39,7 @@ public class Recorder {
             JSONArray rowArray = new JSONArray();
             for (Tile tile : row) {
                 JSONObject tileObject = new JSONObject();
-                //tileObject.put(tile); // need to put a value or toString value from domain
-               //tileObject.put(tile);
+                tileObject.put("row tile", tile); // need to put a value or toString value from domain
                 rowArray.put(tileObject);
             }
             mazeArray.put(rowArray);
@@ -61,4 +61,25 @@ public class Recorder {
         fileWriter.close();
         System.out.println("Game state saved successfully to " + fileName);
     }
+
+    /*
+    public static void main(String[] args) throws IOException {
+        Recorder test = new Recorder();
+        Tile[][] mazeArray = new Tile[2][2];
+        mazeArray[0][0] = new Tile(new Coord(0,0));
+        mazeArray[0][1] = new Tile(new Coord(0,1));
+        mazeArray[1][0] = new Tile(new Coord(1,0));
+        mazeArray[1][1] = new Tile(new Coord(1,1));
+
+        int currentLevel = 3;
+        int timer = 120;
+
+        test.setRecord(currentLevel, timer,mazeArray);
+        test.setRecord(currentLevel, timer,mazeArray);
+        test.setRecord(currentLevel, timer,mazeArray);
+
+        test.saveAsFile("Testing");
+    }
+
+     */
 }

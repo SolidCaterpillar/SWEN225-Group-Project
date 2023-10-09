@@ -23,5 +23,6 @@ public class GameCanvas extends JPanel {
 
         // Delegate the rendering to the Renderer instance
         renderer.renderGameView(g);
+        renderer.repaint(); // To repaint the game view
     }
 }
