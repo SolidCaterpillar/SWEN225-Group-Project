@@ -3,10 +3,7 @@ package nz.ac.wgtn.swen225.lc.domain;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
-import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
-import nz.ac.wgtn.swen225.lc.domain.Tile.InformationTile;
-import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
-import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,9 +19,9 @@ public class testMove {
     public static void main(String[] args){
         Domain domain = new Domain();
 
-        //domain.picKLevel(LevelE.LEVEL_ONE);
+        domain.picKLevel(LevelE.LEVEL_ONE);
 
-        domain.loadTest();
+        //domain.loadTest();
 
         Player ch = domain.getPlayer();
 
@@ -46,7 +43,7 @@ public class testMove {
 
 
         System.out.println("Before createTileAtLoc: " + curr.getTileAtLocation(new Coord(11, 5)));
-        domain.createTileAtLoc(new ExitTile(new Coord(11,5)));
+        domain.createTileAtLoc(new ExitLock(new Coord(11,5)));
         domain.createTileAtLoc(new InformationTile(new Coord(11,10),""));
         domain.createTileAtLoc(new LockedDoor(new Coord(11,12),Colour.PURPLE));
 

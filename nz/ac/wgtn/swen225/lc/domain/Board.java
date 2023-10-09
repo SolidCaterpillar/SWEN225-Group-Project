@@ -107,7 +107,7 @@ public static int getDim(){return arrayDim; }
             for (int y = 0; y < dim; y++) {
                 Tile currentTile = currentboard[x][y];
 
-                if (currentTile instanceof ExitTile) {
+                if (currentTile instanceof ExitLock) {
                     // Replace the ExitTile with a FreeTile at the same location
                     currentboard[x][y] = new FreeTile(new Coord(x, y));
                 }

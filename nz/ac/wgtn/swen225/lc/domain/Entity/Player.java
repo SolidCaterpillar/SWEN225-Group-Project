@@ -5,10 +5,7 @@ import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Domain;
-import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
-import nz.ac.wgtn.swen225.lc.domain.Tile.InformationTile;
-import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
-import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
@@ -61,14 +58,6 @@ public class Player implements Entity{
 
             newPos = optionalTile.get();
 
-            /*
-            boolean checkDoor = tryOpenLockedDoor(newPos);
-
-            if (checkDoor) {
-                Domain.staticBoard().replaceTileAt(newPos.getLocation(), new FreeTile(loc));
-                newPos.setEntity(this);
-                movePlayer(newPos, loc);
-            } */
 
             if (!(newPos instanceof FreeTile)) {
                 System.out.println("Invalid move");
@@ -80,7 +69,6 @@ public class Player implements Entity{
                 }
                 Player.interact(this, loc);
                 movePlayer(newPos, loc);
-                this.checkTreasures();
                 this.tryOpenAdjacentLockedDoor();
             }
         } else {
@@ -93,7 +81,7 @@ public class Player implements Entity{
         Coord currentLoc = this.location;
         Tile currentTile = Domain.staticBoard().getTileAtLocation(currentLoc);
 
-        // Define the possible adjacent locations
+        // Define the true adjacent locations
         Coord upLoc = getTrueLocation().moveUp();
         Coord downLoc = getTrueLocation().moveDown();
         Coord leftLoc = getTrueLocation().moveLeft();
@@ -103,6 +91,13 @@ public class Player implements Entity{
 
         ArrayList<Tile> doors = Board.getTileList(tiles);
 
+        lockedDoorOpen(doors);
+
+        checkTreasures(doors);
+
+    }
+
+    public void lockedDoorOpen(ArrayList<Tile> doors){
         for (Tile door : doors) {
             if (door instanceof LockedDoor lock) {
                 Colour currentColour = lock.getColour();
@@ -137,10 +132,17 @@ public class Player implements Entity{
     }
 
 
-    public void checkTreasures(){
-        boolean checkTreasures = this.treasures.containsAll(Domain.getTreasure()); //check if player contains all treasures
-        if(checkTreasures) {Board.openExitTile(Domain.staticBoard());} //Unlock all openTiles
+    public void checkTreasures(ArrayList<Tile> doors) {
+        boolean checkTreasures = this.treasures.containsAll(Domain.getTreasure());
+        for (Tile tile : doors) {
+            if (tile instanceof ExitLock) {
+                if (checkTreasures) {
+                    Domain.staticBoard().replaceTileAt(tile.getLocation(), new FreeTile(tile.getLocation()));
+                }
+            }
+        }
     }
+
 
 
     public ArrayList<Key> getKeys() { //Keygetter
