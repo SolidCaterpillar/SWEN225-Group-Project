@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen225.lc.fuzz;
 
 import nz.ac.wgtn.swen225.lc.app.GUI;
 import nz.ac.wgtn.swen225.lc.app.Main;
+import org.junit.Test;
 
 
 //import org.junit.Test;
@@ -18,12 +19,9 @@ public class FuzzTest {
     private static final List<Integer[]> moves = List.of(new Integer[]{0, 1}, new Integer[]{0, -1}, // all available moves, up, down, left, right, may need to change depended on how movement works
             new Integer[]{-1, 0}, new Integer[]{1, 0});
 
-    public FuzzTest() {
-        gui = new GUI();
 
-    }
     /**
-     * Initializes a HashMap of random test paths.
+     * Initializes a HashMap of random test paths, 10 paths, 2 moves each.
      * Each path is represented as a list of move directions.
      * Each path is associated with an initial score of 0.
      *
@@ -38,7 +36,7 @@ public class FuzzTest {
 
 
         // generate specified amount of random paths, of length X - WILL DECIDE LATER
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i <= 10; i++) {
             path = new ArrayList<Integer[]>();// reset path to empty list
 
             // generate X random directions, append to path - WILL DECIDE AMOUNT LATER
@@ -101,14 +99,19 @@ public class FuzzTest {
                 loadLevel(2);
             }
 
-
-            Set<int[]> visited = new HashSet<>();//store visited locations
+            Set<int[]> visited = new HashSet<>();
 
             //for each direction in path
             for (Integer[] direction : path) {
 
-                //Check if game has been won and apply score, need method from app
+                char charDirection = getCharDirection(direction);
+
+
+                //Check if game has been won after move is made and apply score, need method from app
                 //Should i check if game has ended also?
+
+
+                //Should i check if game is over?
 
                 //get info on interactions before
                 int[] pastKeyCount = gui.keyInfo();
@@ -116,17 +119,22 @@ public class FuzzTest {
                 int[] pastDoorCount = gui.doorInfo();
 
                 //move player
-                //gui.movePlayer(direction[0], direction[1]);
-                //gui.getPlayer().checkMove('w');
+                gui.getPlayer().checkMove(charDirection);
 
-                //Check if game has been won after move is made and apply score, need method from app
-                //Should i check if game has ended also?
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+//                //Check if game has been won after move is made and apply score, need method from app
+//                //Should i check if game has ended also?
 
                 //get info on interactions after
                 int[] currentKeyCount = gui.keyInfo();
                 int[] currentTreasureCount = gui.treasureInfo();
                 int[] currentDoorCount = gui.doorInfo();
-                visited.add(gui.playerCoords()); // player current location
+                visited.add(gui.playerCoords()); // MAKE THIS CHAPS CURRENT LOCATION
 
                 //score the move based on criteria
                 score += compareKeys(pastKeyCount, currentKeyCount);
@@ -141,14 +149,31 @@ public class FuzzTest {
 
         }
 
+
         return currentPaths;
     }
 
+    /**
+     * Calculates a char to allow interaction for checkMove method used in calculatePathScores
+     *
+     * @param direction Moves represented as x and y coord
+     * @return char for checkMove represent up,down,left or right
+     */
+    private static char getCharDirection(Integer[] direction) {
+        char charDirection = 0;
 
-    private Integer evaluatePath() { //might do this differently in calculate path scores
-        // implement evaluating path
-        return 0;
+        if (Arrays.equals(direction, new Integer[]{0, 1})) {
+            charDirection = 'w'; // up
+        } else if (Arrays.equals(direction, new Integer[]{0, -1})) {
+            charDirection = 's'; // down
+        } else if (Arrays.equals(direction, new Integer[]{-1, 0})) {
+            charDirection = 'a'; // left
+        } else if (Arrays.equals(direction, new Integer[]{1, 0})) {
+            charDirection = 'd'; // right
+        }
+        return charDirection;
     }
+
 
     /**
      * Selects the top-scoring paths from currentPaths.
@@ -158,23 +183,27 @@ public class FuzzTest {
      */
     private Map<List<Integer[]>, Integer> topPaths(Map<List<Integer[]>, Integer> currentPaths) {
 
-        // find the top paths create a list
-        // use list to store top scoring paths temp
+        // Create a list of entries from the currentPaths map
+        List<Map.Entry<List<Integer[]>, Integer>> pathEntries = new ArrayList<>(currentPaths.entrySet());
 
-        // need to work with the entries of the currentPaths map
-        // sort entries by scores in descending order
-        // have a limit ensures tp only consider the top X amount of entries
-        // map entries back to corresponding paths store
+        // Sort the list of entries by value in descending order
+        pathEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
 
+        // Create a map to store the top 4 paths
+        Map<List<Integer[]>, Integer> topFourPaths = new HashMap<>();
 
-        // create new map called topFourPaths to store the final top paths
+        // Pick top 4 paths
+        Random random = new Random();
+        for (int i = 0; i < 4 && i < pathEntries.size(); i++) {
+            int randomIndex = random.nextInt(pathEntries.size());
+            Map.Entry<List<Integer[]>, Integer> randomEntry = pathEntries.get(randomIndex);
+            topFourPaths.put(randomEntry.getKey(), 0);
 
-        // use a loop to pick the top 4 paths and add them to topFourPaths. {
-        // generate random integer called to select a path randomly
-        // add the randomly selected path to topFourPaths with an initial score of 0.
+            // Remove the selected entry to avoid duplicates
+            pathEntries.remove(randomIndex);
+        }
 
-        //return topFourPaths;
-        return null;
+        return topFourPaths;
     }
 
 
@@ -250,19 +279,6 @@ public class FuzzTest {
     }
 
 
-    //GUIPanel guiPanel; //need access to this from app
-    //GUIFram guiFrame; //need access to this from app
-
-    /**
-     * Initializes a new game by creating a new GUI panel and frame for testing.
-     * This method sets up the necessary components for running the game test.
-     */
-    private void newGame() {
-        // new gui panel
-        //guiFrame = new GUIFrame("Fuzz Test");
-        //guiPanel = new GUIPanel(guiFrame);
-    }
-
     /**
      * Closes the game by closing the GUI frame.
      * This method is used to terminate the game after testing.
@@ -282,15 +298,6 @@ public class FuzzTest {
         //need implementation to load from app
     }
 
-
-    /**
-     * Runs fuzz testing for levels 1 and 2
-     */
-    //@Test
-    public void fuzzTesting() {
-        levelTest1();
-        //levelTest2();
-    }
 
     /**
      * Test level one of the game for 60 seconds
@@ -317,7 +324,7 @@ public class FuzzTest {
      * @param level The game level being tested.
      */
     private void testLevel(int level) {
-        //make first generation
+        //make initial paths
         Map<List<Integer[]>, Integer> currentPaths = initializeRandomTestPaths();
         //loop X times
         for (int i = 0; i < 10; i++) {
@@ -329,12 +336,12 @@ public class FuzzTest {
 
     }
 
-    public static void main(String[] args) {
-        FuzzTest game = new FuzzTest();
-        //game.calculatePathScores();
+    @Test
+    public void FuzzTest() {
+        gui = new GUI();
+        levelTest1();
+        //testLevel(2);
 
-        //game.playGame(); // Start the game loop
     }
-
 
 }//sub
