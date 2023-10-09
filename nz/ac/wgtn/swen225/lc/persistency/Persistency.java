@@ -15,17 +15,20 @@ import nz.ac.wgtn.swen225.lc.domain.*;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.persistency.ParseJson.*;
-/**
+/** 
  * A class that saves/loads
  * **/
 public class Persistency{
 
-    public static Level loadLevel(String path){
+    private static Level loadLevel(String path){
         JSONObject json = getJson(path);
         ReadJson levelObjs = ParseJson.parse(json);
         return setupLevel(levelObjs);
     }
 
+    public static void saveLevel(Level curLevel, String filename){
+
+    }
 
     public static Level loadLevel1(){
         //Might need to change these paths, they're pretty wonky
@@ -40,15 +43,14 @@ public class Persistency{
 
 
     public static boolean saveLevel(String filename, Level savedLevel){
-        
-        JSONObject savedJson = SaveJson.saveAsJson(savedLevel);
+        JSONObject savedJson = SaveJson.saveAsJson(savedLevel.board());
         try{
 
             File nFile = new File("level/"+filename);
 
             FileWriter jsonLevel = new FileWriter(nFile);
 
-            //System.out.println(savedJson.toString());
+            System.out.println(savedJson.toString());
             jsonLevel.write(savedJson.toString());
 
             jsonLevel.close();
@@ -62,19 +64,19 @@ public class Persistency{
     private static JSONObject getJson(String path){
         StringBuilder json = new StringBuilder();
         try{
-
+            
             File jsonFile = new File(path);
             Scanner sc = new Scanner (jsonFile);
-
+            
             while(sc.hasNextLine()){
                 json.append(sc.nextLine());
             }
-
+  
         }catch (IOException e){
             System.out.println(e.toString());
         }
         return new JSONObject(json.toString());
-    }
+    }  
 
     private static Level  setupLevel(ReadJson objs){
 

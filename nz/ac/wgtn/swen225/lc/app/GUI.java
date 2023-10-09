@@ -184,53 +184,49 @@ public class GUI {
                             case KeyEvent.VK_UP:
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-                                ch.checkMove(e.getKeyChar());
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_LEFT:
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                ch.checkMove(e.getKeyChar());
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_DOWN:
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                ch.checkMove(e.getKeyChar());
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_RIGHT:
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                ch.checkMove(e.getKeyChar());
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_W:
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-<<<<<<< HEAD
                                 ch.checkMove(e);
-=======
-                                ch.checkMove(e.getKeyChar());
->>>>>>> 2f8797a517d3aaf20579dc457dc3dbcf6940393c
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_A:
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                ch.checkMove(e.getKeyChar());
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_S:
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                ch.checkMove(e.getKeyChar());
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_D:
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                ch.checkMove(e.getKeyChar());
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                         }
@@ -326,16 +322,12 @@ public class GUI {
     }
 
     public void resetTimer(){
-        timer = new Timer(500, new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!gamePaused){
                     decrementTime();
                     redrawGUI();
-                    Domain.StateClass.checkGameState();
-                    for(Enemy enemy : Domain.getEnemies()){
-                        enemy.updateEnemy();
-                    }
                 }
             }
         });
@@ -780,15 +772,13 @@ public class GUI {
         mainFrame.repaint();
 
 
-        rec.setRecord(currentLevel, timeLeft, maze);
-        //try{
-            //rec.saveAsFile("game_state.json");
-        //}catch(IOException e){}
-
+        //rec.saveGameStateFile(timeLeft, currentLevel, chipsText);
     }
 
 
     public void drawInstructions() {
+
+
 
         // this is the only method to redraw the board
         mapPanel.removeAll();
@@ -802,46 +792,38 @@ public class GUI {
         mainFrame.repaint();
     }
 
-    public int[] keyInfo(){
-        int x = ch.getKeys().size();
-        //int y = Domain.getKeys().size();
-        int y = 5;
 
-        int[] keyInfo = {x, y};
-        return keyInfo;
+    private void exitGame() {
+        // Implement game exit logic, potentially saving the game state
+        // and resuming from the last unfinished level next time
+        // Close the application
+        System.exit(0);
     }
 
-    public int[] treasureInfo(){
-        int x = ch.getTreasure().size();
-        int y = Domain.getTreasure().size();
-
-        int[] treasureInfo = {x, y};
-        return treasureInfo;
+    private void saveGame() {
+        // Implement logic to save the current game state
+        // Show a message indicating that the game is saved
     }
 
-    public int[] doorInfo(){
-        int x = 0;
-        int y = 0;
-
-        int[] doorInfo = {x, y};
-        return doorInfo;
+    private void resumeGame() {
+        // Implement logic to resume a saved game
+        // Show a file selector to load a saved game
     }
 
-    public int[] playerCoords(){
-        int x = ch.getLocation().x();
-        int y = ch.getLocation().y();
-
-        int[] coordinates = {x, y};
-        return coordinates;
+    private void startNewGame(int level) {
+        // Implement logic to start a new game at the specified level
+        // Reset game state and initialize the maze for the new level
     }
 
-    public Player getPlayer(){
-        return ch;
+    private void pauseGame() {
+        // Implement logic to pause the game
+        // Display a "game is paused" dialog
+    }
+
+    private void moveChap(String direction) {
+        // Implement logic to move Chap within the maze
     }
 
 }
 
-<<<<<<< HEAD
 */
-=======
->>>>>>> 2f8797a517d3aaf20579dc457dc3dbcf6940393c
