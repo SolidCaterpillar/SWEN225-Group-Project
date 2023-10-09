@@ -22,7 +22,9 @@ public class testMove {
     public static void main(String[] args){
         Domain domain = new Domain();
 
-        domain.picKLevel(LevelE.LEVEL_ONE);
+        //domain.picKLevel(LevelE.LEVEL_ONE);
+
+        domain.loadTest();
 
         Player ch = domain.getPlayer();
 
@@ -46,9 +48,9 @@ public class testMove {
         System.out.println("Before createTileAtLoc: " + curr.getTileAtLocation(new Coord(11, 5)));
         domain.createTileAtLoc(new ExitTile(new Coord(11,5)));
         domain.createTileAtLoc(new InformationTile(new Coord(11,10),""));
-        domain.createTileAtLoc(new LockedDoor(new Coord(11,12),jingle,Colour.PURPLE));
+        domain.createTileAtLoc(new LockedDoor(new Coord(11,12),Colour.PURPLE));
 
-        ch.testKey(jingle);
+        Domain.staticBoard().addEntityToGame(new Key(new Coord(12,10),Colour.PURPLE), new Coord(10,12));
 
 
         System.out.println("After createTileAtLoc: " + curr.getTileAtLocation(new Coord(11, 5)));

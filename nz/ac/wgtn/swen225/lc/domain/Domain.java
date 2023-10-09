@@ -38,6 +38,20 @@ public class Domain {
         enemies = curLevel.enemies();
     }
 
+    public static void loadTest(){
+        Level curLevel = null;
+
+        curLevel = Persistency.loadLevelTest();
+
+        curBoard = curLevel.board();
+        curPlayer = curLevel.player();
+
+        treasures = curLevel.treasures(); //Initialize the class-level ArrayLists
+        keys = curLevel.keys();
+        enemies = curLevel.enemies();
+
+    }
+
     public Board getBoard(){
         return curBoard;
     }

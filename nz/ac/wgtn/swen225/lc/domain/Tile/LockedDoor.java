@@ -7,7 +7,7 @@ public class LockedDoor extends Wall {
 
     protected Colour colour;
     private Key unlockKey;
-    public LockedDoor(Coord loc ,Key unlockKey, Colour col){
+    public LockedDoor(Coord loc, Colour col){
         super(loc);
         this.unlockKey = unlockKey;
         colour = col;
@@ -15,10 +15,6 @@ public class LockedDoor extends Wall {
 
     public String toString(){
         return "|L|";
-    }
-
-    public Key getUnlockKey(){
-        return unlockKey;
     }
 
     public Colour getColour(){

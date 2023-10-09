@@ -157,7 +157,7 @@ public class ParseJson {
                // Colour doorColor = parseColour(wall.getString("colour"));
 
                 //Key keyDoor = keys.stream().filter(e-> e.getColour() == doorColor).findFirst().orElseThrow(()-> new IllegalArgumentException());
-                tiles.add(new LockedDoor(new Coord(x,y),null, Colour.PURPLE));
+                tiles.add(new LockedDoor(new Coord(x,y),Colour.PURPLE));
 
             }
         }

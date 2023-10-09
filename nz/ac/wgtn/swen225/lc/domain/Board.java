@@ -5,6 +5,8 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.*;
 import java.awt.*;
+import java.util.ArrayList;
+
 //sup
 public class Board {
 
@@ -135,4 +137,16 @@ public static int getDim(){return arrayDim; }
         curr.setEntity(entity);
     }
 
-}
+    public static ArrayList<Tile> getTileList(ArrayList<Coord> coords){
+            ArrayList<Tile> tiles = new ArrayList<>();
+            for (Coord coord : coords) {
+                if (Board.checkInBound(coord)) {
+                    tiles.add(Domain.staticBoard().getTileAtLocation(coord));
+                }
+            }
+
+            return tiles;
+        }
+    }
+
+

@@ -38,6 +38,11 @@ public class Persistency{
         return loadLevel("level/level2.json");
     }
 
+    public static Level loadLevelTest(){
+        //Might need to change these paths, they're pretty wonky
+        return loadLevel("level/Test.json");
+    }
+
 
     public static boolean saveLevel(String filename, Level savedLevel){
         
