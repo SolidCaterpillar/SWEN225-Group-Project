@@ -1,4 +1,4 @@
-package nz.ac.wgtn.swen225.lc.app;
+/*package nz.ac.wgtn.swen225.lc.app;
 // Author: Emmanuel De Vera
 
 import nz.ac.wgtn.swen225.lc.domain.*;
@@ -208,6 +208,7 @@ public class GUI {
                             case KeyEvent.VK_W:
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
+                                ch.checkMove(e);
                                 redrawGUI();
                                 break;
                             case KeyEvent.VK_A:
@@ -825,4 +826,4 @@ public class GUI {
 
 }
 
-
+*/

@@ -5,21 +5,18 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Tile {
-
-
-    private final static List<Tile> all = new ArrayList<>();
 
     Coord loc;
     Entity objEntity = null;
 
     public Tile(Coord loc){
         this.loc = loc;
-        all.add(this);
     }
 
-    public Coord getLoc(){
+    public Coord getLocation(){
         return loc;
     }
 
@@ -38,11 +35,21 @@ public class Tile {
     }
 
 
-    public static Optional<Tile> tileAtLoc(Coord loc) {
-        return all.stream()
-                .filter(tile -> tile.getLoc().equals(loc))
-                .findFirst();
+
+    public static Optional<Tile> tileAtLoc(Coord loc, Board board) {
+        int x = loc.y();
+        int y = loc.x();
+        Coord reverse = new Coord(x,y);
+
+        boolean locInBoard = Board.checkInBound(reverse);
+
+        if(locInBoard){
+            Tile toReturn = Domain.staticBoard().getTileAtLocation(reverse);
+            return Optional.of(toReturn);
+        }
+        return Optional.empty();
     }
+
 
     public ImageIcon draw(){
         return null;
@@ -60,5 +67,8 @@ public class Tile {
         }
     }
 
+    public boolean enemyWalkeable() {
+        return false; // Default behavior for non-FreeTile instances
+    }
 
 }
