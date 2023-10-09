@@ -81,7 +81,7 @@ public class ParseJson {
                 int x = enemy.getInt("x");
                 int y = enemy.getInt("y");
 
-                enemies.add(new Enemy(new Coord(x,y)));
+                enemies.add(new Enemy(new Coord(x,y), null));
             }
         }
         allEntity.add(player);

@@ -94,7 +94,7 @@ public class Persistency{
 
         //put speical tiles on the board
         for(Tile tile : gameTiles){
-            Coord tileCo = tile.getLocation();
+            Coord tileCo = tile.getLoc();
             board[tileCo.y()][tileCo.x()] = tile;
         }
 

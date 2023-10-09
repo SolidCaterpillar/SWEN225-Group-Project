@@ -1,18 +1,10 @@
-package nz.ac.wgtn.swen225.lc.domain;
+/*package nz.ac.wgtn.swen225.lc.domain;
 
-import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
-import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
-import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
-import nz.ac.wgtn.swen225.lc.domain.Tile.InformationTile;
-import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
-import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 public class testMove {
 
@@ -21,7 +13,6 @@ public class testMove {
     //tester method for player movement on the board
     public static void main(String[] args){
         Domain domain = new Domain();
-
         domain.picKLevel(LevelE.LEVEL_ONE);
 
         Player ch = domain.getPlayer();
@@ -29,51 +20,9 @@ public class testMove {
         Board curr = domain.getBoard();
 
 
-        //add enemy for test
-        Coord enemyCoord = new Coord(5,5);
-        Enemy enemy =  new Enemy(enemyCoord);
-        curr.addEntityToGame(enemy,enemyCoord);
-
-        //Here put other tiles for tests
-        Coord ExitTile =  new Coord(0,0);
-
-        //Here put other tiles for LockedDoor
-        Coord LockedDoor = new Coord(0,0);
-
-        Key jingle = new Key(new Coord(0,0),Colour.PURPLE);
-
-
-        System.out.println("Before createTileAtLoc: " + curr.getTileAtLocation(new Coord(11, 5)));
-        domain.createTileAtLoc(new ExitTile(new Coord(11,5)));
-        domain.createTileAtLoc(new InformationTile(new Coord(11,10),""));
-        domain.createTileAtLoc(new LockedDoor(new Coord(11,12),jingle,Colour.PURPLE));
-
-        ch.testKey(jingle);
-
-
-        System.out.println("After createTileAtLoc: " + curr.getTileAtLocation(new Coord(11, 5)));
-        System.out.println("After createTileAtLoc: " + Domain.staticBoard().getTileAtLocation(new Coord(11, 5)));
-        System.out.println("After createTileAtLoc: " + Tile.tileAtLoc(new Coord(11, 5), Domain.staticBoard()));
-
-
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
-                System.out.println(ch.getLocation());
-                System.out.println("Player tile: " + Domain.staticBoard().getTileAtLocation(ch.getLocation()).getLocation());
-                System.out.println("Entity tile: " + Domain.staticBoard().getTileAtLocation(ch.getLocation()).getEntity());
-
-                ArrayList<Enemy> TEST = new ArrayList<>(List.of(enemy));
-                domain.setEnemies(TEST);
-
-
-                Domain.StateClass.isPlayerDead();
-                Domain.StateClass.checkGameState(); //DEATH CHECK FIXED
-
-                if(Domain.StateClass.isPlayerDead()){ System.exit(0);}
-
-                drawB(curr, ch); //call drawB method to display the board
-
-
+                drawB(curr); //call drawB method to display the board
 
                 // Read user input
                 System.out.print("Enter WASD to move (Q to quit): ");
@@ -103,9 +52,7 @@ public class testMove {
                             break;
                     }
                 }
-                enemy.updateEnemy(); //TEST ENEMY MOVEMENT WORKS!
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,9 +60,9 @@ public class testMove {
 
     }
 
-    public static void drawB(Board curr, Player player){
+    public static void drawB(Board curr){
         Board.buildString(curr.getBoard());
-        System.out.println("Treasures: " + player.getTresDisplay());
     }
 
 }
+*/

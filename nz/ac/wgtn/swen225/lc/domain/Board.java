@@ -1,7 +1,6 @@
 package nz.ac.wgtn.swen225.lc.domain;
 import javax.swing.*;
 
-import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.*;
 import java.awt.*;
@@ -9,9 +8,8 @@ import java.awt.*;
 public class Board {
 
     int level;
-    Tile[][] board = new Tile[20][20];
+    static Tile[][] board = new Tile[20][20];
 
-    static final int arrayDim = 20;
     static final int tileSize = 122;
 
 
@@ -21,7 +19,18 @@ public class Board {
 
         //Test board constructor
         if(level == 0) {
+            //Test scenario
+            for (int i = 0; i < 20; i++) {
+                for (int j = 0; j < 20; j++) {
 
+                    JPanel cell = new JPanel();
+                    cell.setPreferredSize(new Dimension(25, 25));
+                    cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+                    board[i][j] = new FreeTile(new Coord(i,j));
+
+                }
+            }
         }
 
         else{
@@ -30,11 +39,58 @@ public class Board {
         //setupBoard(board);
     }
 
+    public void setupBoard(Tile[][] brd){
+    //     Nothing here, this is extended in Rendering
 
-    public Tile[][] getBoard(){ //For returning game
-        return board; //Unecessary copy was playing around
+
+
+
+         //Test scenario
+         JFrame frame = new JFrame("Board");
+             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+             JPanel boardPanel = new JPanel(new GridLayout(26, 26));
+
+             //board = new Tile[26][26];
+
+             for (int i = 0; i < 20; i++) {
+                 for (int j = 0; j < 20; j++) {
+                     Tile currentTile = brd[i][j];
+                     JPanel cell = new JPanel();
+                     cell.setPreferredSize(new Dimension(25, 25));
+                     cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+
+                     if (currentTile instanceof FreeTile) {
+                         cell.setBackground(Color.WHITE);
+                     } else {
+                         cell.setBackground(Color.GRAY);
+                     }
+
+                     boardPanel.add(cell);
+                 }
+             }
+
+             frame.add(boardPanel);
+             frame.pack();
+             frame.setVisible(true);
+         }
+
+
+
+    public void updateCamera(){
+        //Shift row or column +- in direction of player movement
+
     }
 
+    public Tile[][] getBoard(){ //For returning game
+        Tile[][] copy = board;
+        return copy; //Unecessary copy was playing around
+    }
+
+    public static int getDim(){
+        return board.length;
+    }
 
     public String toString(){
         String b = "";
@@ -59,17 +115,6 @@ public class Board {
     }
 
 
-
-
-    public static boolean checkInBound(Coord check) {
-        int x = check.x();
-        int y = check.y();
-        int dim = arrayDim;
-
-        return x >= 0 && x < dim && y >= 0 && y < dim;
-    }
-
-
     //String tester
     public static void buildString(Tile[][] stringBoard) {
         StringBuilder ret = new StringBuilder();
@@ -84,55 +129,5 @@ public class Board {
         System.out.println(ret.toString());
     }
 
-
-    public Tile getTileAtLocation(Coord location) {
-        int x = location.x();
-        int y = location.y();
-
-        if (checkInBound(location)) {
-            return board[x][y];
-        } else {
-            throw new IllegalArgumentException("Invalid location: " + location);
-        }
-    }
-
-    //REMOVE EXIT TILES IF PLAYER HAS ALL OF THE TREASURE
-    public static void openExitTile(Board b) {
-        Tile[][] currentboard = b.getBoard();
-        int dim = currentboard.length;
-
-        for (int x = 0; x < dim; x++) {
-            for (int y = 0; y < dim; y++) {
-                Tile currentTile = currentboard[x][y];
-
-                if (currentTile instanceof ExitTile) {
-                    // Replace the ExitTile with a FreeTile at the same location
-                    currentboard[x][y] = new FreeTile(new Coord(x, y));
-                }
-            }
-        }
-    }
-
-
-    public void replaceTileAt(Coord coord, Tile newTile) {
-        int x = coord.x();
-        int y = coord.y();
-
-        if (checkInBound(coord)) {
-            board[x][y] = newTile;
-        } else {
-            throw new IllegalArgumentException("Invalid location: " + coord);
-        }
-    }
-
-
-    //TEST METHOD
-    public void addEntityToGame(Entity entity, Coord loc){
-        int x = loc.x();
-        int y = loc.y();
-
-        Tile curr = board[x][y];
-        curr.setEntity(entity);
-    }
 
 }

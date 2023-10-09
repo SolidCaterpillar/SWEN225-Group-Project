@@ -32,9 +32,4 @@ public record Coord(int x, int y){
                 throw new IllegalArgumentException("Invalid input: " + keyPressed+". Only use wasd!");
         }
     }
-
-    @Override
-    public String toString(){
-        return "X:" + x() + "\n" + "Y:" + y();
-    }
 }

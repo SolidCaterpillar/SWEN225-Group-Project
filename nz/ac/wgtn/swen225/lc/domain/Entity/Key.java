@@ -1,18 +1,13 @@
 package nz.ac.wgtn.swen225.lc.domain.Entity;
 
-import nz.ac.wgtn.swen225.lc.domain.Colour;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 
 public class Key implements Entity{
 
-    protected Colour colour;
-
     protected Coord location;
 
-    public Key(Coord co,Colour col){
-
+    public Key(Coord co){
         location = co;
-        colour = col;
     }
 
     @Override
@@ -23,9 +18,4 @@ public class Key implements Entity{
     public String toString(){
         return "k";
     }
-
-    public Colour getColour(){
-        return colour;
-    }
-
 }
