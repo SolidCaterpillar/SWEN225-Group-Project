@@ -3,6 +3,7 @@ package nz.ac.wgtn.swen225.lc.persistency;
 import nz.ac.wgtn.swen225.lc.persistency.plugin.main.java.org.json.*;
 
 //import org.json.JSONObject;
+import java.awt.*;
 import java.util.ArrayList;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
@@ -63,7 +64,7 @@ public class ParseJson {
                 int x = key.getInt("x");
                 int y = key.getInt("y");
                 //Colour keyColor = parseColour(key.getString("colour"));
-                keys.add(new Key(new Coord(x,y)/*,keycolor */));
+                keys.add(new Key(new Coord(x,y), Colour.PURPLE));
             }
         }
 
@@ -156,7 +157,8 @@ public class ParseJson {
                // Colour doorColor = parseColour(wall.getString("colour"));
 
                 //Key keyDoor = keys.stream().filter(e-> e.getColour() == doorColor).findFirst().orElseThrow(()-> new IllegalArgumentException());
-                tiles.add(new LockedDoor(new Coord(x,y)/* ,keyDoor, doorColor */));
+                tiles.add(new LockedDoor(new Coord(x,y),null, Colour.PURPLE));
+
             }
         }
 

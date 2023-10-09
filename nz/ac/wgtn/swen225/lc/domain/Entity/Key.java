@@ -9,10 +9,10 @@ public class Key implements Entity{
 
     protected Coord location;
 
-    public Key(Coord co /*,Colour col */){
+    public Key(Coord co,Colour col){
 
         location = co;
-        //colour = col;
+        colour = col;
     }
 
     @Override

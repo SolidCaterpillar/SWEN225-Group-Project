@@ -1,9 +1,12 @@
 package nz.ac.wgtn.swen225.lc.domain;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
+import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.InformationTile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
+import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,12 +40,27 @@ public class testMove {
         //Here put other tiles for LockedDoor
         Coord LockedDoor = new Coord(0,0);
 
+        Key jingle = new Key(new Coord(0,0),Colour.PURPLE);
+
+
+        System.out.println("Before createTileAtLoc: " + curr.getTileAtLocation(new Coord(11, 5)));
         domain.createTileAtLoc(new ExitTile(new Coord(11,5)));
         domain.createTileAtLoc(new InformationTile(new Coord(11,10),""));
+        domain.createTileAtLoc(new LockedDoor(new Coord(11,12),jingle,Colour.PURPLE));
+
+        ch.testKey(jingle);
+
+
+        System.out.println("After createTileAtLoc: " + curr.getTileAtLocation(new Coord(11, 5)));
+        System.out.println("After createTileAtLoc: " + Domain.staticBoard().getTileAtLocation(new Coord(11, 5)));
+        System.out.println("After createTileAtLoc: " + Tile.tileAtLoc(new Coord(11, 5), Domain.staticBoard()));
 
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
+                System.out.println(ch.getLocation());
+                System.out.println("Player tile: " + Domain.staticBoard().getTileAtLocation(ch.getLocation()).getLocation());
+                System.out.println("Entity tile: " + Domain.staticBoard().getTileAtLocation(ch.getLocation()).getEntity());
 
                 ArrayList<Enemy> TEST = new ArrayList<>(List.of(enemy));
                 domain.setEnemies(TEST);
@@ -87,6 +105,7 @@ public class testMove {
                 }
                 enemy.updateEnemy(); //TEST ENEMY MOVEMENT WORKS!
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

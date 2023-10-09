@@ -5,13 +5,14 @@ import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Domain;
 import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.InformationTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 
 import java.awt.event.KeyEvent;
 import java.util.*;
 
-import static nz.ac.wgtn.swen225.lc.domain.Board.getDim;
+
 import static nz.ac.wgtn.swen225.lc.domain.Board.openExitTile;
 
 public class Player implements Entity{
@@ -30,6 +31,9 @@ public class Player implements Entity{
     }
 
 
+    //ADD A IS WALKEABLE TO ENSURE COLLISION DETECTION IS CORRECT THE CURRENT CHECKS ARE INSUFFICIENT.
+
+    /*
     public void checkMove(char keyEvent) {
         //char keyCode = keyEvent.getKeyChar(); //convert to char for switch
         char keyCode = keyEvent;
@@ -58,10 +62,13 @@ public class Player implements Entity{
 
         newPos = optionalTile.get();
 
+
         boolean checkDoor = tryOpenLockedDoor(newPos);//check if next position is a lockedDoor
 
-        //If door existed and player has key then player can move onto it.
-        if(checkDoor){movePlayer(newPos, loc);}
+        //If door existed and player has key then player can move onto it and replace with freetile.
+        if(checkDoor){movePlayer(newPos, loc);
+            Domain.staticBoard().replaceTileAt(loc, new FreeTile(loc));
+        }
 
         //Currently only movement add interaction later too
         if (!(newPos instanceof FreeTile)) {System.out.println("Invalid move"); }
@@ -72,8 +79,58 @@ public class Player implements Entity{
         movePlayer(newPos, loc);
 
         this.checkTreasures(); //Unlocks ExitTiles which open when player has all treasure
+    } */
+    public void checkMove(char keyEvent) {
+        //char keyCode = keyEvent.getKeyChar(); //convert to char for switch
+        char keyCode = keyEvent;
+        this.changeDir(keyCode); //Change orientations
 
+        System.out.println(keyCode);
 
+        Coord loc = null;
+        Tile newPos = null;
+
+        loc = switch (keyCode) {
+            case 'w' -> loc = this.location.moveUp();
+            case 'a' -> loc = this.location.moveLeft();
+            case 's' -> loc = this.location.moveDown();
+            case 'd' -> loc = this.location.moveRight();
+            default -> throw new IllegalArgumentException("Invalid key pressed!");
+        };
+        if (Board.checkInBound(loc)) {
+            // get new tile
+            Optional<Tile> optionalTile = Tile.tileAtLoc(loc,Domain.staticBoard());
+
+            // if no tile present
+            if (!optionalTile.isPresent()) {
+                throw new IllegalArgumentException("No tile at the target location!");
+            }
+
+            newPos = optionalTile.get();
+
+            boolean checkDoor = tryOpenLockedDoor(newPos);
+
+            if (checkDoor) {
+                Domain.staticBoard().replaceTileAt(newPos.getLocation(), new FreeTile(loc));
+                newPos.setEntity(this);
+                movePlayer(newPos, loc);
+            }
+
+            if (!(newPos instanceof FreeTile)) {
+                System.out.println("Invalid move");
+            } //IF NOT INVALID
+
+            else {
+                if(newPos instanceof InformationTile){
+                    ((InformationTile) newPos).isChapOn(this);
+                }
+                Player.interact(this, loc);
+                movePlayer(newPos, loc);
+                this.checkTreasures();
+            }
+        } else {
+            throw new IllegalArgumentException("Tile not in board boundary");
+        }
     }
 
     //check if player has key for locked door
@@ -86,7 +143,7 @@ public class Player implements Entity{
     }
 
     public void movePlayer(Tile newPos, Coord loc){
-        Tile oldPos = Tile.tileAtLoc(this.location).orElseThrow(
+        Tile oldPos = Tile.tileAtLoc(this.location, Domain.staticBoard()).orElseThrow(
                 () -> new IllegalArgumentException("OG player position not found")
         );
 
@@ -145,7 +202,7 @@ public class Player implements Entity{
 
     public static void interact(Player player, Coord loc) {
         // get the tile at the player's current location
-        Optional<Tile> currentTileOptional = Tile.tileAtLoc(loc);
+        Optional<Tile> currentTileOptional = Tile.tileAtLoc(loc,Domain.staticBoard());
 
         if (currentTileOptional.isPresent()) {
             Tile currentTile = currentTileOptional.get();
@@ -184,5 +241,7 @@ public class Player implements Entity{
         return s;
     }
 
-
+    public void testKey(Key k){
+        this.keys.add(k);
+    }
 }

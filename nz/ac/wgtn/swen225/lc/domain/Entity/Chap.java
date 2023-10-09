@@ -1,5 +1,6 @@
 package nz.ac.wgtn.swen225.lc.domain.Entity;
 
+import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.Domain;
@@ -7,7 +8,7 @@ import nz.ac.wgtn.swen225.lc.domain.Domain;
 import java.awt.event.KeyEvent;
 import java.util.*;
 
-import static nz.ac.wgtn.swen225.lc.domain.Board.getDim;
+
 
 //REDUNDANT CLASS REPLACED WITH PLAYER
 
@@ -47,15 +48,15 @@ public class Chap extends Player{
             default -> throw new IllegalArgumentException("Invalid key pressed!");
         };
 
-        if (!checkInBound(loc)) {return;} //if new loc in bound
-        Optional<Tile> optionalTile = Tile.tileAtLoc(loc); //get new tile
+        //if (!checkInBound(loc)) {return;} //if new loc in bound
+        Optional<Tile> optionalTile = Tile.tileAtLoc(loc, Domain.staticBoard()); //get new tile
         if (!optionalTile.isPresent()) { throw new IllegalArgumentException("No tile at the target location!");}//if no tile present
         newPos = optionalTile.get();
         if (!(newPos instanceof FreeTile)) {System.out.println("Invalid move"); } //Currently only movement add interaction later too
 
         Player.interact(this, loc); //Static interaction method will expand to encompass tile interactions with locked doors etc.
 
-        Tile oldPos = Tile.tileAtLoc(this.location).orElseThrow(
+        Tile oldPos = Tile.tileAtLoc(this.location, Domain.staticBoard()).orElseThrow(
                 () -> new IllegalArgumentException("OG player position not found")
         );
 
@@ -70,13 +71,6 @@ public class Chap extends Player{
 
 
 
-    public boolean checkInBound(Coord check) {
-        int x = check.x();
-        int y = check.y();
-        int dim = getDim();
-
-        return x >= 0 && x < dim && y >= 0 && y < dim;
-    }
 
     public ArrayList<Key> getKeys() { //Keygetter
         return new ArrayList<>(Collections.unmodifiableCollection(keys));

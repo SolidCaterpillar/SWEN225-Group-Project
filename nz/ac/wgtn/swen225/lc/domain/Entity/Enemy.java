@@ -5,6 +5,7 @@ import java.util.Queue;
 import java.util.Random;
 
 import nz.ac.wgtn.swen225.lc.domain.Board;
+import nz.ac.wgtn.swen225.lc.domain.Domain;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
@@ -49,9 +50,9 @@ public class Enemy implements Entity{
 
     private void performMovement(Coord coord) {
         // Get tile for movement
-        Tile oldPos = Tile.tileAtLoc(location).orElseThrow(() -> new IllegalArgumentException("Original position not found!"));
+        Tile oldPos = Tile.tileAtLoc(location, Domain.staticBoard()).orElseThrow(() -> new IllegalArgumentException("Original position not found!"));
 
-        Tile newLoc = Tile.tileAtLoc(coord).orElseThrow(() -> new IllegalArgumentException("New position not found!"));
+        Tile newLoc = Tile.tileAtLoc(coord,Domain.staticBoard()).orElseThrow(() -> new IllegalArgumentException("New position not found!"));
 
         newLoc.moveEntity(oldPos);
 
@@ -80,8 +81,8 @@ public class Enemy implements Entity{
             return false;
         }
 
-        Tile destinationTile = Tile.tileAtLoc(coord).orElseThrow(()-> new IllegalArgumentException("Tile to move to does not exist!"));
-        return destinationTile instanceof FreeTile && destinationTile.enemyWalkeable();
+        Tile destinationTile = Tile.tileAtLoc(coord,Domain.staticBoard()).orElseThrow(()-> new IllegalArgumentException("Tile to move to does not exist!"));
+        return destinationTile.enemyWalkeable();
     }
 
 

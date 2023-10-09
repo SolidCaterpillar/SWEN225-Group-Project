@@ -49,6 +49,8 @@ public class Domain {
     public static Board staticBoard(){return curBoard;}
     public static ArrayList<Enemy> getEnemies(){return enemies;}
 
+    public static ArrayList<Key> getKeys(){return keys;}
+
     public static ArrayList<Treasure> getTreasure(){
         return treasures;
     }
@@ -87,8 +89,7 @@ public class Domain {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                reloadCurrentLevel();
+System.exit(1);
                 return;
             }
 

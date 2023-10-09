@@ -9,8 +9,9 @@ import java.awt.*;
 public class Board {
 
     int level;
-    static Tile[][] board = new Tile[20][20];
+    Tile[][] board = new Tile[20][20];
 
+    static final int arrayDim = 20;
     static final int tileSize = 122;
 
 
@@ -31,14 +32,10 @@ public class Board {
 
 
     public Tile[][] getBoard(){ //For returning game
-        Tile[][] copy = board;
-        return copy; //Unecessary copy was playing around
+        return board; //Unecessary copy was playing around
     }
 
-    public static int getDim(){
-        return board.length;
-    }
-
+public static int getDim(){return arrayDim; }
     public String toString(){
         String b = "";
         for(int x = 0; x < board.length; x++){
@@ -67,7 +64,7 @@ public class Board {
     public static boolean checkInBound(Coord check) {
         int x = check.x();
         int y = check.y();
-        int dim = board.length;
+        int dim = arrayDim;
 
         return x >= 0 && x < dim && y >= 0 && y < dim;
     }

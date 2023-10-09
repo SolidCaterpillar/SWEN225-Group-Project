@@ -7,9 +7,11 @@ public class InformationTile extends FreeTile{
 
     protected String information;
 
+    boolean chapIsOn = false;
     public InformationTile(Coord loc, String info) {
         super(loc);
         information = info;
+        chapIsOn = false;
     }
 
     public String getInformation() {
@@ -17,14 +19,20 @@ public class InformationTile extends FreeTile{
     }
 
     public String toString(){
-        return "I";
+        if(chapIsOn){
+            return "PP";
+        }
+            return "I";
     }
 
 
-    public boolean isChapOn(Player player){
-        return player.getLocation().equals(this.loc);
-        //If chap is on then Renderer can use this to do stuff
+    public void isChapOn(Player player){
+        chapIsOn = player.getLocation().equals(this.getLocation()) ? true : false;
+        //if true renderer draws Chap icon over Info wall
     }
 
+    public boolean enemyWalkeable() {
+        return false; // Default behavior for non-FreeTile instances
+    }
 
 }
