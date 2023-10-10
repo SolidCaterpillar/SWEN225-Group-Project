@@ -11,44 +11,37 @@ import nz.ac.wgtn.swen225.lc.recorder.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Enumeration;
-import javax.imageio.ImageIO;
 import java.io.*;
+import java.util.Objects;
 
+/**
+ * This is the GUI object that create the entirety of App
+ * GUI creates a JFrame that will contain all the key components
+ */
 public class GUI {
 
     private int currentLevel = 1; // Current game level
-    private int treasuresRemaining; // Number of treasures remaining
-    private int maxTime = 60;
-
-    //private Recorder rec;
+    private final int maxTime = 60;   // Sets up the time limit to count down from
     private int timeLeft = maxTime; // Time left for the current level
     private Timer timer; // Timer for counting down the time
+    private int counter = 0; // Used with Modulus to turn milliseconds into seconds
 
 
 
-    // Composed of a Main Frame which is then broken into Panels
-    private JFrame mainFrame;
-    private JPanel backPanel;
-    private JPanel mapPanel;
-    private JPanel sidePanel;
-    private JPanel levelPanel;
-    private JPanel timePanel;
-    private JPanel chipsPanel;
-    private JPanel inventoryPanel;
-    private JLabel levelLabel;
-    private JLabel timeLabel;
-    private JLabel chipsLabel;
+    private final JFrame mainFrame;   // This is the JFrame that contains everything
+    private JPanel backPanel;   // This contains the background of the App
+    private JPanel mapPanel;    // JPanel that contains the Board of the game
+    private JPanel sidePanel;   // JPanel that holds all sidePanel subPanels
+    private JPanel levelPanel;  // Shows the Current Level being played
+    private JPanel timePanel;   // Shows the Time remaining that is counting down
+    private JPanel chipsPanel;  // Shows how many Chips/Treasure still remain
+    private JPanel inventoryPanel;  // Shows the keys that the player has collected
 
 
-
-    private Level play;
-    private Tile[][] maze;
-    private Player ch;
-    private Domain d;
-    private GameRenderer renderer;
-    private GameCanvas canvas;
-    private Recorder rec;
+    private final Player ch;
+    private final GameCanvas canvas;
+    private final Recorder rec;
+    private final Tile[][] maze;
 
 
 
@@ -58,43 +51,39 @@ public class GUI {
 
 
 
-    private final int tileSize = 68; // Adjust this size as needed
-    private final int numRows = 9;
-    private final int numCols = 9;
+    private final int tileSize = 68; // Adjust this size as needed for inventory
     private boolean gamePaused = false; // Flag to track if the game is paused
+    private boolean showInstructions = false;   // Tracking if Instructions are shown
 
-    private boolean showInstructions = false;
-
-
+    /**
+     * Creating the GUI class will create all the JPanel Components
+     */
     public GUI() {
 
-        // Frame is the overall GUI JFrame that contains pannels.
+        // Frame is the overall GUI JFrame that contains panels.
         mainFrame = new JFrame("Larry Croftâ€™s Adventures");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setResizable(false);
 
-        //rec = new Recorder();
-
-
-        play = Persistency.loadLevel1();
-        maze = play.board().getBoard() ;
-
-
-        d = new Domain();
-        d.picKLevel(LevelE.LEVEL_ONE);
+        // Creating the objects of the other modules
+        // The Following are Integrations of previous Modules
+        Level play = Persistency.loadLevel1();
+        maze = play.board().getBoard();
+        Domain d = new Domain();
+        Domain.picKLevel(LevelE.LEVEL_ONE);
         ch = d.getPlayer();
 
-        renderer = new GameRenderer(maze, ch, d);
+        // Creating the render object and the canvas which display the board
+        GameRenderer renderer = new GameRenderer(maze, ch, d);
         canvas = new GameCanvas(renderer);
         rec = new Recorder();
 
-
-
-
+        // functions to draw App components
         drawBoard();
         createSideBar();
         createMenuBar();
 
+        // Reset Timer will initial create and start the timer
         resetTimer();
 
         // Add the key listener to the panel. All of these lines are required
@@ -103,43 +92,42 @@ public class GUI {
 
         mapPanel.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                // This method is called when a key is typed
-            }
-
+            public void keyTyped(KeyEvent e) {}  // This method is called when a key is typed
+            @Override
+            public void keyReleased(KeyEvent e) {} // This method is called when a key is released
+            /**
+             * All the input logic occurs below
+             * The following is lengthy but necessary
+             * @param e KeyEvent
+             */
             @Override
             public void keyPressed(KeyEvent e) {
                 // This method is called when a key is pressed
                 int keyCode = e.getKeyCode();
-
-                if (e.isControlDown()) {
-                    // Handle Ctrl key combinations
+                if (e.isControlDown()) {    // Handle Ctrl key combinations
                     switch (keyCode) {
-                        case KeyEvent.VK_X:
+                        case KeyEvent.VK_X -> {
                             // CTRL-X: Exit the game and lose current game state
                             // Implement game state reset logic and exit
                             chipsText = "CTRL-X";
-                            redrawGUI();
                             int choice = JOptionPane.showConfirmDialog(mainFrame, "Custom JOptionPane: wanna leave bro?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
                             if (choice == JOptionPane.YES_OPTION) {
                                 System.exit(0);
                             }
-                            break;
-                        case KeyEvent.VK_S:
+                        }
+                        case KeyEvent.VK_S -> {
                             // CTRL-S: Save the game state
                             // Implement game state save logic
                             chipsText = "CTRL-S";
-                            redrawGUI();
-                            loadFile();
-                            break;
-                        case KeyEvent.VK_R:
+                            writeFile();
+                        }
+                        case KeyEvent.VK_R -> {
                             // CTRL-R: Resume a saved game
                             // Implement game state loading logic using a file selector
                             chipsText = "CTRL-R";
-                            redrawGUI();
-                            writeFile();
-                            break;
-                        case KeyEvent.VK_1:
+                            loadFile();
+                        }
+                        case KeyEvent.VK_1 -> {
                             // CTRL-1: Start a new game at level 1
                             // Implement logic to start a new game at level 1
                             chipsText = "CTRL-1";
@@ -149,9 +137,8 @@ public class GUI {
                                 timer.stop();
                             }
                             resetTimer();
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_2:
+                        }
+                        case KeyEvent.VK_2 -> {
                             // CTRL-2: Start a new game at level 2
                             // Implement logic to start a new game at level 2
                             chipsText = "CTRL-2";
@@ -161,105 +148,87 @@ public class GUI {
                                 timer.stop();
                             }
                             resetTimer();
-                            redrawGUI();
-                            break;
-                        case KeyEvent.VK_E:
+                        }
+                        case KeyEvent.VK_E -> {
                             // CTRL-2: Start a new game at level 2
                             // Implement logic to start a new game at level 2
-                            showInstructions = showInstructions ? false : true;
+                            showInstructions = !showInstructions;
                             gamePaused = showInstructions;
-                            redrawGUI();
-                            break;
+                        }
                     }
-                } else {
-                    // Handle regular arrow key movements
+                } else { // Handle regular key presses
                     if(!gamePaused){
                         switch (keyCode) {
-                            case KeyEvent.VK_ESCAPE:
+                            case KeyEvent.VK_ESCAPE -> {
                                 chipsText = "Escape";
                                 gamePaused = true;
                                 levelText = "Paused";
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_UP:
+                            }
+                            case KeyEvent.VK_UP -> {
+                                // Handle UP arrow key press (e.g., move up)
+                                chipsText = "UP";
+                                ch.checkMove('w');
+                            }
+                            case KeyEvent.VK_LEFT -> {
+                                // Handle LEFT arrow key press (e.g., move left)
+                                chipsText = "LEFT";
+                                ch.checkMove('a');
+                            }
+                            case KeyEvent.VK_DOWN -> {
+                                // Handle DOWN arrow key press (e.g., move down)
+                                chipsText = "DOWN";
+                                ch.checkMove('s');
+                            }
+                            case KeyEvent.VK_RIGHT -> {
+                                // Handle RIGHT arrow key press (e.g., move right)
+                                chipsText = "RIGHT";
+                                ch.checkMove('d');
+                            }
+                            case KeyEvent.VK_W -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
                                 ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_LEFT:
+                            }
+                            case KeyEvent.VK_A -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
                                 ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_DOWN:
+                            }
+                            case KeyEvent.VK_S -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
                                 ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_RIGHT:
+                            }
+                            case KeyEvent.VK_D -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
                                 ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_W:
-                                // Handle UP arrow key press (e.g., move up)
-                                chipsText = "UP";
-                                ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_A:
-                                // Handle LEFT arrow key press (e.g., move left)
-                                chipsText = "LEFT";
-                                ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_S:
-                                // Handle DOWN arrow key press (e.g., move down)
-                                chipsText = "DOWN";
-                                ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
-                            case KeyEvent.VK_D:
-                                // Handle RIGHT arrow key press (e.g., move right)
-                                chipsText = "RIGHT";
-                                ch.checkMove(e.getKeyChar());
-                                redrawGUI();
-                                break;
+                            }
                         }
                     }else{
-                        switch (keyCode) {
-                            case KeyEvent.VK_ESCAPE:
-                                chipsText = "Escape";
-                                gamePaused = showInstructions;
-                                levelText = "Level";
-                                redrawGUI();
-                                break;
+                        // This is to prevent pause conflicts
+                        if (keyCode == KeyEvent.VK_ESCAPE) {
+                            chipsText = "Escape";
+                            gamePaused = showInstructions;
+                            levelText = "Level";
                         }
                     }
                 }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                // This method is called when a key is released
+                redrawGUI();    // always redrawGUI per key input
             }
         });
 
+        // complete the mainFrame functionality
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
 
-    public int getTime(){
-        return timeLeft;
-    }
 
 
-
-
+    /**
+     * The method that will load the file, used for recorder
+     * This is used to bring up a saved state of the game.
+     */
     public void loadFile() {    //static
 
         // Create a file chooser
@@ -281,8 +250,7 @@ public class GUI {
                     System.out.println(line);
                 }
                 reader.close();
-
-
+                // used to catch IOException
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Error reading the file.");
@@ -293,7 +261,10 @@ public class GUI {
 
     }
 
-
+    /**
+     * Used after Save functionality, menu Save or CTRL-S
+     * Will save all the actions made by the user
+     */
     public void writeFile() {   // static
 
         // Create a file chooser
@@ -321,64 +292,84 @@ public class GUI {
         }
     }
 
+    /**
+     * Important method to create a new Timer and set behaviour
+     * The timer is a powerful object that is independent of any input or idle state
+     */
     public void resetTimer(){
-        timer = new Timer(500, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(!gamePaused){
+        // The timer is set to tick every 50th of a second
+        timer = new Timer(20, e -> {
+            if(!gamePaused){
+                // useful to always verify the state of the game
+                counter ++;
+                Domain.StateClass.checkGameState();
+                redrawGUI();
+                // Using modulus, every second the enemies move and the time decreases
+                if(counter % 50 == 0) {
                     decrementTime();
-                    redrawGUI();
-                    Domain.StateClass.checkGameState();
-                    for(Enemy enemy : Domain.getEnemies()){
+                    for (Enemy enemy : Domain.getEnemies()) {
                         enemy.updateEnemy();
+                        redrawGUI();
                     }
+                    rec.setRecord(currentLevel, timeLeft, maze);
+                    try{
+                        rec.saveAsFile("game_state.json");
+                    }catch(IOException ignored){}
                 }
             }
         });
         timer.start();
     }
 
+    /**
+     * Draw the board as well as the background of the GUI
+     * Setting up the dimensions for the central mapPanel object
+     */
     public void drawBoard() {
         backPanel = new JPanel(new BorderLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                // Load your background image
-                ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/background.png"));
+                // Loading the background image
+                ImageIcon backgroundImage  = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/background.png")));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-
+        // Create a border to show the background with equal proportions
         backPanel.setBorder(BorderFactory.createEmptyBorder(60, 150, 60, 150));
         backPanel.setPreferredSize(new Dimension(1280, 720));
 
+        // The mapPanel is now the canvas / board that Renderer has made
         mapPanel = canvas;
         mapPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mapPanel.setOpaque(false);
 
-        // This method will initialize the positions of specific Tiles. Use this to link to Tile, Estate, and Player
-        //createTiles();
-
+        // The Central board and background container is added to the Frame
         backPanel.add(mapPanel, BorderLayout.CENTER);
         mainFrame.add(backPanel);
     }
 
+    /**
+     * Creating the top menu bar with all the Menu Items
+     */
     public void createMenuBar(){
         // Create the menu bar
         JMenuBar menuBar = new JMenuBar();
         mainFrame.setJMenuBar(menuBar);
 
-        // Create a menu
+        // Create the main menu dropdowns
         JMenu menu1 = new JMenu("Game");
         JMenu menu2 = new JMenu("Options");
         JMenu menu3 = new JMenu("Level");
         JMenu menu4 = new JMenu("Help");
 
+        // Add the four dropdowns to the menu
         menuBar.add(menu1);
         menuBar.add(menu2);
         menuBar.add(menu3);
         menuBar.add(menu4);
 
+        // Create all the necessary Menu Items
         JMenuItem pauseMenuItem = new JMenuItem("Pause");
         JMenuItem resumeMenuItem = new JMenuItem("Resume");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
@@ -389,6 +380,7 @@ public class GUI {
         JMenuItem level2MenuItem = new JMenuItem("Level 2");
         JMenuItem instructionsMenuItem = new JMenuItem("Game Rules");
 
+        // Sort the Menu Items to be added into the appropriate dropdown.
         menu1.add(pauseMenuItem);
         menu1.add(resumeMenuItem);
         menu1.add(exitMenuItem);
@@ -399,128 +391,81 @@ public class GUI {
         menu3.add(level2MenuItem);
         menu4.add(instructionsMenuItem);
 
-
-
-
-
-        pauseMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gamePaused = true;
-                levelText = "Paused";
-                redrawGUI();
-            }
+        pauseMenuItem.addActionListener(e -> {
+            // Pressing Pause Menu Item will set the pause boolean
+            gamePaused = true;
+            levelText = "Paused";
+            redrawGUI();
         });
-
-        resumeMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gamePaused = false;
-                levelText = "Level";
-                redrawGUI();
-            }
+        resumeMenuItem.addActionListener(e -> {
+            // Pressing Resume Menu Item will set the pause boolean false
+            gamePaused = false;
+            levelText = "Level";
+            redrawGUI();
         });
-
         // Adding the JOptionPane alongside the MenuItem when clicked
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showConfirmDialog(mainFrame, "Custom JOptionPane: wanna leave bro?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
-                if (choice == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                }
+        exitMenuItem.addActionListener(e -> {
+            // Create a basic JOptionPane to confirm leaving or not
+            int choice = JOptionPane.showConfirmDialog(mainFrame, "Custom JOptionPane: Would you like to exit the game?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                System.exit(0);
             }
         });
-
-        loadMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadFile();
-            }
+        loadMenuItem.addActionListener(e -> {
+            // Call the LoadFile method
+            loadFile();
         });
-
-        saveMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                writeFile();
-            }
+        saveMenuItem.addActionListener(e -> {
+            // Call the WriteFile method
+            writeFile();
         });
-
-        level1MenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                currentLevel = 1;
-                timeLeft = maxTime;
-                if (timer.isRunning()) {
-                    timer.stop();
-                }
-                resetTimer();
-                redrawGUI();
+        level1MenuItem.addActionListener(e -> {
+            // Turn the current Level to one and reset
+            currentLevel = 1;
+            timeLeft = maxTime;
+            if (timer.isRunning()) {
+                timer.stop();
             }
+            resetTimer();
+            redrawGUI();
         });
-
-        level2MenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                currentLevel = 2;
-                timeLeft = maxTime;
-                if (timer.isRunning()) {
-                    timer.stop();
-                }
-                resetTimer();
-                redrawGUI();
+        level2MenuItem.addActionListener(e -> {
+            // Turn the current Level to two and reset
+            currentLevel = 2;
+            timeLeft = maxTime;
+            if (timer.isRunning()) {
+                timer.stop();
             }
+            resetTimer();
+            redrawGUI();
         });
+        instructionsMenuItem.addActionListener(e -> {
+            // Using a ternary operator to create a toggle and sync with gamePaused
+            showInstructions = !showInstructions;
+            gamePaused = gamePaused || showInstructions;
 
-        instructionsMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showInstructions = showInstructions ? false : true;
-                gamePaused = showInstructions;
-                redrawGUI();
-            }
+            // if game is paused, and then show instructions.
+            // if game is paused it must remain paused, if it is not, then do not be paused.
+            redrawGUI();
         });
     }
-
+    /**
+     * Basic logic for decrementTime
+     * If it hits 0 seconds left a basic JOptionPane is shown
+     */
     public void decrementTime(){
         timeLeft --;
         if(timeLeft < 1){
             timer.stop();
             redrawGUI();
-            //JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-
-    public void createTiles() {
-
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/walltile3.png"));
-
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++) {
-
-                // below basically makes a small JPanel square which will contain the content of a Tile.
-                JPanel cell = new JPanel(new BorderLayout()) {
-                    @Override
-                    protected void paintComponent(Graphics g) {
-                        super.paintComponent(g);
-                        // Load your background image
-                        ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/walltile3.png"));
-                        g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-                    }
-                };
-                cell.setPreferredSize(new Dimension(tileSize, tileSize));
-
-                //JLabel sprite = new JLabel();
-                //sprite.setIcon(imageIcon);
-
-                //cell.add(sprite);
-                mapPanel.add(cell);
-
-            }
+            JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
 
+    /**
+     *
+     */
     public void createLevelPanel() {
 
         int n = !showInstructions ? 2 : 1;
@@ -530,7 +475,7 @@ public class GUI {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load your background image
-                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield" + n + ".png"));
+                ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/shield" + n + ".png")));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -543,7 +488,7 @@ public class GUI {
         if(!showInstructions){
 
 
-            levelLabel = new JLabel(levelText);
+            JLabel levelLabel = new JLabel(levelText);
             Font font = new Font("Arial", Font.BOLD, 20);
             levelLabel.setFont(font);
 
@@ -556,14 +501,14 @@ public class GUI {
             JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
             sprite2.setOpaque(false);
 
-            ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
+            ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
             for (int i = 0; i < 3; i++) {
                 // Create a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel();
                 cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
 
                 if (i == 2) {
-                    imageIcon = new ImageIcon(getClass().getResource("icons/" + currentLevel + ".png"));
+                    imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + currentLevel + ".png")));
                 }
 
                 JLabel sprite = new JLabel();
@@ -583,6 +528,9 @@ public class GUI {
 
     }
 
+    /**
+     *
+     */
     public void createTimePanel(){
 
         int n = !showInstructions ? 2 : 3;
@@ -592,7 +540,7 @@ public class GUI {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load your background image
-                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield" + n + ".png"));
+                ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/shield" + n + ".png")));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -602,7 +550,7 @@ public class GUI {
         // Centered label at the first row
 
         if(!showInstructions) {
-            timeLabel = new JLabel(timeText);
+            JLabel timeLabel = new JLabel(timeText);
             Font font = new Font("Arial", Font.BOLD, 20);
             timeLabel.setFont(font);
 
@@ -615,7 +563,7 @@ public class GUI {
             JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
             sprite2.setOpaque(false);
 
-            ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
+            ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
             for (int i = 0; i < 3; i++) {
                 // Create a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel();
@@ -623,11 +571,11 @@ public class GUI {
                 cell.setBackground(Color.WHITE);
 
                 if (i == 1) {
-                    imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft / 10) + ".png"));
+                    imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (timeLeft / 10) + ".png")));
                 }
 
                 if (i == 2) {
-                    imageIcon = new ImageIcon(getClass().getResource("icons/" + (timeLeft % 10) + ".png"));
+                    imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (timeLeft % 10) + ".png")));
                 }
 
                 JLabel sprite = new JLabel();
@@ -649,6 +597,9 @@ public class GUI {
 
     }
 
+    /**
+     *
+     */
     public void createChipsPanel(){
 
         int n = !showInstructions ? 2 : 4;
@@ -658,7 +609,7 @@ public class GUI {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load your background image
-                ImageIcon backgroundImage = new ImageIcon(getClass().getResource("icons/shield" + n + ".png"));
+                ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/shield" + n + ".png")));
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
@@ -668,7 +619,7 @@ public class GUI {
 
         if(!showInstructions) {
             // Centered label at the first row
-            chipsLabel = new JLabel(chipsText);
+            JLabel chipsLabel = new JLabel(chipsText);
             Font font = new Font("Arial", Font.BOLD, 20);
             chipsLabel.setFont(font);
 
@@ -681,7 +632,7 @@ public class GUI {
             JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
             sprite2.setOpaque(false);
 
-            ImageIcon imageIcon = new ImageIcon(getClass().getResource("icons/0.png"));
+            ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
             for (int i = 0; i < 3; i++) {
                 // Create a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel();
@@ -706,9 +657,11 @@ public class GUI {
         }
     }
 
-    public void createinventoryPanel(){
+    /**
+     * Track the inventory of the player in a 4x2 grid
+     */
+    public void createInventoryPanel(){
         inventoryPanel = new JPanel(new GridLayout(2, 4));
-
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inventoryPanel.setOpaque(false);
 
@@ -720,8 +673,7 @@ public class GUI {
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     // Load your background image
-
-                    ImageIcon backgroundImage  = new ImageIcon(getClass().getResource("icons/key" + num + ".png"));
+                    ImageIcon backgroundImage  = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/key" + num + ".png")));
                     g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 }
             };
@@ -730,110 +682,99 @@ public class GUI {
         }
     }
 
+    /**
+     * Using all the sideBar components to comprise the full SideBar
+     */
     public void createSideBar(){
         // Create the header panels
         sidePanel = new JPanel(new GridLayout(4, 1)); // 4 rows, 1 column
         sidePanel.setPreferredSize(new Dimension(300, mainFrame.getHeight()));
         sidePanel.setOpaque(false);
 
+        // Call the methods that create the SideBar Components
         createLevelPanel();
         sidePanel.add(levelPanel);
-
         createTimePanel();
         sidePanel.add(timePanel);
-
         createChipsPanel();
         sidePanel.add(chipsPanel);
-
-        createinventoryPanel();
+        createInventoryPanel();
         sidePanel.add(inventoryPanel);
 
+        // Add the sidePanel components to SidePanel
         backPanel.add(sidePanel, BorderLayout.EAST);
+        // Add the full sidePanel to the back panel
     }
 
+    /**
+     * Important Method to Refresh the GUI for movement and sidePanel info
+     */
     public void redrawGUI() {
-
         // this is the only method to redraw the board
         mapPanel.removeAll();
-        //createTiles();
-
-        // this is the method to redraw the side panel
         sidePanel.removeAll();
+
+        // Recall the methods that create the SideBar Components
         createLevelPanel();
         sidePanel.add(levelPanel);
-
         createTimePanel();
         sidePanel.add(timePanel);
-
         createChipsPanel();
         sidePanel.add(chipsPanel);
-
-        createinventoryPanel();
+        createInventoryPanel();
         sidePanel.add(inventoryPanel);
 
         // this is needed to confirm the changes
         mainFrame.revalidate();
         mainFrame.repaint();
-
-
-        rec.setRecord(currentLevel, timeLeft, maze);
-        //try{
-            //rec.saveAsFile("game_state.json");
-        //}catch(IOException e){}
-
     }
 
-
-    public void drawInstructions() {
-
-        // this is the only method to redraw the board
-        mapPanel.removeAll();
-        //createTiles();
-
-        // this is the method to redraw the side panel
-        sidePanel.removeAll();
-
-        // this is needed to confirm the changes
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
+    /**
+     * Getter method for Fuzz to get the [collected keys, total keys]
+     * @return an int Array of basic Key info
+     */
     public int[] keyInfo(){
         int x = ch.getKeys().size();
         //int y = Domain.getKeys().size();
         int y = 5;
 
-        int[] keyInfo = {x, y};
-        return keyInfo;
+        return new int[]{x, y};
     }
-
+    /**
+     * Getter method for Fuzz to get the [collected treasure, total treasure]
+     * @return an int Array of basic treasure info
+     */
     public int[] treasureInfo(){
         int x = ch.getTreasure().size();
         int y = Domain.getTreasure().size();
 
-        int[] treasureInfo = {x, y};
-        return treasureInfo;
+        return new int[]{x, y};
     }
-
+    /**
+     * Getter method for Fuzz to get the [collected treasure, total treasure]
+     * @return an int Array of basic treasure info
+     */
     public int[] doorInfo(){
-        int x = 0;
-        int y = 0;
+        int x = ch.getTreasure().size();
+        int y = Domain.getTreasure().size();
 
-        int[] doorInfo = {x, y};
-        return doorInfo;
+        return new int[]{x, y};
     }
-
+    /**
+     * Getter method for Fuzz to get the [x position, y position]
+     * @return an int Array of basic coordinate info
+     */
     public int[] playerCoords(){
         int x = ch.getLocation().x();
         int y = ch.getLocation().y();
 
-        int[] coordinates = {x, y};
-        return coordinates;
+        return new int[]{x, y};
     }
-
+    /**
+     * Getter method for Fuzz to get the Player
+     * @return the Player
+     */
     public Player getPlayer(){
         return ch;
     }
-
 }
-
