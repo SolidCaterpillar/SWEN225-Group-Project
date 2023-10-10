@@ -2,7 +2,8 @@ package nz.ac.wgtn.swen225.lc.recorder;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
-import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
+import nz.ac.wgtn.swen225.lc.domain.Tile.*;
+import nz.ac.wgtn.swen225.lc.renderer.GameCanvas;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileWriter;
@@ -29,28 +30,64 @@ public class Recorder {
      * @param timer record the timer of the ongoing game
      * @param maze record the 2d maze of the ongoing game
      */
-    public void setRecord( int currentLevel, int timer, Tile[][] maze){
+    public void setRecord( int currentLevel, int timer, Tile[][] maze) {
         JSONObject jsonGameState = new JSONObject();
         jsonGameState.put("currentLevel", currentLevel);
         jsonGameState.put("timer", timer);
-
-        JSONArray mazeArray = new JSONArray(); // store maze in 2d array
-
-        for (Tile[] row : maze) {
-            JSONArray rowArray = new JSONArray();
-            for (Tile tile : row) {
-                JSONObject tileObject = new JSONObject();
-                tileObject.put("row tile", tile); // need to put a value or toString value from domain
-                rowArray.put(tileObject);
-            }
-            mazeArray.put(rowArray);
-        }
-
-        // Add the 2d maze array to the JSON object
-        jsonGameState.put("Maze", mazeArray);
-
+        JSONObject tiles = saveTiles(maze);
+        jsonGameState.put("maze", tiles);
         record.put(jsonGameState); // add all the JSON object in the JSON array
     }
+
+    /**
+     * Record the game every time the GUI redraws.
+     * @param maze The maze to store in JSON format.
+     * @return A JSON object representing the maze.
+     */
+    private static JSONObject saveTiles(Tile[][] maze) {
+        JSONObject tiles = new JSONObject();
+        JSONArray walls = new JSONArray();
+        JSONArray lockedDoors = new JSONArray();
+        JSONArray exitLocks = new JSONArray();
+        JSONArray questionBlocks = new JSONArray();
+
+        for (int row = 0; row < maze.length; row++) {
+            for (int col = 0; col < maze[row].length; col++) {
+                Tile tile = maze[row][col];
+                JSONObject obj = new JSONObject();
+                obj.put("x", tile.getLocation().x());
+                obj.put("y", tile.getLocation().y());
+
+                if (tile instanceof ExitTile) {
+                    tiles.put("exit", obj);
+                } else if (tile instanceof Wall) {
+                    obj.put("length_down", 0);
+                    obj.put("length_up", 0);
+                    obj.put("length_right", 0);
+                    obj.put("length_left", 0);
+                    walls.put(obj);
+                } else if (tile instanceof LockedDoor) {
+                    LockedDoor lockedDoor = (LockedDoor) tile;
+                    obj.put("colour", lockedDoor.getColour().toString());
+                    lockedDoors.put(obj);
+                } else if (tile instanceof ExitLock) {
+                    exitLocks.put(obj);
+                } else if (tile instanceof InformationTile) {
+                    InformationTile informationTile = (InformationTile) tile;
+                    obj.put("message", informationTile.getInformation());
+                    questionBlocks.put(obj);
+                }
+            }
+        }
+
+        tiles.put("walls", walls);
+        tiles.put("lockedDoors", lockedDoors);
+        tiles.put("exitLocks", exitLocks);
+        tiles.put("questionBlocks", questionBlocks);
+
+        return tiles;
+    }
+
 
     /**
      * Save the record game when player finish or end (quit) the game
@@ -64,6 +101,7 @@ public class Recorder {
     }
 
     /*
+    // testing the recorder
     public static void main(String[] args) throws IOException {
         Recorder test = new Recorder();
         Tile[][] mazeArray = new Tile[2][2];
@@ -81,6 +119,5 @@ public class Recorder {
 
         test.saveAsFile("Testing");
     }
-
      */
 }
