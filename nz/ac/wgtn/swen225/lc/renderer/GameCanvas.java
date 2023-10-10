@@ -10,7 +10,7 @@ import java.awt.*;
  */
 public class GameCanvas extends JPanel {
 
-    private GameRenderer renderer; // Renderer instance
+    private final GameRenderer renderer; // Renderer instance
 
     /**
      * Constructs a GameCanvas with a specified GameRenderer.

@@ -11,7 +11,7 @@ import java.util.Map;
  * @Author Arnav Dogra (@dograarna)
  */
 public class SoundManager {
-    private Map<String, Clip> soundClips;
+    private final Map<String, Clip> soundClips;
     private static final String ICONS_FOLDER = "nz/ac/wgtn/swen225/lc/renderer/gamesounds/";
 
     /**
@@ -55,7 +55,7 @@ public class SoundManager {
     }
 
     /**
-     * Play the sound of collecting a Item on board.
+     * Play the sound of collecting  item on board.
      */
     public void playItemCollectSound() {
         playSound("pickup");

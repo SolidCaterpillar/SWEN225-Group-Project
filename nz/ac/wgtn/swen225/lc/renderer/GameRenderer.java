@@ -19,18 +19,17 @@ public class GameRenderer extends JPanel {
 
     // Fields
     private static final String ICONS_FOLDER = "nz/ac/wgtn/swen225/lc/renderer/gameicons/";
-    private ImageIcon[][] tileIcons;
+    private final ImageIcon[][] tileIcons;
     private Tile[][] maze;
-    private ImageIcon playerIcon;
-    private Player player;
-    private Domain domainObj;
-    private int tileSize;
-    private ImageIcon playerUpIcon;
-    private ImageIcon playerDownIcon;
-    private ImageIcon playerLeftIcon;
-    private ImageIcon playerRightIcon;
-    private List<Enemy> enemies;
-    private ImageIcon enemyIcon;
+    private final Player player;
+    private final Domain domainObj;
+    private final int tileSize;
+    private final ImageIcon playerUpIcon;
+    private final ImageIcon playerDownIcon;
+    private final ImageIcon playerLeftIcon;
+    private final ImageIcon playerRightIcon;
+    private final List<Enemy> enemies;
+    private final ImageIcon enemyIcon;
 
     /**
      * Constructor to initialize game-related variables and set up the game state and resources.
@@ -47,7 +46,6 @@ public class GameRenderer extends JPanel {
         tileSize = domainObj.getBoard().getSize();
         loadTileIcons();
         initializeRenderer();
-        playerIcon = loadImageIcon("playerup1.png");
         playerUpIcon = loadImageIcon("playerup1.png");
         playerDownIcon = loadImageIcon("playerdown1.png");
         playerLeftIcon = loadImageIcon("playerleft2.png");
@@ -78,14 +76,13 @@ public class GameRenderer extends JPanel {
                 Tile tile = maze[row][col];
                 if (tile != null) {
                     String iconName;
-                    if (tile instanceof FreeTile) {
-                        FreeTile freeTile = (FreeTile) tile;
+                    if (tile instanceof FreeTile freeTile) {
                         Entity entity = freeTile.getEntity();
                         if (entity instanceof Key key) {
                             // Get the color of the key and construct the icon name
                             String colorName = key.getColour().toString().toLowerCase();
                             iconName = "key" + colorName + ".png"; // e.g., key_red.png
-                        } else if (entity instanceof Treasure treas) {
+                        } else if (entity instanceof Treasure ) {
                             iconName = "treasure.png"; // Load the treasure entity icon
                         } else {
                             iconName = getIconNameForTile(tile);
@@ -140,8 +137,8 @@ public class GameRenderer extends JPanel {
     private ImageIcon loadImageIcon(String filename) {
         String path = ICONS_FOLDER + filename;
        // System.out.println("Loading image from path: " + path); // Added  for debugging
-        ImageIcon icon = new ImageIcon(path);
-        return icon;
+        return new ImageIcon(path);
+
     }
 
     /**
@@ -239,18 +236,12 @@ public class GameRenderer extends JPanel {
      */
 
     private ImageIcon getPlayerIcon() {
-        switch (player.getDirection()) {
-            case SOUTH:
-                return playerUpIcon;
-            case NORTH:
-                return playerDownIcon;
-            case WEST:
-                return playerLeftIcon;
-            case EAST:
-                return playerRightIcon;
-            default:
-                return playerUpIcon;
-        }
+        return switch (player.getDirection()) {
+            case NORTH -> playerDownIcon;
+            case WEST -> playerLeftIcon;
+            case EAST -> playerRightIcon;
+            default -> playerUpIcon;
+        };
     }
 
     /**
@@ -283,15 +274,14 @@ public class GameRenderer extends JPanel {
                     // Calculate the destination rectangle for the image
                     int x = (col - startCol) * tileSize;
                     int y = (row - startRow) * tileSize;
-                    int width = tileSize;
-                    int height = tileSize;
+
 
                     // Draw the tile image
-                    g.drawImage(tileIcons[row][col].getImage(), x, y, width, height, this);
+                    g.drawImage(tileIcons[row][col].getImage(), x, y, tileSize, tileSize, this);
 
                     // Draw a border around the tile
                     g.setColor(Color.BLACK);
-                    g.drawRect(x, y, width - 1, height - 1);
+                    g.drawRect(x, y, tileSize - 1, tileSize - 1);
                 }
             }
         }
