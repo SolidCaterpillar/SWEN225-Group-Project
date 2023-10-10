@@ -44,6 +44,8 @@ public class GUI {
     private final Recorder rec;
     private final Tile[][] maze;
 
+    private final SoundManager soundManager;
+
 
 
     private String levelText = "Level";
@@ -55,7 +57,7 @@ public class GUI {
     private final int tileSize = 68; // Adjust this size as needed for inventory
     private boolean gamePaused = false; // Flag to track if the game is paused
     private boolean showInstructions = false;   // Tracking if Instructions are shown
-private Level play;
+
     /**
      * Creating the GUI class will create all the JPanel Components
      */
@@ -68,11 +70,12 @@ private Level play;
 
         // Creating the objects of the other modules
         // The Following are Integrations of previous Modules
-         play = Persistency.loadLevel1();
+        Level play = Persistency.loadLevel1();
         maze = play.board().getBoard();
         Domain d = new Domain();
         Domain.picKLevel(LevelE.LEVEL_ONE);
         ch = d.getPlayer();
+        soundManager = new SoundManager();
 
         // Creating the render object and the canvas which display the board
         renderer = new GameRenderer(maze, ch, d);
@@ -168,41 +171,49 @@ private Level play;
                             case KeyEvent.VK_UP -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove('w');
                             }
                             case KeyEvent.VK_LEFT -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove('a');
                             }
                             case KeyEvent.VK_DOWN -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove('s');
                             }
                             case KeyEvent.VK_RIGHT -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove('d');
                             }
                             case KeyEvent.VK_W -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove(e.getKeyChar());
                             }
                             case KeyEvent.VK_A -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove(e.getKeyChar());
                             }
                             case KeyEvent.VK_S -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove(e.getKeyChar());
                             }
                             case KeyEvent.VK_D -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
+                                soundManager.playPlayerMoveSound();
                                 ch.checkMove(e.getKeyChar());
                             }
                         }
@@ -670,27 +681,45 @@ private Level play;
     /**
      * Track the inventory of the player in a 4x2 grid
      */
-    public void createInventoryPanel(){
+    public void createInventoryPanel() {
         inventoryPanel = new JPanel(new GridLayout(2, 4));
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inventoryPanel.setOpaque(false);
 
+        java.util.ArrayList<Entity> inven = new java.util.ArrayList<Entity>(ch.getTreasure());
+        inven.addAll(ch.getKeys());
+
         for (int i = 0; i < 8; i++) {
-            // below basically makes a small JPanel square which will contain the content of a Tile.
-            int num = i > 3 ? (i % 4) + 1 : ((3 - i) % 4) + 1;
+            final Entity item;  // Declare item as final reference
+            if (inven.size() > i) {
+                item = inven.get(i);
+            } else {
+                item = null;  // Handle the case where inven.size() <= i
+            }
+            // Below basically makes a small JPanel square which will contain the content of a Tile.
             JPanel cell = new JPanel(new BorderLayout()) {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     // Load your background image
-                    ImageIcon backgroundImage  = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/key" + num + ".png")));
-                    g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+
+                    if (item instanceof Treasure) {
+                        ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/treasure.png")));
+                        g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                    } else if(item instanceof Key){
+                        ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/key" + ((Key) item).getColour() + ".png")));
+                        g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                    }else {
+                        ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/shield2.png")));
+                        g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                    }
                 }
             };
             cell.setOpaque(false);
             inventoryPanel.add(cell);
         }
     }
+
 
     /**
      * Using all the sideBar components to comprise the full SideBar
