@@ -1,6 +1,5 @@
 package nz.ac.wgtn.swen225.lc.renderer;
 
-import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
@@ -12,10 +11,13 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * responsible for handling the rendering logic for the game.
+ * The GameRenderer class is responsible for handling the rendering logic for the game.
+ * It renders the game board, player, and enemy actors on the game canvas.
+ * @Author Arnav Dogra (@dograarna)
  */
 public class GameRenderer extends JPanel {
 
+    // Fields
     private static final String ICONS_FOLDER = "nz/ac/wgtn/swen225/lc/renderer/gameicons/";
     private ImageIcon[][] tileIcons;
     private Tile[][] maze;
@@ -27,11 +29,15 @@ public class GameRenderer extends JPanel {
     private ImageIcon playerDownIcon;
     private ImageIcon playerLeftIcon;
     private ImageIcon playerRightIcon;
-    private List<Enemy> enemies; // List of enemy actors in the game
-    private ImageIcon enemyIcon; // Icon for enemy actors
+    private List<Enemy> enemies;
+    private ImageIcon enemyIcon;
+
     /**
-     * Constructor to initialize game-related variables
-     * set up  game state and resources here
+     * Constructor to initialize game-related variables and set up the game state and resources.
+     *
+     * @param maze    A 2D array of Tile objects representing the game board.
+     * @param player  The player character.
+     * @param dom     The Domain object containing the game state.
      */
     public GameRenderer(Tile[][] maze, Player player, Domain dom) {
         this.maze = maze;
@@ -51,7 +57,9 @@ public class GameRenderer extends JPanel {
 
     }
 
-
+    /**
+     * Initializes the renderer by setting the preferred size of the rendering panel.
+     */
     private void initializeRenderer() {
         // Set the preferred size of the rendering panel
         int panelWidth = 800;
@@ -59,8 +67,11 @@ public class GameRenderer extends JPanel {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
 
     }
-    
 
+
+    /**
+     * Loads tile icons based on the game board configuration.
+     */
     private void loadTileIcons() {
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
@@ -83,17 +94,21 @@ public class GameRenderer extends JPanel {
                         iconName = getIconNameForTile(tile);
                     }
                     tileIcons[row][col] = loadImageIcon(iconName);
-                    System.out.println("Loaded tile icon for row " + row + ", col " + col + ": " + iconName);
+                  //  System.out.println("Loaded tile icon for row " + row + ", col " + col + ": " + iconName);
                 }
             }
         }
     }
 
-
-
+    /**
+     * Determines the icon name for a given tile.
+     *
+     * @param tile The tile for which to determine the icon name.
+     * @return The icon name for the tile.
+     */
     private String getIconNameForTile(Tile tile) {
         if (tile == null) {
-            System.out.println(" Tile Null");
+           // System.out.println(" Tile Null");
             return "unknown.png";
         }
         switch (tile.getClass().getSimpleName()) {
@@ -116,20 +131,33 @@ public class GameRenderer extends JPanel {
         }
     }
 
-
+    /**
+     * Loads an ImageIcon from a file.
+     *
+     * @param filename The name of the image file.
+     * @return The loaded ImageIcon.
+     */
     private ImageIcon loadImageIcon(String filename) {
         String path = ICONS_FOLDER + filename;
-        System.out.println("Loading image from path: " + path); // Add this line for debugging
-        ImageIcon icon = new ImageIcon(path);        return icon;
+       // System.out.println("Loading image from path: " + path); // Added  for debugging
+        ImageIcon icon = new ImageIcon(path);
+        return icon;
     }
 
+    /**
+     * Redraws the game board based on the updated game state.
+     */
     public  void reDrawBoard(){
         maze = domainObj.getBoard().getBoard(); // Fetch the updated game board
         loadTileIcons(); // Reload tile icons based on the updated board
         repaint(); // Request the JPanel to repaint itself
     }
 
-
+    /**
+     * Overrides the paintComponent method to render full game board.
+     *
+     * @param g The Graphics context for rendering.
+     */
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawMaze(g);
@@ -138,6 +166,13 @@ public class GameRenderer extends JPanel {
 
 
     }
+
+    /**
+     * Draws the game board.
+     *
+     * @param g The Graphics context for rendering.
+     */
+
     private void drawMaze(Graphics g) {
 
         for (int row = 0; row < maze.length; row++) {
@@ -158,6 +193,12 @@ public class GameRenderer extends JPanel {
 
     }
 
+    /**
+     * Draws the player character on the game board.
+     *
+     * @param g The Graphics context for rendering.
+     */
+
     private void drawPlayer(Graphics g) {
         if (player != null) {
             int playerX = player.getX() * domainObj.getBoard().getSize();
@@ -174,6 +215,12 @@ public class GameRenderer extends JPanel {
             g.drawImage(playerIcon.getImage(), playerX + 1, playerY + 1, tileSize - 2, tileSize - 2, this);
         }
     }
+
+    /**
+     * Draws enemy actors on the game board.
+     *
+     * @param g The Graphics context for rendering.
+     */
     private void drawActors(Graphics g) {
         for (Enemy enemy : enemies) {
             int enemyX = enemy.getLocation().x() * tileSize;
@@ -183,6 +230,13 @@ public class GameRenderer extends JPanel {
             g.drawImage(enemyIcon.getImage(), enemyX + 1, enemyY + 1, tileSize - 2, tileSize - 2, this);
         }
     }
+
+
+    /**
+     * Determines the appropriate player icon based on the player's direction.
+     *
+     * @return The ImageIcon representing the player character.
+     */
 
     private ImageIcon getPlayerIcon() {
         switch (player.getDirection()) {
@@ -199,7 +253,11 @@ public class GameRenderer extends JPanel {
         }
     }
 
-
+    /**
+     * Renders the game view on the canvas.
+     *
+     * @param g The Graphics context for rendering.
+     */
     public void renderGameView(Graphics g) {
         // Determine player's position in the 5x5 grid
         int playerRow = player.getY();

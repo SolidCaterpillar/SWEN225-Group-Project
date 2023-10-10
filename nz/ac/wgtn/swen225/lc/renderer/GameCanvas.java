@@ -4,12 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * This class represents the canvas where the game is displayed.
+ * The GameCanvas class represents the canvas where the game is displayed.
+ * It extends JPanel and provides focus region.
+ * @Author Arnav Dogra (@dograarna)
  */
 public class GameCanvas extends JPanel {
 
     private GameRenderer renderer; // Renderer instance
 
+    /**
+     * Constructs a GameCanvas with a specified GameRenderer.
+     *
+     * @param renderer The GameRenderer instance responsible for rendering the game.
+     */
     public GameCanvas(GameRenderer renderer) {
         this.renderer = renderer;
 
@@ -17,11 +24,15 @@ public class GameCanvas extends JPanel {
         setPreferredSize(renderer.getPreferredSize());
     }
 
+    /**
+     * Overrides the paintComponent method to render the game view.
+     *
+     * @param g The Graphics context to render the game.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        // Delegate the rendering to the Renderer instance
         renderer.renderGameView(g);
         renderer.repaint(); // To repaint the game view
     }
