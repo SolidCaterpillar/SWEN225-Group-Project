@@ -86,13 +86,13 @@ public class FuzzTest {
      */
     private Map<List<Integer[]>, Integer> calculatePathScores(Map<List<Integer[]>, Integer> currentPaths, Integer level) {
 
-        System.out.println("Calculating Scores...");
         int score; // score for each path
 
         //for each path in current paths
         for (List<Integer[]> path : currentPaths.keySet()) {
             score = 0;
 
+            //resets the level
             if (level == 1) {
                 loadLevel(1);
             } else {
@@ -122,7 +122,7 @@ public class FuzzTest {
                 gui.getPlayer().checkMove(charDirection);
 
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -144,7 +144,8 @@ public class FuzzTest {
 
             }
 
-            score += visited.size() * 2; // add X points for each unique tile visited on board during movement on this path (no points for going over the same tile)
+            score += (visited.size() * 2); // add X points for each unique tile visited on board during movement on this path (no points for going over the same tile)
+            System.out.println("Calculating Scores...");
             currentPaths.put(path, score); //update paths score after evaluation
 
         }
@@ -215,18 +216,21 @@ public class FuzzTest {
      * @return A score of X if a key is collected during the move, or 0 if no keys are collected or all keys are already collected.
      */
     private Integer compareKeys(int[] pastKeyCount, int[] currentKeyCount) {
+
+        //If all keys are picked up
         if (currentKeyCount[1] == 0) {
-            return 10;
-        } // if all keys are picked up
+            return 20;
+        }
 
         int past = pastKeyCount[0];
         int current = currentKeyCount[0];
 
+        //If a key is picked up
         if (current > past) {
             return 10;
-        } // if picked up a key
+        }
 
-        return 0;
+        return 0;//If no keys are picked up
 
     }
 
@@ -239,18 +243,21 @@ public class FuzzTest {
      * @return A score of X if a door is opened during the move, or 0 if no doors are opened or all doors are already opened.
      */
     private Integer compareDoors(int[] pastDoorCount, int[] currentDoorCount) {
+
+        //If all doors are unlocked
         if (currentDoorCount[1] == 0) {
-            return 10;
-        } // if all keys are picked up
+            return 20;
+        }
 
         int past = pastDoorCount[0];
         int current = currentDoorCount[0];
 
+        //If a door is unlocked
         if (current > past) {
             return 10;
-        } // if picked up a key
+        }
 
-        return 0;
+        return 0; //If no doors are unlocked
 
     }
 
@@ -263,18 +270,21 @@ public class FuzzTest {
      * @return A score of X if a treasure is collected during the move, or 0 if no treasures are collected or all treasures are already collected.
      */
     private Integer compareTreasure(int[] pastTreasureCount, int[] currentTreasureCount) {
+
+        //If all treasures are picked up
         if (currentTreasureCount[1] == 0) {
-            return 10;
-        } // if all keys are picked up
+            return 20;
+        }
 
         int past = pastTreasureCount[0];
         int current = currentTreasureCount[0];
 
+        //If a treasure is picked up
         if (current > past) {
             return 10;
-        } // if picked up a key
+        }
 
-        return 0;
+        return 0; //If no treasures are picked up
 
     }
 
@@ -290,12 +300,13 @@ public class FuzzTest {
 
     /**
      * Loads the specified game level for testing.
+     * Places chap back in place of origin on load
      *
      * @param level The game level being tested.
      */
     private void loadLevel(int level) {
         System.out.println("loading level " + level + "...");
-        //need implementation to load from app
+        //gui.reloadLevel(level);
     }
 
 
@@ -315,7 +326,11 @@ public class FuzzTest {
      * Test level two of the game for 60 seconds
      */
     private void levelTest2() {
-        //copy test1 but for level 2
+        System.out.println("Testing level 2...");
+        long start = System.currentTimeMillis(); //start time of the test
+        while ((System.currentTimeMillis() - start) / 1000 < 60) {
+            testLevel(2);
+        }
 
     }
 
@@ -344,4 +359,4 @@ public class FuzzTest {
 
     }
 
-}//sub
+}
