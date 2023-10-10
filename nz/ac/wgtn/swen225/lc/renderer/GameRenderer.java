@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen225.lc.renderer;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
+import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 import nz.ac.wgtn.swen225.lc.domain.Domain;
 
@@ -79,14 +80,18 @@ public class GameRenderer extends JPanel {
                 return "walltile.png";
             case "FreeTile":
                 return "freetile.png";
-            case "TreasureTile":
-                return "treasure.png";
+            case "LockedDoor":
+                LockedDoor lockD = (LockedDoor) tile;
+                String keyColor = lockD.getColour().toString().toLowerCase();
+                return "door" + keyColor + ".png";
             case "ExitLock":
                 return "exitlock.png";
             case "ExitTile":
                 return "exit.png";
-            case "KeyTile":
-                return "key.png";
+            case "InformationTile":
+                return "infofield.png";
+// key and treassure are entities
+
             default:
                 return "keyyellow.png";
         }
