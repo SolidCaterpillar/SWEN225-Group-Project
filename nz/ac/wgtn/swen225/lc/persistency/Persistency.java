@@ -91,20 +91,20 @@ public class Persistency{
         //set up board
         for(int x = 0; x <= objs.length()-1; x++){
             for(int y = 0; y <= objs.width()-1; y++){
-                board[y][x] = new FreeTile(new Coord(x,y));
+                board[x][y] = new FreeTile(new Coord(x,y));
             }
         }
 
         //put speical tiles on the board
         for(Tile tile : gameTiles){
             Coord tileCo = tile.getLocation();
-            board[tileCo.y()][tileCo.x()] = tile;
+            board[tileCo.x()][tileCo.y()] = tile;
         }
 
         //put entites on the board
         for(Entity entity : gameEntites.entites()){
             Coord coord = entity.getLocation();
-            board[coord.y()][coord.x()].setEntity(entity);
+            board[coord.x()][coord.y()].setEntity(entity);
         }
 
         return new Level(new Board(1,board), gameEntites.player(), gameEntites.keys(),gameEntites.treasures(),gameEntites.enemies());

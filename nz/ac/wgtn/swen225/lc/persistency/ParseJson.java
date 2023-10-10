@@ -63,8 +63,8 @@ public class ParseJson {
             if(o instanceof JSONObject key){
                 int x = key.getInt("x");
                 int y = key.getInt("y");
-                //Colour keyColor = parseColour(key.getString("colour"));
-                keys.add(new Key(new Coord(x,y), Colour.PURPLE));
+                Colour keyColour = parseColour(key.getString("colour"));
+                keys.add(new Key(new Coord(x,y), keyColour));
             }
         }
 
@@ -154,10 +154,10 @@ public class ParseJson {
             if(o instanceof JSONObject wall){
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
-               // Colour doorColor = parseColour(wall.getString("colour"));
+                Colour doorColour = parseColour(wall.getString("colour"));
 
                 //Key keyDoor = keys.stream().filter(e-> e.getColour() == doorColor).findFirst().orElseThrow(()-> new IllegalArgumentException());
-                tiles.add(new LockedDoor(new Coord(x,y),Colour.PURPLE));
+                tiles.add(new LockedDoor(new Coord(x,y),doorColour));
 
             }
         }
