@@ -28,7 +28,7 @@ public class GUI {
 
 
 
-    private final JFrame mainFrame;   // This is the JFrame that contains everything
+    private JFrame mainFrame;   // This is the JFrame that contains everything
     private JPanel backPanel;   // This contains the background of the App
     private JPanel mapPanel;    // JPanel that contains the Board of the game
     private JPanel sidePanel;   // JPanel that holds all sidePanel subPanels
@@ -38,13 +38,15 @@ public class GUI {
     private JPanel inventoryPanel;  // Shows the keys that the player has collected
 
 
-    private final Player ch;
-    private final GameCanvas canvas;
-    private final GameRenderer  renderer;
-    private final Recorder rec;
-    private final Tile[][] maze;
+    private Player ch;
+    private Level play;
+    private Domain d;
+    private GameCanvas canvas;
+    private GameRenderer  renderer;
+    private Recorder rec;
+    private Tile[][] maze;
 
-    private final SoundManager soundManager;
+    private SoundManager soundManager;
 
 
 
@@ -70,17 +72,18 @@ public class GUI {
 
         // Creating the objects of the other modules
         // The Following are Integrations of previous Modules
-        Level play = Persistency.loadLevel1();
-        maze = play.board().getBoard();
-        Domain d = new Domain();
-        Domain.picKLevel(LevelE.LEVEL_ONE);
-        ch = d.getPlayer();
         soundManager = new SoundManager();
 
+        this.play = Persistency.loadLevel1();
+        this.maze = play.board().getBoard();
+        this.d = new Domain();
+        this.d.picKLevel(LevelE.LEVEL_ONE);
+        this.ch = d.getPlayer();
+
         // Creating the render object and the canvas which display the board
-        renderer = new GameRenderer(maze, ch, d);
-        canvas = new GameCanvas(renderer);
-        rec = new Recorder();
+        this.renderer = new GameRenderer(maze, ch, d);
+        this.canvas = new GameCanvas(renderer);
+        this.rec = new Recorder();
 
         // functions to draw App components
         drawBoard();
@@ -94,6 +97,14 @@ public class GUI {
         mapPanel.setFocusable(true);
         mapPanel.requestFocus();
 
+        addKeyListener();
+
+        // complete the mainFrame functionality
+        mainFrame.pack();
+        mainFrame.setVisible(true);
+    }
+
+    private void addKeyListener(){
         mapPanel.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}  // This method is called when a key is typed
@@ -141,6 +152,7 @@ public class GUI {
                                 timer.stop();
                             }
                             resetTimer();
+                            replay();
                         }
                         case KeyEvent.VK_2 -> {
                             // CTRL-2: Start a new game at level 2
@@ -152,6 +164,8 @@ public class GUI {
                                 timer.stop();
                             }
                             resetTimer();
+                            replay();
+
                         }
                         case KeyEvent.VK_E -> {
                             // CTRL-2: Start a new game at level 2
@@ -171,49 +185,41 @@ public class GUI {
                             case KeyEvent.VK_UP -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('w');
                             }
                             case KeyEvent.VK_LEFT -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('a');
                             }
                             case KeyEvent.VK_DOWN -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('s');
                             }
                             case KeyEvent.VK_RIGHT -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('d');
                             }
                             case KeyEvent.VK_W -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('w');
                             }
                             case KeyEvent.VK_A -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('a');
                             }
                             case KeyEvent.VK_S -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('s');
                             }
                             case KeyEvent.VK_D -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                if(!gamePaused) soundManager.playPlayerMoveSound();
                                 moveChecker('d');
                             }
                         }
@@ -230,13 +236,44 @@ public class GUI {
                 renderer.reDrawBoard();
             }
         });
+    }
+    private void replay() {
+        // Remove all components from the content pane
+        Container contentPane = mainFrame.getContentPane();
+        contentPane.removeAll();
 
-        // complete the mainFrame functionality
-        mainFrame.pack();
-        mainFrame.setVisible(true);
+        // Reinitialize all necessary objects and components
+        soundManager = new SoundManager();
+        this.play = Persistency.loadLevel1();
+        this.maze = play.board().getBoard();
+        this.d = new Domain();
+        this.d.picKLevel(LevelE.LEVEL_ONE);
+        this.ch = d.getPlayer();
+        this.renderer = new GameRenderer(maze, ch, d);
+        this.canvas = new GameCanvas(renderer);
+        this.rec = new Recorder();
+
+        // Re-create components
+        drawBoard();
+        createSideBar();
+        createMenuBar();
+        resetTimer();
+
+        // Add key listener
+        mapPanel.setFocusable(true);
+        mapPanel.requestFocus();
+        // Add your key listener code here
+
+        addKeyListener();
+
+        // Revalidate and repaint the content pane
+        contentPane.revalidate();
+        contentPane.repaint();
     }
 
+
     public void moveChecker(char key){
+        soundManager.playPlayerMoveSound();
         if (ch.checkMove(key) == 1){
             showInstructions = !showInstructions;
             gamePaused = showInstructions;
@@ -360,7 +397,7 @@ public class GUI {
         backPanel.setPreferredSize(new Dimension(1280, 720));
 
         // The mapPanel is now the canvas / board that Renderer has made
-        mapPanel = canvas;
+        mapPanel = this.canvas;
         mapPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mapPanel.setOpaque(false);
 
@@ -451,6 +488,7 @@ public class GUI {
             resetTimer();
             redrawGUI();
             renderer.reDrawBoard();
+            replay();
         });
         level2MenuItem.addActionListener(e -> {
             // Turn the current Level to two and reset
@@ -462,6 +500,7 @@ public class GUI {
             resetTimer();
             redrawGUI();
             renderer.reDrawBoard();
+            replay();
         });
         instructionsMenuItem.addActionListener(e -> {
             // Using a ternary operator to create a toggle and sync with gamePaused
@@ -715,7 +754,7 @@ public class GUI {
                         ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/key" + ((Key) item).getColour() + ".png")));
                         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                     }else {
-                        ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/shield2.png")));
+                        ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/walltile3.png")));
                         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                     }
                 }
