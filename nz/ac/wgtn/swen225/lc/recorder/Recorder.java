@@ -3,6 +3,7 @@ import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
+import nz.ac.wgtn.swen225.lc.persistency.Level;
 import nz.ac.wgtn.swen225.lc.renderer.GameCanvas;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,10 +31,12 @@ public class Recorder {
      * @param timer record the timer of the ongoing game
      * @param maze record the 2d maze of the ongoing game
      */
-    public void setRecord( int currentLevel, int timer, Tile[][] maze) {
+    public void setRecord( int currentLevel, int timer, Player player ,Tile[][] maze) {
         JSONObject jsonGameState = new JSONObject();
         jsonGameState.put("currentLevel", currentLevel);
         jsonGameState.put("timer", timer);
+        JSONObject p = savePlayer(player);
+        jsonGameState.put("player", p);
         JSONObject tiles = saveTiles(maze);
         jsonGameState.put("maze", tiles);
         record.put(jsonGameState); // add all the JSON object in the JSON array
@@ -51,6 +54,7 @@ public class Recorder {
         JSONArray exitLocks = new JSONArray();
         JSONArray questionBlocks = new JSONArray();
 
+        // for nested loop the maze
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[row].length; col++) {
                 Tile tile = maze[row][col];
@@ -88,6 +92,18 @@ public class Recorder {
         return tiles;
     }
 
+    /**
+     * Record the game every time the GUI redraws.
+     * @param p A player to get X and Y position.
+     * @return A JSON object representing the player.
+     */
+    private static JSONObject savePlayer(Player p){
+       JSONObject player = new JSONObject();
+
+        player.put("x", p.getX());
+        player.put("y", p.getY());
+        return player ;
+    }
 
     /**
      * Save the record game when player finish or end (quit) the game
@@ -99,25 +115,4 @@ public class Recorder {
         fileWriter.close();
         System.out.println("Game state saved successfully to " + fileName);
     }
-
-    /*
-    // testing the recorder
-    public static void main(String[] args) throws IOException {
-        Recorder test = new Recorder();
-        Tile[][] mazeArray = new Tile[2][2];
-        mazeArray[0][0] = new Tile(new Coord(0,0));
-        mazeArray[0][1] = new Tile(new Coord(0,1));
-        mazeArray[1][0] = new Tile(new Coord(1,0));
-        mazeArray[1][1] = new Tile(new Coord(1,1));
-
-        int currentLevel = 3;
-        int timer = 120;
-
-        test.setRecord(currentLevel, timer,mazeArray);
-        test.setRecord(currentLevel, timer,mazeArray);
-        test.setRecord(currentLevel, timer,mazeArray);
-
-        test.saveAsFile("Testing");
-    }
-     */
 }
