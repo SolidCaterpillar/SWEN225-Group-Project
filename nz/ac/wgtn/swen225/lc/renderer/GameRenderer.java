@@ -1,7 +1,7 @@
 package nz.ac.wgtn.swen225.lc.renderer;
 
-import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
-import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
+import nz.ac.wgtn.swen225.lc.domain.Entity.*;
+import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 import nz.ac.wgtn.swen225.lc.domain.Domain;
@@ -62,13 +62,32 @@ public class GameRenderer extends JPanel {
     private void loadTileIcons() {
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
-                if (maze[row][col] != null) {
-                    String iconName = getIconNameForTile(maze[row][col]);
+                Tile tile = maze[row][col];
+                if (tile != null) {
+                    String iconName;
+                    if (tile instanceof FreeTile) {
+                        FreeTile freeTile = (FreeTile) tile;
+                        Entity entity = freeTile.getEntity();
+                        if (entity instanceof Key key) {
+                            // Get the color of the key and construct the icon name
+                            String colorName = key.getColour().toString().toLowerCase();
+                            iconName = "key" + colorName + ".png"; // e.g., key_red.png
+                        } else if (entity instanceof Treasure treas) {
+                            iconName = "treasure.png"; // Load the treasure entity icon
+                        } else {
+                            iconName = getIconNameForTile(tile);
+                        }
+                    } else {
+                        iconName = getIconNameForTile(tile);
+                    }
                     tileIcons[row][col] = loadImageIcon(iconName);
-                   System.out.println("Loaded tile icon for row " + row + ", col " + col + ": " + iconName);
-           }}
+                    System.out.println("Loaded tile icon for row " + row + ", col " + col + ": " + iconName);
+                }
+            }
         }
     }
+
+
 
     private String getIconNameForTile(Tile tile) {
         if (tile == null) {
@@ -90,10 +109,8 @@ public class GameRenderer extends JPanel {
                 return "exit.png";
             case "InformationTile":
                 return "infofield.png";
-// key and treassure are entities
-
             default:
-                return "keyyellow.png";
+                return null; // Return null for keys and treasures
         }
     }
 
@@ -157,7 +174,6 @@ public class GameRenderer extends JPanel {
             g.drawImage(enemyIcon.getImage(), enemyX + 1, enemyY + 1, tileSize - 2, tileSize - 2, this);
         }
     }
-
 
     private ImageIcon getPlayerIcon() {
         switch (player.getDirection()) {
