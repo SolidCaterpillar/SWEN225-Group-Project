@@ -14,6 +14,6 @@ public class Test {
 
         Level test = Persistency.loadLevel("level/TESTING.json");
 
-        System.out.println(test.board().toString().equals(l1.board().toString()));
+        System.out.println(test.board().toString());
     }
 }

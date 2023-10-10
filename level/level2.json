@@ -1,0 +1,236 @@
+{
+    "dimension" : {
+        "width" : 20,
+        "length" : 20
+    },
+
+    "tiles" : {
+
+        "exit" : {
+            "x" : 9,
+            "y" : 3
+        },
+        "walls" : [
+            {
+                "x" : 0,
+                "y" : 0,
+                "length_down" : 19,
+                "length_up" : 0,
+                "length_right" : 19,
+                "Length_left" : 0
+            },
+            {
+                "x" : 19,
+                "y" : 19,
+                "length_down" : 0,
+                "length_up" : 19,
+                "length_right" : 0,
+                "Length_left" : 19
+            },
+            {
+                "x" : 6,
+                "y" : 6,
+                "length_down" : 2,
+                "length_up" : 0,
+                "length_right" : 2,
+                "Length_left" : 0
+            },
+
+            {
+                "x" : 12,
+                "y" : 6,
+                "length_down" : 1,
+                "length_up" : 0,
+                "length_right" : 0,
+                "Length_left" : 2
+            },
+
+            {
+                "x" : 6,
+                "y" : 12,
+                "length_down" : 0,
+                "length_up" : 2,
+                "length_right" : 2,
+                "Length_left" : 0
+            },
+
+            {
+                "x" : 12,
+                "y" : 12,
+                "length_down" : 0,
+                "length_up" : 1,
+                "length_right" : 0,
+                "Length_left" : 2
+            },
+            {
+                "x" : 13,
+                "y" : 7,
+                "length_down" : 0,
+                "length_up" : 0,
+                "length_right" : 5,
+                "Length_left" : 0
+            },
+            {
+                "x" : 13,
+                "y" : 11,
+                "length_down" : 0,
+                "length_up" : 0,
+                "length_right" : 5,
+                "Length_left" : 0
+            },
+            {
+                "x" : 5,
+                "y" : 6,
+                "length_down" : 0,
+                "length_up" : 0,
+                "length_right" : 0,
+                "Length_left" : 4
+            },
+            {
+                "x" : 5,
+                "y" : 12,
+                "length_down" : 0,
+                "length_up" : 0,
+                "length_right" : 0,
+                "Length_left" : 4
+            },
+            {
+                "x" : 6,
+                "y" : 5,
+                "length_down" : 0,
+                "length_up" : 4,
+                "length_right" : 0,
+                "Length_left" : 0
+            },
+            {
+                "x" : 12,
+                "y" : 5,
+                "length_down" : 0,
+                "length_up" : 4,
+                "length_right" : 0,
+                "Length_left" : 0
+            }
+
+        ],
+        "lock_Door" : [
+            {
+                "x" : 9,
+                "y" : 6,
+                "colour" : "pink"
+            },
+            {
+                "x" : 6,
+                "y" : 9,
+                "colour" : "red"
+            }
+        ],
+        "exit_Lock" : [
+            {
+                "x" : 9,
+                "y" : 12
+            }
+        ],
+        "question_Block" : [
+            {
+                "x" : 11,
+                "y" : 9,
+                "message" : "Collect the treasure and collect the keys, then you may leave"
+            }
+        ]
+
+    },
+
+    "entites" : {
+
+        "player" : {
+            "x" : 9,
+            "y" : 9,
+            "inventory" : []
+
+        },
+
+        "keys" : [
+            {
+                "x" : 3,
+                "y" : 9,
+                "colour" : "pink"
+            },
+            {
+                "x" : 1,
+                "y" : 18,
+                "colour" : "red"
+            }
+        ],
+        
+        "treasures" : [
+            {
+                "x" : 14,
+                "y" : 9
+            },
+            {
+                "x" : 15,
+                "y" : 8
+            },
+            {
+                "x" : 15,
+                "y" : 10
+            },
+            {
+                "x" : 16,
+                "y" : 9
+            },
+            {
+                "x" : 17,
+                "y" : 8
+            },
+            {
+                "x" : 17,
+                "y" : 10
+            },
+            {
+                "x" : 18,
+                "y" : 9
+            },
+            {
+                "x" : 7,
+                "y" : 9
+            },
+            {
+                "x" : 9,
+                "y" : 7
+            },
+            {
+                "x" : 9,
+                "y" : 11
+            }
+  
+        ],
+
+        "enemies" : [
+            {
+                "x" : 3,
+                "y" : 15
+            },
+
+            {
+                "x" : 15,
+                "y" : 15
+            },
+            {
+                "x" : 16,
+                "y" : 13
+            },
+            {
+                "x" : 9,
+                "y" : 14
+            },
+            {
+                "x" : 6,
+                "y" : 15
+            }
+        ]
+
+    }
+
+
+}
