@@ -171,50 +171,50 @@ public class GUI {
                             case KeyEvent.VK_UP -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove('w');
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('w');
                             }
                             case KeyEvent.VK_LEFT -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove('a');
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('a');
                             }
                             case KeyEvent.VK_DOWN -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove('s');
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('s');
                             }
                             case KeyEvent.VK_RIGHT -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove('d');
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('d');
                             }
                             case KeyEvent.VK_W -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove(e.getKeyChar());
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('w');
                             }
                             case KeyEvent.VK_A -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove(e.getKeyChar());
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('a');
                             }
                             case KeyEvent.VK_S -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove(e.getKeyChar());
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('s');
                             }
                             case KeyEvent.VK_D -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
-                                soundManager.playPlayerMoveSound();
-                                ch.checkMove(e.getKeyChar());
+                                if(!gamePaused) soundManager.playPlayerMoveSound();
+                                moveChecker('d');
                             }
                         }
                     }else{
@@ -236,7 +236,12 @@ public class GUI {
         mainFrame.setVisible(true);
     }
 
-
+    public void moveChecker(char key){
+        if (ch.checkMove(key) == 1){
+            showInstructions = !showInstructions;
+            gamePaused = showInstructions;
+        }
+    }
 
     /**
      * The method that will load the file, used for recorder
