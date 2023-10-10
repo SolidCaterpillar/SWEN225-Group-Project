@@ -27,7 +27,8 @@ public class InformationTile extends FreeTile{
 
 
     public void isChapOn(Player player){
-        chapIsOn = player.getLocation().equals(this.getLocation()) ? true : false;
+        System.exit(1);
+        chapIsOn = player.getTrueLocation().equals(this.getLocation()) ? true : false;
         //if true renderer draws Chap icon over Info wall
     }
 

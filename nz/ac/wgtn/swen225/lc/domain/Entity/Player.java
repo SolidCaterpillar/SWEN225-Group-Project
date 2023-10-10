@@ -30,7 +30,7 @@ public class Player implements Entity{
     }
 
 
-    public void checkMove(char keyEvent) {
+    public int checkMove(char keyEvent) {
         //char keyCode = keyEvent.getKeyChar(); //convert to char for switch
         char keyCode = keyEvent;
         this.changeDir(keyCode); //Change orientations
@@ -74,6 +74,7 @@ public class Player implements Entity{
         } else {
             throw new IllegalArgumentException("Tile not in board boundary");
         }
+        return newPos instanceof InformationTile ? 1 : 0;
     }
 
     //check if player has key for locked door
@@ -236,5 +237,18 @@ public class Player implements Entity{
 
     public void testKey(Key k){
         this.keys.add(k);
+    }
+
+    public void setLocation(Coord location){
+        this.location = location;
+    }
+
+
+    public void setKeys(ArrayList<Key> keys){
+        this.keys = keys;
+    }
+
+    public void setTreasure(ArrayList<Treasure> treasure){
+        this.treasures = treasure;
     }
 }

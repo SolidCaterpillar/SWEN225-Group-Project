@@ -19,24 +19,42 @@ public class Domain {
     static ArrayList<Key> keys;
     static ArrayList<Enemy> enemies;
 
+
+
     public static void picKLevel(LevelE level){
-                Level curLevel = null;
+        Level curLevel = null;
         switch(level){
             case LEVEL_ONE:
                 curLevel = Persistency.loadLevel1();
                 break;
             case LEVEL_TWO:
-                curLevel = Persistency.loadLevel2();
+                curLevel = Persistency.loadLevel1();
                 break;
-         }
+        }
+
 
         curBoard = curLevel.board();
-        curPlayer = curLevel.player();
+        Player newPlayer = curLevel.player();
+        if(curPlayer != null){
+            curPlayer.setLocation(newPlayer.getLocation());
+        }else{
+            curPlayer = newPlayer;
+        }
+
 
         treasures = curLevel.treasures(); //Initialize the class-level ArrayLists
         keys = curLevel.keys();
-        enemies = curLevel.enemies();
+
+
+        if(enemies == null){
+            enemies = curLevel.enemies();
+        }else{
+            enemies.clear();
+            enemies.addAll(curLevel.enemies());
+        }
+
     }
+
 
     public static void loadTest(){
         Level curLevel = null;
@@ -71,8 +89,6 @@ public class Domain {
 
 
 
-
-
     public static class StateClass {
         private static int currentLevel = 1; //starting level
 
@@ -88,7 +104,7 @@ public class Domain {
                 }
             }
 
-            return false; // Player is not dead
+            return false;
         }
 
 
@@ -103,12 +119,12 @@ public class Domain {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-System.exit(1);
+                reloadCurrentLevel();
                 return;
             }
 
             // Check if the player is on an exit tile
-            if (curBoard.getTileAtLocation(curPlayer.getLocation()) instanceof ExitTile) {
+            if (curBoard.getTileAtLocation(curPlayer.getTrueLocation()) instanceof ExitTile) {
                 if (currentLevel == 1) {
                     System.out.println("Player reached the exit on level 1. Advancing to level 2...");
                     currentLevel = 2;
@@ -118,6 +134,7 @@ System.exit(1);
                     winState();
                 }
             }
+
         }
 
 
@@ -127,7 +144,6 @@ System.exit(1);
 
         private static void loadLevel(LevelE level) {
             picKLevel(level);
-
         }
 
         private void loadLevel1() {
