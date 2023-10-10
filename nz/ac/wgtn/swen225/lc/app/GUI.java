@@ -368,7 +368,7 @@ public class GUI {
                         redrawGUI();
                         renderer.reDrawBoard();
                     }
-                    rec.setRecord(currentLevel, timeLeft, maze);
+                    //rec.setRecord(currentLevel, timeLeft, maze);
                     try{
                         rec.saveAsFile("game_state.json");
                     }catch(IOException ignored){}

@@ -83,7 +83,14 @@
         "player" : {
             "x" : 9,
             "y" : 9,
-            "inventory" : []
+            "inventory" : {
+                "keys" : [
+
+                ],
+                "treasures" : [
+
+                ]
+            }
 
         },
 
