@@ -30,6 +30,7 @@ public class GameRenderer extends JPanel {
     private final ImageIcon playerRightIcon;
     private final List<Enemy> enemies;
     private final ImageIcon enemyIcon;
+    private final SoundManager sound ;
 
     /**
      * Constructor to initialize game-related variables and set up the game state and resources.
@@ -52,6 +53,7 @@ public class GameRenderer extends JPanel {
         playerRightIcon = loadImageIcon("playerright2.png");
         enemies = dom.getEnemies(); // Initialize the list of enemy actors
         enemyIcon = loadImageIcon("actor1.png");
+        sound = new SoundManager();
 
     }
 
@@ -305,6 +307,28 @@ public class GameRenderer extends JPanel {
                 // Draw the enemy icon scaled to the tile size
                 g.drawImage(enemyIcon.getImage(), enemyX, enemyY, tileSize, tileSize, this);
             }
+            if (enemyX == playerX && enemyY == playerY) {
+                System.out.println( "reaches enemy and player location check");
+                sound.playDeathSound();
+
+            }
+        }
+
+        // Check the tile the player is currently on
+        Tile playerTile = maze[playerRow][playerCol];
+
+        // Check if the player is on a FreeTile with a key or treasure
+        if (playerTile instanceof FreeTile) {
+            System.out.println(" Reaches player tile == free tile ncheck");
+            FreeTile freeTile = (FreeTile) playerTile;
+            Entity entity = freeTile.getEntity();
+
+            System.out.println(" Entity on free tile"+ entity);
+            if (entity instanceof Key || entity instanceof Treasure) {
+                System.out.println(" Reaches entity if condition");
+                sound.playItemCollectSound(); // Play the pickup sound when the player collects an item
+
+            }else{ System.out.println("sound fail");}
         }
     }
 
