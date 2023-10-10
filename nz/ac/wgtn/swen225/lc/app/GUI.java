@@ -40,6 +40,7 @@ public class GUI {
 
     private final Player ch;
     private final GameCanvas canvas;
+    private final GameRenderer  renderer;
     private final Recorder rec;
     private final Tile[][] maze;
 
@@ -54,7 +55,7 @@ public class GUI {
     private final int tileSize = 68; // Adjust this size as needed for inventory
     private boolean gamePaused = false; // Flag to track if the game is paused
     private boolean showInstructions = false;   // Tracking if Instructions are shown
-
+private Level play;
     /**
      * Creating the GUI class will create all the JPanel Components
      */
@@ -67,14 +68,14 @@ public class GUI {
 
         // Creating the objects of the other modules
         // The Following are Integrations of previous Modules
-        Level play = Persistency.loadLevel1();
+         play = Persistency.loadLevel1();
         maze = play.board().getBoard();
         Domain d = new Domain();
         Domain.picKLevel(LevelE.LEVEL_ONE);
         ch = d.getPlayer();
 
         // Creating the render object and the canvas which display the board
-        GameRenderer renderer = new GameRenderer(maze, ch, d);
+        renderer = new GameRenderer(maze, ch, d);
         canvas = new GameCanvas(renderer);
         rec = new Recorder();
 
@@ -215,6 +216,7 @@ public class GUI {
                     }
                 }
                 redrawGUI();    // always redrawGUI per key input
+                renderer.reDrawBoard();
             }
         });
 
@@ -304,12 +306,14 @@ public class GUI {
                 counter ++;
                 Domain.StateClass.checkGameState();
                 redrawGUI();
+                renderer.reDrawBoard();
                 // Using modulus, every second the enemies move and the time decreases
                 if(counter % 50 == 0) {
                     decrementTime();
                     for (Enemy enemy : Domain.getEnemies()) {
                         enemy.updateEnemy();
                         redrawGUI();
+                        renderer.reDrawBoard();
                     }
                     rec.setRecord(currentLevel, timeLeft, maze);
                     try{
@@ -396,12 +400,14 @@ public class GUI {
             gamePaused = true;
             levelText = "Paused";
             redrawGUI();
+            renderer.reDrawBoard();
         });
         resumeMenuItem.addActionListener(e -> {
             // Pressing Resume Menu Item will set the pause boolean false
             gamePaused = false;
             levelText = "Level";
             redrawGUI();
+            renderer.reDrawBoard();
         });
         // Adding the JOptionPane alongside the MenuItem when clicked
         exitMenuItem.addActionListener(e -> {
@@ -428,6 +434,7 @@ public class GUI {
             }
             resetTimer();
             redrawGUI();
+            renderer.reDrawBoard();
         });
         level2MenuItem.addActionListener(e -> {
             // Turn the current Level to two and reset
@@ -438,6 +445,7 @@ public class GUI {
             }
             resetTimer();
             redrawGUI();
+            renderer.reDrawBoard();
         });
         instructionsMenuItem.addActionListener(e -> {
             // Using a ternary operator to create a toggle and sync with gamePaused
@@ -447,6 +455,7 @@ public class GUI {
             // if game is paused, and then show instructions.
             // if game is paused it must remain paused, if it is not, then do not be paused.
             redrawGUI();
+            renderer.reDrawBoard();
         });
     }
     /**
@@ -458,6 +467,7 @@ public class GUI {
         if(timeLeft < 1){
             timer.stop();
             redrawGUI();
+            renderer.reDrawBoard();
             JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
         }
     }

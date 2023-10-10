@@ -1,5 +1,6 @@
 package nz.ac.wgtn.swen225.lc.renderer;
 
+import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
@@ -20,7 +21,7 @@ public class GameRenderer extends JPanel {
     private Tile[][] maze;
     private ImageIcon playerIcon;
     private Player player;
-    private Domain domOb;
+    private Domain domainObj;
     private int tileSize;
     private ImageIcon playerUpIcon;
     private ImageIcon playerDownIcon;
@@ -35,9 +36,9 @@ public class GameRenderer extends JPanel {
     public GameRenderer(Tile[][] maze, Player player, Domain dom) {
         this.maze = maze;
         this.player = player;
-        this.domOb = dom;
+        this.domainObj = dom;
         tileIcons = new ImageIcon[maze.length][maze[0].length];
-        tileSize = domOb.getBoard().getSize();
+        tileSize = domainObj.getBoard().getSize();
         loadTileIcons();
         initializeRenderer();
         playerIcon = loadImageIcon("playerup1.png");
@@ -58,6 +59,7 @@ public class GameRenderer extends JPanel {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
 
     }
+    
 
     private void loadTileIcons() {
         for (int row = 0; row < maze.length; row++) {
@@ -101,8 +103,8 @@ public class GameRenderer extends JPanel {
                 return "freetile.png";
             case "LockedDoor":
                 LockedDoor lockD = (LockedDoor) tile;
-                String keyColor = lockD.getColour().toString().toLowerCase();
-                return "door" + keyColor + ".png";
+                String doorColor = lockD.getColour().toString().toLowerCase();
+                return "door" + doorColor + ".png";
             case "ExitLock":
                 return "exitlock.png";
             case "ExitTile":
@@ -114,10 +116,17 @@ public class GameRenderer extends JPanel {
         }
     }
 
+
     private ImageIcon loadImageIcon(String filename) {
         String path = ICONS_FOLDER + filename;
         System.out.println("Loading image from path: " + path); // Add this line for debugging
         ImageIcon icon = new ImageIcon(path);        return icon;
+    }
+
+    public  void reDrawBoard(){
+        maze = domainObj.getBoard().getBoard(); // Fetch the updated game board
+        loadTileIcons(); // Reload tile icons based on the updated board
+        repaint(); // Request the JPanel to repaint itself
     }
 
 
@@ -151,8 +160,8 @@ public class GameRenderer extends JPanel {
 
     private void drawPlayer(Graphics g) {
         if (player != null) {
-            int playerX = player.getX() * domOb.getBoard().getSize();
-            int playerY = player.getY() * domOb.getBoard().getSize();
+            int playerX = player.getX() * domainObj.getBoard().getSize();
+            int playerY = player.getY() * domainObj.getBoard().getSize();
 
             g.setColor(Color.BLACK);
             g.drawRect(playerX, playerY, tileSize, tileSize);
@@ -195,7 +204,7 @@ public class GameRenderer extends JPanel {
         // Determine player's position in the 5x5 grid
         int playerRow = player.getY();
         int playerCol = player.getX();
-        int tileSize = domOb.getBoard().getSize();
+        int tileSize = domainObj.getBoard().getSize();
 
         // Calculate the starting row and column based on player's position
         int startRow = Math.max(0, Math.min(playerRow - 2, maze.length - 5));
