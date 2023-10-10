@@ -1,6 +1,7 @@
 package nz.ac.wgtn.swen225.lc.renderer;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
+import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.FreeTile;
 import nz.ac.wgtn.swen225.lc.domain.Tile.LockedDoor;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
@@ -269,6 +270,21 @@ public class GameRenderer extends JPanel {
         endRow = Math.min(endRow, maze.length);
         endCol = Math.min(endCol, maze[0].length);
 
+     /*   // Determine if the player has moved
+        int newPlayerRow = player.getY();
+        int newPlayerCol = player.getX();
+
+        if (newPlayerRow != playerRow || newPlayerCol != playerCol) {
+            // Player has moved, play the movement sound
+            System.out.println("reaches movement check");
+            sound.playPlayerMoveSound();
+
+            // Update the player's position
+            playerRow = newPlayerRow;
+            playerCol = newPlayerCol;
+        }*/
+
+
         // Calculate the rendering coordinates for each tile
         for (int row = startRow; row < endRow; row++) {
             for (int col = startCol; col < endCol; col++) {
@@ -276,7 +292,6 @@ public class GameRenderer extends JPanel {
                     // Calculate the destination rectangle for the image
                     int x = (col - startCol) * tileSize;
                     int y = (row - startRow) * tileSize;
-
 
                     // Draw the tile image
                     g.drawImage(tileIcons[row][col].getImage(), x, y, tileSize, tileSize, this);
@@ -297,6 +312,10 @@ public class GameRenderer extends JPanel {
         // Draw the player icon scaled to the tile size
         g.drawImage(playerIcon.getImage(), playerX, playerY, tileSize, tileSize, this);
 
+
+
+
+
         // Render enemy actors within the 5x5 grid
         for (Enemy enemy : enemies) {
             int enemyX = (enemy.getLocation().x() - startCol) * tileSize;
@@ -308,28 +327,42 @@ public class GameRenderer extends JPanel {
                 g.drawImage(enemyIcon.getImage(), enemyX, enemyY, tileSize, tileSize, this);
             }
             if (enemyX == playerX && enemyY == playerY) {
-                System.out.println( "reaches enemy and player location check");
+                System.out.println("reaches enemy and player location check");
                 sound.playDeathSound();
-
             }
         }
 
-        // Check the tile the player is currently on
+        /*// Check the tile the player is currently on
         Tile playerTile = maze[playerRow][playerCol];
 
         // Check if the player is on a FreeTile with a key or treasure
         if (playerTile instanceof FreeTile) {
-            System.out.println(" Reaches player tile == free tile ncheck");
+            System.out.println("Reaches player tile == free tile check");
             FreeTile freeTile = (FreeTile) playerTile;
             Entity entity = freeTile.getEntity();
 
-            System.out.println(" Entity on free tile"+ entity);
+            System.out.println("Entity on free tile: " + entity);
             if (entity instanceof Key || entity instanceof Treasure) {
-                System.out.println(" Reaches entity if condition");
+                System.out.println("Reaches entity if condition");
                 sound.playItemCollectSound(); // Play the pickup sound when the player collects an item
+            } else {
+                System.out.println("Sound fail");
+            }
+        }*/
 
-            }else{ System.out.println("sound fail");}
-        }
+          // Check the tile the player is currently on
+        Tile playerTile = maze[playerRow][playerCol];
+
+        // Check if the player is on a FreeTile with a key or treasure
+        if (playerTile instanceof ExitTile) {
+           // System.out.println("Reaches player tile == exit tile check");
+                sound.playLevelCompleteSound(); // Play the winning sound
+
+            }
+
+
+
     }
+
 
 }
