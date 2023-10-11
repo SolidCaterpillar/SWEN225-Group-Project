@@ -2,7 +2,7 @@ package nz.ac.wgtn.swen225.lc.fuzz;
 
 import nz.ac.wgtn.swen225.lc.app.GUI;
 import nz.ac.wgtn.swen225.lc.app.Main;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 //import org.junit.Test;

@@ -11,11 +11,11 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Treasure;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
-import nz.ac.wgtn.swen225.lc.domain.Tile.InformationTile;
+
 import nz.ac.wgtn.swen225.lc.domain.Colour;
 /*
  * class that parses the json into game objects
- * @author salvadalvi
+ *@author Alvien T. Salvador (Salvadalvi)
  */
 public class ParseJson {
     
@@ -124,15 +124,18 @@ public class ParseJson {
         //parses the exit tile
 
         //parses and constructs exit
-        int exitX = exit.getInt("x");
-        int exitY = exit.getInt("y");
+        if(!exit.isEmpty()) {
 
-        tiles.add(new ExitTile(new Coord(exitX, exitY)));
+            int exitX = exit.getInt("x");
+            int exitY = exit.getInt("y");
 
+            tiles.add(new ExitTile(new Coord(exitX, exitY)));
+        }
         //parses wall tiles
         for(Object o : walls){
             if(o instanceof JSONObject wall){
                 //starts where wall to be drawn
+
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
             
@@ -224,6 +227,7 @@ public class ParseJson {
                 Coord keyCO = new Coord(key.getInt("x"), key.getInt("y"));
 
                 inventoryKey.add(new Key(keyCO,parseColour(key.getString("colour"))));
+
             }
         }
 
@@ -234,8 +238,8 @@ public class ParseJson {
                 inventoryTreasure.add(new Treasure(treCO));
             }
         }
-        //player.setKeys(inventoryKeys);
-        //player.setTresure(inventoryTreasure);
+        player.setKeys(inventoryKey);
+        player.setTreasure(inventoryTreasure);
         return player;
     }
     /**

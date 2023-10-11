@@ -20,7 +20,7 @@ import nz.ac.wgtn.swen225.lc.persistency.ParseJson.*;
  * The main class in Persistency, that loads and saves
  * the game
  * 
- * @author salvdalvi
+ * @author Alvien T. Salvador (Salvadalvi)
  * **/
 public class Persistency{
 

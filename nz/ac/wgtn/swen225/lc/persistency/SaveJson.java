@@ -7,21 +7,21 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Treasure;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
-
+import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
 import nz.ac.wgtn.swen225.lc.domain.Board;
 /*
- * class that reads game objects, and saves them in a 
+ * class that reads game objects, and saves them in a
  * Json format.
- * @author salvadalvi
+ * @author Alvien T. Salvador (Salvadalvi)
  */
 public class SaveJson {
 
     /*
      * Turns the game objects into a jsonobject
      * so it be written on to a .json file
-     * 
+     *
      * @param saveLevel, level to be turned into a json obj
      * @return JsonObject, json object with level field
      */
@@ -30,7 +30,7 @@ public class SaveJson {
         JSONObject json = new JSONObject();
 
         JSONObject dimension = new JSONObject();
-        
+
         //turns entites into json form
         JSONObject entites = saveEntites(saveLevel);
 
@@ -55,14 +55,14 @@ public class SaveJson {
     /*
      * Takes the a board, and turns the speical tiles into
      * json objects
-     * 
+     *
      * @param board, the board to be turned into a json
      * @return JsonObject, json object with board info
      */
     private static JSONObject saveTiles(Board board){
         JSONObject tiles = new JSONObject();
-        
-       //intalizes all json objects 
+
+       //intalizes all json objects
         JSONObject exit = new JSONObject();
         JSONArray walls = new JSONArray();
         JSONArray lockedDoor = new JSONArray();
@@ -76,7 +76,7 @@ public class SaveJson {
 
                 Tile tile = board.getTileAt(x,y);
                 JSONObject obj = new JSONObject();
-                
+
                 //checks what kind of tile
 
                 //if exit tile add to exitTile jsonObj
@@ -84,8 +84,18 @@ public class SaveJson {
                     exit.put("x",tile.getLocation().x());
 
                     exit.put("y",tile.getLocation().y());
-                
+
                 //if wall tile create new json obj, and add to WallJsonArray
+                }else if(tile instanceof LockedDoor lo){
+
+                    obj.put("x",lo.getLocation().x());
+
+                    obj.put("y",lo.getLocation().y());
+
+                    obj.put("colour", loadColour(lo.getColour()));
+                    lockedDoor.put(obj);
+
+                    //if ExitLock create new json obj, add to LockedDoorArray
                 }else if(tile instanceof Wall){
 
                     obj.put("x",tile.getLocation().x());
@@ -100,23 +110,13 @@ public class SaveJson {
                     walls.put(obj);
 
                 //if LockedDoor create new json obj, add to LockedDoorArray
-                }else if(tile instanceof LockedDoor lo){
-
-                    obj.put("x",lo.getLocation().x());
-
-                    obj.put("y",lo.getLocation().y());
-                    
-                    obj.put("colour", loadColour(lo.getColour()));
-                    lockedDoor.put(obj);
-
-                //if ExitLock create new json obj, add to LockedDoorArray
                 }else if(tile instanceof ExitLock){
                     obj.put("x",tile.getLocation().x());
 
                     obj.put("y",tile.getLocation().y());
-                    
+
                     exitLock.put(obj);
-                
+
                 //if infoTile create new json obj, add to infoTileArray
                 }else if(tile instanceof InformationTile msg){
                     obj.put("x",msg.getLocation().x());
@@ -124,9 +124,9 @@ public class SaveJson {
                     obj.put("y",msg.getLocation().y());
 
                     obj.put("message",msg.getInformation() );
-                    
-                    questionBlock.put(obj);
 
+                    questionBlock.put(obj);
+                    break;
                 }
             }
 
@@ -149,18 +149,18 @@ public class SaveJson {
 
 
     /*INTERNAL METHODS FOR SAVING THE ENTITES INTO JSON */
-        
+
     /*
      * Takes the entites in the level, and turns them into
      * a json format.
-     * 
+     *
      * @param l, level where the entites have to be saved
      * @return JsonObject, json object with \entitiy info
      */
     private static JSONObject saveEntites(Level l){
 
         JSONObject entites = new JSONObject();
-        //creates and saves a jsonObject, containing the 
+        //creates and saves a jsonObject, containing the
         //respective entity into the entity JSONObject
         entites.put("player", savePlayer(l.player()));
 
@@ -175,7 +175,7 @@ public class SaveJson {
 
     /*
      * Takes the player, and turns it into a JSONobject
-     * 
+     *
      * @param p, player to be saved
      * @return JsonObject, json object with player info
      */
@@ -184,12 +184,33 @@ public class SaveJson {
         JSONObject inventory = new  JSONObject();
 
         JSONArray keys = new JSONArray();
-        JSONArray treasure = new JSONArray();
+        JSONArray treasures = new JSONArray();
 
+        for(Key k : p.getKeys()){
+            JSONObject key = new JSONObject();
+
+            Coord loc = k.getLocation();
+
+            key.put("x", loc.x());
+            key.put("y", loc.y());
+            key.put("colour", loadColour(k.getColour()));
+            keys.put(key);
+        }
+
+        for(Treasure tre : p.getTreasure()){
+            JSONObject treasure = new JSONObject();
+
+            Coord loc = tre.getLocation();
+
+            treasure.put("x", loc.x());
+            treasure.put("y", loc.y());
+
+            treasures.put(treasure);
+        }
         //sets up the player inventory
         inventory.put("keys", keys);
 
-        inventory.put("treasures", treasure);
+        inventory.put("treasures", treasures);
 
         player.put("x", p.getX());
 
@@ -197,13 +218,14 @@ public class SaveJson {
 
 
         player.put("inventory", inventory);
+
         return player ;
     }
 
     /*
      * Takes the Keys, and turns it into a JSONobject
      * adding it to a greater JSON array
-     * 
+     *
      * @param key, keys to be saved
      * @return JSONarray, json Array with jSONobjects with
      * key info
@@ -211,7 +233,7 @@ public class SaveJson {
     private static JSONArray saveKeys(ArrayList<Key> key){
         JSONArray keys = new JSONArray();
         for(Key k : key){
-            JSONObject obj = new JSONObject(); 
+            JSONObject obj = new JSONObject();
             obj.put("x", k.getLocation().x());
 
             obj.put("y", k.getLocation().y());
@@ -224,16 +246,18 @@ public class SaveJson {
     /*
      * Takes the Treasure, and turns it into a JSONobject
      * adding it to a greater JSON array
-     * 
+     *
      * @param treasure, treasures to be saved
      * @return JSONarray, json Array with jSONobjects with
      * treasure info
      */
 
     private static JSONArray saveTreasure(ArrayList<Treasure> tre){
+
         JSONArray treasure = new JSONArray();
         for(Treasure t: tre){
-            JSONObject obj = new JSONObject(); 
+
+            JSONObject obj = new JSONObject();
             obj.put("x", t.getLocation().x());
             obj.put("y", t.getLocation().y());
             treasure.put(obj);
@@ -244,7 +268,7 @@ public class SaveJson {
     /*
      * Takes the enemies, and turns it into a JSONobject
      * adding it to a greater JSON array
-     * 
+     *
      * @param enemies, enemies to be saved
      * @return JSONarray, json Array with jSONobjects with
      *  enemy info
@@ -253,7 +277,7 @@ public class SaveJson {
     private static JSONArray saveEnemies(ArrayList<Enemy> ens){
         JSONArray enemies = new JSONArray();
         for(Enemy e: ens){
-            JSONObject obj = new JSONObject(); 
+            JSONObject obj = new JSONObject();
             obj.put("x", e.getLocation().x());
             obj.put("y", e.getLocation().y());
             enemies.put(obj);
@@ -261,10 +285,10 @@ public class SaveJson {
         return enemies;
     }
 
-    /* 
+    /*
      * Takes a enum colour, and turns it into
      * string representation
-     * 
+     *
      * @param colour, enum rep of colour
      * @return colour, string rep of colour
     */
