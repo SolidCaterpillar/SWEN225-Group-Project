@@ -35,6 +35,7 @@ public class Player implements Entity{
 
     public int checkMove(char keyEvent) {
         //char keyCode = keyEvent.getKeyChar(); //convert to char for switch
+        this.interaftFalse();
         char keyCode = keyEvent;
         this.changeDir(keyCode); //Change orientations
 
@@ -199,12 +200,12 @@ public class Player implements Entity{
         if (currentTileOptional.isPresent()) {
             Tile currentTile = currentTileOptional.get();
             Entity entityOptional = currentTile.getEntity();
-            player.intractTrue();
+
             // check if the tile contains an entity
             if(entityOptional != null){
 
                 if (entityOptional instanceof Treasure) {
-
+                    player.intractTrue();
                     player.treasures.add((Treasure) entityOptional);
 
                     // remove Entity
@@ -212,7 +213,7 @@ public class Player implements Entity{
                 }
 
                 else if (entityOptional instanceof Key) {
-
+                    player.intractTrue();
                     player.keys.add((Key) entityOptional);
 
                     // rem oveentity
@@ -220,7 +221,6 @@ public class Player implements Entity{
                 }
             }
         }
-        player.interaftFalse();
     }
 
 

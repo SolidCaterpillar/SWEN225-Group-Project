@@ -118,6 +118,12 @@ public class FuzzTest {
                 int[] pastTreasureCount = gui.treasureInfo();
                 int[] pastDoorCount = gui.doorInfo();
 
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 //move player
                 gui.getPlayer().checkMove(charDirection);
 
@@ -306,6 +312,7 @@ public class FuzzTest {
      */
     private void loadLevel(int level) {
         System.out.println("loading level " + level + "...");
+        gui.replay(1);
         //gui.reloadLevel(level);
     }
 

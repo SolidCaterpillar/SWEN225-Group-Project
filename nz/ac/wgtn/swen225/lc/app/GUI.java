@@ -151,7 +151,7 @@ public class GUI {
                                 timer.stop();
                             }
                             resetTimer();
-                            replay();
+                            replay(1);
                         }
                         case KeyEvent.VK_2 -> {
                             // CTRL-2: Start a new game at level 2
@@ -163,7 +163,7 @@ public class GUI {
                                 timer.stop();
                             }
                             resetTimer();
-                            replay();
+                            replay(2);
 
                         }
                         case KeyEvent.VK_E -> {
@@ -204,21 +204,25 @@ public class GUI {
                             case KeyEvent.VK_W -> {
                                 // Handle UP arrow key press (e.g., move up)
                                 chipsText = "UP";
+                                soundManager.playPlayerMoveSound();
                                 moveChecker('w');
                             }
                             case KeyEvent.VK_A -> {
                                 // Handle LEFT arrow key press (e.g., move left)
                                 chipsText = "LEFT";
+                                soundManager.playPlayerMoveSound();
                                 moveChecker('a');
                             }
                             case KeyEvent.VK_S -> {
                                 // Handle DOWN arrow key press (e.g., move down)
                                 chipsText = "DOWN";
+                                soundManager.playPlayerMoveSound();
                                 moveChecker('s');
                             }
                             case KeyEvent.VK_D -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
                                 chipsText = "RIGHT";
+                                soundManager.playPlayerMoveSound();
                                 moveChecker('d');
                             }
                         }
@@ -236,7 +240,7 @@ public class GUI {
             }
         });
     }
-    private void replay() {
+    public void replay(int level) {
         // Remove all components from the content pane
         Container contentPane = mainFrame.getContentPane();
         contentPane.removeAll();
@@ -276,6 +280,11 @@ public class GUI {
         if (ch.checkMove(key) == 1){
             showInstructions = !showInstructions;
             gamePaused = showInstructions;
+        }
+        if(Player.getInteract(ch)){
+            System.out.println("Testtt");
+            soundManager.playItemCollectSound();
+            ch.interaftFalse();
         }
     }
 
@@ -485,7 +494,7 @@ public class GUI {
             resetTimer();
             redrawGUI();
             renderer.reDrawBoard();
-            replay();
+            replay(2);
         });
         level2MenuItem.addActionListener(e -> {
             // Turn the current Level to two and reset
@@ -497,7 +506,7 @@ public class GUI {
             resetTimer();
             redrawGUI();
             renderer.reDrawBoard();
-            replay();
+            replay(2);
         });
         instructionsMenuItem.addActionListener(e -> {
             // Using a ternary operator to create a toggle and sync with gamePaused
@@ -748,7 +757,7 @@ public class GUI {
                         ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/treasure.png")));
                         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                     } else if(item instanceof Key){
-                        ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/key" + ((Key) item).getColour() + ".png")));
+                        ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/key" + ((Key) item).getColour().toString().toLowerCase() + ".png")));
                         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                     }else {
                         ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/walltile3.png")));
