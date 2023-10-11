@@ -28,7 +28,7 @@ public class Domain {
                 curLevel = Persistency.loadLevel1();
                 break;
             case LEVEL_TWO:
-                curLevel = Persistency.loadLevel1();
+                curLevel = Persistency.loadLevelTest();
                 break;
         }
 
@@ -51,6 +51,13 @@ public class Domain {
         }else{
             enemies.clear();
             enemies.addAll(curLevel.enemies());
+        }
+
+        if(!curPlayer.getTreasure().isEmpty()){
+            curPlayer.setTreasure(newPlayer.getTreasure());
+        }
+        if(!curPlayer.getKeys().isEmpty()){
+            curPlayer.setKeys(newPlayer.getKeys());
         }
 
     }

@@ -22,11 +22,14 @@ public class Player implements Entity{
 
     protected ArrayList<Key> keys;
 
+    protected boolean interact;
+
 
     public Player(Coord loc){
         this.location = loc;
         treasures = new ArrayList<>();
         keys = new ArrayList<>();
+        interact = false;
     }
 
 
@@ -196,7 +199,7 @@ public class Player implements Entity{
         if (currentTileOptional.isPresent()) {
             Tile currentTile = currentTileOptional.get();
             Entity entityOptional = currentTile.getEntity();
-
+            player.intractTrue();
             // check if the tile contains an entity
             if(entityOptional != null){
 
@@ -217,6 +220,7 @@ public class Player implements Entity{
                 }
             }
         }
+        player.interaftFalse();
     }
 
 
@@ -250,5 +254,16 @@ public class Player implements Entity{
 
     public void setTreasure(ArrayList<Treasure> treasure){
         this.treasures = treasure;
+    }
+
+    public void intractTrue(){
+        this.interact = true;
+    }
+    public void interaftFalse(){
+        this.interact = false;
+    }
+
+    public static boolean getInteract(Player player){
+        return player.interact;
     }
 }

@@ -6,7 +6,7 @@ import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 import nz.ac.wgtn.swen225.lc.persistency.*;
 import nz.ac.wgtn.swen225.lc.renderer.*;
-import nz.ac.wgtn.swen225.lc.recorder.*;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +43,7 @@ public class GUI {
     private Domain d;
     private GameCanvas canvas;
     private GameRenderer  renderer;
-    private Recorder rec;
+
     private Tile[][] maze;
 
     private SoundManager soundManager;
@@ -83,7 +83,6 @@ public class GUI {
         // Creating the render object and the canvas which display the board
         this.renderer = new GameRenderer(maze, ch, d);
         this.canvas = new GameCanvas(renderer);
-        this.rec = new Recorder();
 
         // functions to draw App components
         drawBoard();
@@ -251,7 +250,7 @@ public class GUI {
         this.ch = d.getPlayer();
         this.renderer = new GameRenderer(maze, ch, d);
         this.canvas = new GameCanvas(renderer);
-        this.rec = new Recorder();
+
 
         // Re-create components
         drawBoard();
@@ -369,9 +368,7 @@ public class GUI {
                         renderer.reDrawBoard();
                     }
                     //rec.setRecord(currentLevel, timeLeft, maze);
-                    try{
-                        rec.saveAsFile("game_state.json");
-                    }catch(IOException ignored){}
+
                 }
             }
         });
