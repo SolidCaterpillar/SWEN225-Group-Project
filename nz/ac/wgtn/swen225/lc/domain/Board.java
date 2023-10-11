@@ -2,10 +2,12 @@ package nz.ac.wgtn.swen225.lc.domain;
 import javax.swing.*;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
+import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 //sup
 public class Board {
@@ -17,19 +19,9 @@ public class Board {
     static final int tileSize = 122;
 
 
-    public Board(int lev, Tile[][] boardObj){
-        if(lev > 3 || lev < 0) throw new IllegalArgumentException("Invalid levels only 0-2"); //ONLY ALLOW LEVELS 0-3
-        level = lev;
+    public Board( Tile[][] boardObj){
+        board = boardObj;
 
-        //Test board constructor
-        if(level == 0) {
-
-        }
-
-        else{
-            board = boardObj;
-        }
-        //setupBoard(board);
     }
 
 
@@ -72,19 +64,8 @@ public static int getDim(){return arrayDim; }
     }
 
 
-    //String tester
-    public static void buildString(Tile[][] stringBoard) {
-        StringBuilder ret = new StringBuilder();
-        for (int i = 0; i < stringBoard.length; i++) {
-            for (int j = 0; j < stringBoard[0].length; j++) {
-                ret.append(stringBoard[i][j].toString());
-                if (j == stringBoard[0].length - 1) {
-                    ret.append("\n");
-                }
-            }
-        }
-        System.out.println(ret.toString());
-    }
+
+
 
 
     public Tile getTileAtLocation(Coord location) {
@@ -98,22 +79,6 @@ public static int getDim(){return arrayDim; }
         }
     }
 
-    //REMOVE EXIT TILES IF PLAYER HAS ALL OF THE TREASURE
-    public static void openExitTile(Board b) {
-        Tile[][] currentboard = b.getBoard();
-        int dim = currentboard.length;
-
-        for (int x = 0; x < dim; x++) {
-            for (int y = 0; y < dim; y++) {
-                Tile currentTile = currentboard[x][y];
-
-                if (currentTile instanceof ExitLock) {
-                    // Replace the ExitTile with a FreeTile at the same location
-                    currentboard[x][y] = new FreeTile(new Coord(x, y));
-                }
-            }
-        }
-    }
 
 
     public void replaceTileAt(Coord coord, Tile newTile) {
@@ -147,6 +112,62 @@ public static int getDim(){return arrayDim; }
 
             return tiles;
         }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Board board = (Board) obj;
+
+        // Compare attributes of the Board here. For example:
+        return Arrays.equals(this.getBoard(), board.getBoard());
     }
+
+
+    @Override
+    public int hashCode() {
+        int result = Integer.hashCode(level);
+        for (int i = 0; i < arrayDim; i++) {
+            for (int j = 0; j < arrayDim; j++) {
+                result = 31 * result + board[i][j].hashCode();
+            }
+        }
+        return result;
+    }
+
+
+        public static Tile[][] initializeTiles() {
+            Tile[][] tiles = new Tile[20][20];
+            for (int i = 0; i < 20; i++) {
+                for (int j = 0; j < 20; j++) {
+                    tiles[i][j] = new FreeTile(new Coord(i, j));
+                }
+            }
+            return tiles;
+        }
+
+    public static void setPlacePlayer(Board board, Coord newLocation) {
+        Tile[][] tiles = board.getBoard();
+
+        for (int x = 0; x < tiles.length; x++) {
+            for (int y = 0; y < tiles[0].length; y++) {
+                Tile currentTile = tiles[x][y];
+                Entity entity = currentTile.getEntity();
+
+                if (entity instanceof Player) {
+                    // Remove the player entity from the current tile
+                    currentTile.setEntity(null);
+
+                    // Place the player entity at the new location
+                    tiles[newLocation.x()][newLocation.y()].setEntity(entity);
+
+                    return; // Player found and placed, so exit the loop
+                }
+            }
+        }
+    }
+
+
+}
 
 

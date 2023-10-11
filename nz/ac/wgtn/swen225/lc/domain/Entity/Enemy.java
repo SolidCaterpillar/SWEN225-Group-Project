@@ -70,9 +70,8 @@ public class Enemy implements Entity{
 
 
     private boolean isValidMove(Coord coord) {
-        Coord temp = coord;
         // make it check if it's adjacent and on the board
-        if (!Board.checkInBound(temp)) {
+        if (!Board.checkInBound(coord)) {
             return false;
         }
 

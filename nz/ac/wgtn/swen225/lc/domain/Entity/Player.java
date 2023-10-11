@@ -12,7 +12,6 @@ import java.util.*;
 import java.util.function.Supplier;
 
 
-import static nz.ac.wgtn.swen225.lc.domain.Board.openExitTile;
 
 public class Player implements Entity{
     //starting Orientation is South
@@ -36,15 +35,14 @@ public class Player implements Entity{
     public int checkMove(char keyEvent) {
         //char keyCode = keyEvent.getKeyChar(); //convert to char for switch
         this.interaftFalse();
-        char keyCode = keyEvent;
-        this.changeDir(keyCode); //Change orientations
+        this.changeDir(keyEvent); //Change orientations
 
-        System.out.println(keyCode);
+        System.out.println(keyEvent);
 
         Coord loc = null;
         Tile newPos = null;
 
-        loc = switch (keyCode) {
+        loc = switch (keyEvent) {
             case 'w' -> loc = this.location.moveUp();
             case 'a' -> loc = this.location.moveLeft();
             case 's' -> loc = this.location.moveDown();
@@ -68,9 +66,7 @@ public class Player implements Entity{
             } //IF NOT INVALID
 
             else {
-                if(newPos instanceof InformationTile){
-                    ((InformationTile) newPos).isChapOn(this);
-                }
+
                 Player.interact(this, loc);
                 movePlayer(newPos, loc);
                 this.tryOpenAdjacentLockedDoor();
@@ -84,7 +80,6 @@ public class Player implements Entity{
     //check if player has key for locked door
     public void tryOpenAdjacentLockedDoor() {
         Coord currentLoc = this.location;
-        Tile currentTile = Domain.staticBoard().getTileAtLocation(currentLoc);
 
         // Define the true adjacent locations
         Coord upLoc = getTrueLocation().moveUp();
@@ -224,20 +219,7 @@ public class Player implements Entity{
     }
 
 
-    //FOR TESTING
-    public String getTresDisplay(){
-        String s = "";
 
-        for(var x: this.getTreasure()){
-            s+= "$";
-        }
-        s+= "\n";
-        for(Key k: this.getKeys()) {
-            s += "Key:" + k.getColour();
-        }
-
-        return s;
-    }
 
     public void testKey(Key k){
         this.keys.add(k);
@@ -266,4 +248,43 @@ public class Player implements Entity{
     public static boolean getInteract(Player player){
         return player.interact;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        // If the object is compared with itself then return true
+        if (this == obj) {
+            return true;
+        }
+
+        // Check if obj is an instance of Player or not
+        if (!(obj instanceof Player)) {
+            return false;
+        }
+
+        // Cast obj to Player to compare data members
+        Player otherPlayer = (Player) obj;
+
+        // Compare the player's location
+        if (!location.equals(otherPlayer.location)) {
+            return false;
+        }
+
+        // Compare the player's treasures (if order doesn't matter)
+        if (treasures.size() != otherPlayer.treasures.size() ||
+                !treasures.containsAll(otherPlayer.treasures)) {
+            return false;
+        }
+
+        // Compare the player's keys (if order doesn't matter)
+        if (keys.size() != otherPlayer.keys.size() ||
+                !keys.containsAll(otherPlayer.keys)) {
+            return false;
+        }
+
+        // If all attributes are the same, the players are considered equal
+        return true;
+    }
+
+
+
 }

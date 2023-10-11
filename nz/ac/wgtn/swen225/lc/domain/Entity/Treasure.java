@@ -13,6 +13,7 @@ public class Treasure implements Entity{
         return location;
     }
 
+
     public String toString(){
         return "s";
     }

@@ -1,6 +1,7 @@
 package nz.ac.wgtn.swen225.lc.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nz.ac.wgtn.swen225.lc.domain.Tile.ExitLock;
 import nz.ac.wgtn.swen225.lc.domain.Tile.ExitTile;
@@ -19,16 +20,39 @@ public class Domain {
     static ArrayList<Key> keys;
     static ArrayList<Enemy> enemies;
 
+    static boolean gameWon = false;
 
+    static String currPath = null;
 
-    public static void picKLevel(LevelE level){
+    public static void reset() {
+        curBoard = null;
+        curPlayer = null;
+        treasures = null;
+        keys = null;
+        enemies = null;
+        gameWon = false;
+    }
+
+    public Domain(){
+      reset();
+
+    }
+
+    public static void pickLevel(LevelE level){
+        gameWon = false;
         Level curLevel = null;
         switch(level){
+            case TEST_ONE:
+                ArrayList<Key> keyList = new ArrayList<Key>(List.of(new Key(new Coord(0,0),null)));
+                ArrayList<Enemy> enemyList = new ArrayList<>(List.of(new Enemy(new Coord(0,0))));
+                ArrayList<Treasure> treasureList = new ArrayList<>(List.of(new Treasure(new Coord(0,0))));
+                curLevel = new Level(new Board(Board.initializeTiles()),new Player(new Coord(0,0)),keyList, treasureList, enemyList);
+                break;
             case LEVEL_ONE:
                 curLevel = Persistency.loadLevel1();
                 break;
             case LEVEL_TWO:
-                curLevel = Persistency.loadLevelTest();
+                curLevel = Persistency.loadLevel2();
                 break;
         }
 
@@ -63,19 +87,6 @@ public class Domain {
     }
 
 
-    public static void loadTest(){
-        Level curLevel = null;
-
-        curLevel = Persistency.loadLevelTest();
-
-        curBoard = curLevel.board();
-        curPlayer = curLevel.player();
-
-        treasures = curLevel.treasures(); //Initialize the class-level ArrayLists
-        keys = curLevel.keys();
-        enemies = curLevel.enemies();
-
-    }
 
     public Board getBoard(){
         return curBoard;
@@ -139,46 +150,66 @@ public class Domain {
                 } else if (currentLevel == 2) {
                     System.out.println("Player reached the exit on level 2. You win!");
                     winState();
+                    System.out.println(gameWon);
                 }
             }
 
         }
 
 
-        private static void reloadCurrentLevel() {
+        public static void reloadCurrentLevel() {
             loadLevel(currentLevel == 1 ? LevelE.LEVEL_ONE : LevelE.LEVEL_TWO);
         }
 
         private static void loadLevel(LevelE level) {
-            picKLevel(level);
+            pickLevel(level);
         }
 
         private void loadLevel1() {
             currentLevel = 1;
-            picKLevel(LevelE.LEVEL_ONE);
+            pickLevel(LevelE.LEVEL_ONE);
         }
 
         private void loadLevel2() {
             currentLevel = 2;
-            picKLevel(LevelE.LEVEL_TWO);
+            pickLevel(LevelE.LEVEL_TWO);
         }
 
-        private static void winState(){}
+        private static void winState(){
+            gameWon = true;
+        }
+
+        private static boolean checkWon(Domain domain){
+            return Domain.gameWon;
+        }
     }
 
 
     //FOLLOWING TESTING ONLY
-    public void setEnemies(ArrayList<Enemy> en){
-        for(Enemy enemy: en){
+    // FOR TESTING ONLY
+    public void setEnemies(ArrayList<Enemy> en) {
+        if (enemies == null) {
+            enemies = new ArrayList<>();
+        }
+        for (Enemy enemy : en) {
             enemies.add(enemy);
         }
     }
+
 
     public void createTileAtLoc(Tile tile) {
         if (Board.checkInBound(tile.getLocation())) {
             curBoard.replaceTileAt(tile.getLocation(), tile); // Replace the old tile with the new
         }
     }
+
+
+
+    public static boolean setPath(String path){
+        currPath = path;
+        return Persistency.saveLevel(path, new Level(curBoard,curPlayer, keys,treasures,enemies));
+    }
+
 
 }
 
