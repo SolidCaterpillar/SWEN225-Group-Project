@@ -80,7 +80,7 @@ public class GUI {
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
         this.d = new Domain();
-        this.d.picKLevel(LevelE.LEVEL_ONE);
+        this.d.pickLevel(LevelE.LEVEL_ONE);
         this.ch = d.getPlayer();
         this.rec = new Recorder();
 
@@ -261,7 +261,7 @@ public class GUI {
         Replay replay = new Replay(filename);
 
         if(replay.replay(frameNum).level() == 1) {
-            this.d.picKLevel(LevelE.LEVEL_ONE);
+            this.d.pickLevel(LevelE.LEVEL_ONE);
             this.ch = replay.replay(3).player();
             this.maze = replay.replay(3).maze();
         }
@@ -301,7 +301,12 @@ public class GUI {
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
         this.d = new Domain();
-        this.d.picKLevel(LevelE.LEVEL_ONE);
+        if(level == 1){
+            this.d.pickLevel(LevelE.LEVEL_ONE);
+        }else{
+            this.d.pickLevel(LevelE.LEVEL_TWO);
+        }
+
         this.ch = d.getPlayer();
         this.renderer = new GameRenderer(maze, ch, d);
         this.canvas = new GameCanvas(renderer);
