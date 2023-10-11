@@ -75,6 +75,7 @@ public class GUI {
         // Creating the objects of the other modules
         // The Following are Integrations of previous Modules
         soundManager = new SoundManager();
+        soundManager.playGameStartSound();
 
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
@@ -243,6 +244,53 @@ public class GUI {
             }
         });
     }
+
+    public void replay2(String filename, int frameNum) {
+        // Remove all components from the content pane
+        Container contentPane = mainFrame.getContentPane();
+        contentPane.removeAll();
+
+        soundManager = new SoundManager();
+
+        this.play = Persistency.loadLevel1();
+        // this.maze = play.board().getBoard();
+        this.d = new Domain();
+        this.rec = new Recorder();
+
+
+        Replay replay = new Replay(filename);
+
+        if(replay.replay(frameNum).level() == 1) {
+            this.d.picKLevel(LevelE.LEVEL_ONE);
+            this.ch = replay.replay(3).player();
+            this.maze = replay.replay(3).maze();
+        }
+
+
+        // Creating the render object and the canvas which display the board
+        this.renderer = new GameRenderer(maze, ch, d);
+        this.canvas = new GameCanvas(renderer);
+
+        // functions to draw App components
+        drawBoard();
+        createSideBar();
+        createMenuBar();
+
+        // Reset Timer will initial create and start the timer
+        resetTimer();
+
+        // Add the key listener to the panel. All of these lines are required
+        mapPanel.setFocusable(true);
+        mapPanel.requestFocus();
+
+        addKeyListener();
+
+
+        // Revalidate and repaint the content pane
+        contentPane.revalidate();
+        contentPane.repaint();
+    }
+
     public void replay(int level) {
         // Remove all components from the content pane
         Container contentPane = mainFrame.getContentPane();
@@ -527,7 +575,59 @@ public class GUI {
             redrawGUI();
             renderer.reDrawBoard();
         });
+        replayMenuItem.addActionListener(e -> {
+            gamePaused = true;
+            String currentDirectory = System.getProperty("user.dir");
+            JFileChooser fileChooser = new JFileChooser(currentDirectory);
+            int returnValue = fileChooser.showOpenDialog(null);
+
+            // Check if the user selected a file
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                // Get the selected file
+                File selectedFile = fileChooser.getSelectedFile();
+                System.out.println(selectedFile.getName());
+
+                JTextField inputField = new JTextField(10);
+
+                // Create an array of JComponents to be displayed in the dialog
+                JComponent[] components = new JComponent[] {
+                        new JLabel("Enter a number:"),
+                        inputField
+                };
+
+                int result = JOptionPane.showConfirmDialog(null, components, "Number Input", JOptionPane.OK_CANCEL_OPTION);
+
+                if (result == JOptionPane.OK_OPTION) {
+                    String inputText = inputField.getText();
+                    if (isNumeric(inputText)) {
+                        int number = Integer.parseInt(inputText);
+                        replay2(selectedFile.getName(), number);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+
+
+                // Read the contents of the file
+            } else {
+                System.out.println("No file selected.");
+            }
+        });
     }
+
+    private static boolean isNumeric(String str) {
+        if (str == null) {
+            return false;
+        }
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     /**
      * Basic logic for decrementTime
      * If it hits 0 seconds left a basic JOptionPane is shown
