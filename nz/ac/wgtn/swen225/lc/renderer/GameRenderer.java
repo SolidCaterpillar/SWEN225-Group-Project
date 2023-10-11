@@ -247,83 +247,90 @@ public class GameRenderer extends JPanel {
         };
     }
 
+    // Declare class fields for playerX and playerY
+    private int playerX;
+    private int playerY;
+
     /**
      * Renders the game view on the canvas.
      *
      * @param g The Graphics context for rendering.
      */
     public void renderGameView(Graphics g) {
-        // Determine player's position in the 5x5 grid
         int playerRow = player.getY();
         int playerCol = player.getX();
         int tileSize = domainObj.getBoard().getSize();
-
-        // Calculate the starting row and column based on player's position
         int startRow = Math.max(0, Math.min(playerRow - 2, maze.length - 5));
         int startCol = Math.max(0, Math.min(playerCol - 2, maze[0].length - 5));
-
-        // Calculate the ending row and column based on starting position
         int endRow = startRow + 5;
         int endCol = startCol + 5;
-
-        // Ensure the ending row and column are within bounds
         endRow = Math.min(endRow, maze.length);
         endCol = Math.min(endCol, maze[0].length);
 
-     /*   // Determine if the player has moved
-        int newPlayerRow = player.getY();
-        int newPlayerCol = player.getX();
+        renderTiles(g, startRow, endRow, startCol, endCol, tileSize);
+        renderPlayer(g, startRow, startCol, playerRow, playerCol, tileSize);
+        renderEnemies(g, startRow, startCol, tileSize);
+        playWiningSound(playerRow, playerCol);
+    }
 
-        if (newPlayerRow != playerRow || newPlayerCol != playerCol) {
-            // Player has moved, play the movement sound
-            System.out.println("reaches movement check");
-            sound.playPlayerMoveSound();
+    /**
+     * Renders the tiles on the focus region
+     *
+     * @param g         The Graphics context for rendering.
+     * @param startRow  The starting row index for rendering.
+     * @param endRow    The ending row index for rendering.
+     * @param startCol  The starting column index for rendering.
+     * @param endCol    The ending column index for rendering.
+     * @param tileSize  The size of a single tile.
+     */
 
-            // Update the player's position
-            playerRow = newPlayerRow;
-            playerCol = newPlayerCol;
-        }*/
-
-
-        // Calculate the rendering coordinates for each tile
+    private void renderTiles(Graphics g, int startRow, int endRow, int startCol, int endCol, int tileSize) {
         for (int row = startRow; row < endRow; row++) {
             for (int col = startCol; col < endCol; col++) {
                 if (tileIcons[row][col] != null) {
-                    // Calculate the destination rectangle for the image
                     int x = (col - startCol) * tileSize;
                     int y = (row - startRow) * tileSize;
-
-                    // Draw the tile image
                     g.drawImage(tileIcons[row][col].getImage(), x, y, tileSize, tileSize, this);
-
-                    // Draw a border around the tile
                     g.setColor(Color.BLACK);
                     g.drawRect(x, y, tileSize - 1, tileSize - 1);
                 }
             }
         }
+    }
 
-        // Determine the player's direction and select the appropriate player icon
+
+    /**
+     * Renders the player character on the focus region
+     *
+     * @param g         The Graphics context for rendering.
+     * @param startRow  The starting row index for rendering.
+     * @param startCol  The starting column index for rendering.
+     * @param playerRow The current row of the player character.
+     * @param playerCol The current column of the player character.
+     * @param tileSize  The size of a single tile.
+     */
+    private void renderPlayer(Graphics g, int startRow, int startCol, int playerRow, int playerCol, int tileSize) {
         ImageIcon playerIcon = getPlayerIcon();
-
-        // Render the player
-        int playerX = (playerCol - startCol) * tileSize;
-        int playerY = (playerRow - startRow) * tileSize;
-        // Draw the player icon scaled to the tile size
+        playerX = (playerCol - startCol) * tileSize; // Store in class field
+        playerY = (playerRow - startRow) * tileSize; // Store in class field
         g.drawImage(playerIcon.getImage(), playerX, playerY, tileSize, tileSize, this);
+    }
 
+    /**
+     * Renders enemy characters on the focus region
+     *
+     * @param g         The Graphics context for rendering.
+     * @param startRow  The starting row index for rendering.
+     * @param startCol  The starting column index for rendering.
+     * @param tileSize  The size of a single tile.
+     */
 
-
-
-
-        // Render enemy actors within the 5x5 grid
+    private void renderEnemies(Graphics g, int startRow, int startCol, int tileSize) {
         for (Enemy enemy : enemies) {
             int enemyX = (enemy.getLocation().x() - startCol) * tileSize;
             int enemyY = (enemy.getLocation().y() - startRow) * tileSize;
 
-            // Check if the enemy is within the focus region
             if (enemyX >= 0 && enemyX < 5 * tileSize && enemyY >= 0 && enemyY < 5 * tileSize) {
-                // Draw the enemy icon scaled to the tile size
                 g.drawImage(enemyIcon.getImage(), enemyX, enemyY, tileSize, tileSize, this);
             }
             if (enemyX == playerX && enemyY == playerY) {
@@ -331,38 +338,20 @@ public class GameRenderer extends JPanel {
                 sound.playDeathSound();
             }
         }
-
-        /*// Check the tile the player is currently on
-        Tile playerTile = maze[playerRow][playerCol];
-
-        // Check if the player is on a FreeTile with a key or treasure
-        if (playerTile instanceof FreeTile) {
-            System.out.println("Reaches player tile == free tile check");
-            FreeTile freeTile = (FreeTile) playerTile;
-            Entity entity = freeTile.getEntity();
-
-            System.out.println("Entity on free tile: " + entity);
-            if (entity instanceof Key || entity instanceof Treasure) {
-                System.out.println("Reaches entity if condition");
-                sound.playItemCollectSound(); // Play the pickup sound when the player collects an item
-            } else {
-                System.out.println("Sound fail");
-            }
-        }*/
-
-          // Check the tile the player is currently on
-        Tile playerTile = maze[playerRow][playerCol];
-
-        // Check if the player is on a FreeTile with a key or treasure
-        if (playerTile instanceof ExitTile) {
-           // System.out.println("Reaches player tile == exit tile check");
-                sound.playLevelCompleteSound(); // Play the winning sound
-
-            }
-
-
-
     }
+    /**
+     * Plays wining sound when the player reaches the exit tile.
+     *
+     * @param playerRow The current row of the player character.
+     * @param playerCol The current column of the player character.
+     */
+    private void playWiningSound(int playerRow, int playerCol) {
+        Tile playerTile = maze[playerRow][playerCol];
+        if (playerTile instanceof ExitTile) {
+            sound.playLevelCompleteSound();
+        }
+    }
+
 
 
 }
