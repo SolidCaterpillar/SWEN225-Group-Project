@@ -1,26 +1,22 @@
 package nz.ac.wgtn.swen225.lc.recorder;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
-import nz.ac.wgtn.swen225.lc.domain.Coord;
+import nz.ac.wgtn.swen225.lc.domain.Domain;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
+import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
+import nz.ac.wgtn.swen225.lc.domain.Entity.Treasure;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
-import nz.ac.wgtn.swen225.lc.persistency.Level;
-import nz.ac.wgtn.swen225.lc.renderer.GameCanvas;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-
-import nz.ac.wgtn.swen225.lc.app.*;
 
 /**
  * @author Ricky Fong 300500545
  * The Recorder class record the game when the game start
  * After the game is finish or end the record of the game will save
- **/
+ */
 public class Recorder {
 
     private JSONArray record;
@@ -28,21 +24,83 @@ public class Recorder {
     public Recorder() { this.record = new JSONArray(); }
 
     /**
-     * record the game everytime the gui redraw
+     * record the game everytime the gui redraw when the player move
      * @param currentLevel record the current level of the game
      * @param timer record the timer of the ongoing game
      * @param maze record the 2d maze of the ongoing game
      */
-    public void setRecord( int currentLevel, int timer, Player player ,Tile[][] maze) {
+    public void setRecord(int currentLevel, int timer, Player player , Tile[][] maze) {
         JSONObject jsonGameState = new JSONObject();
-        jsonGameState.put("currentLevel", currentLevel);
-        jsonGameState.put("timer", timer);
-        JSONObject p = savePlayer(player);
+        jsonGameState.put("currentLevel", currentLevel); // save current level
+        jsonGameState.put("timer", timer); // save timer
+
+        JSONObject p = savePlayer(player); // save player's information
         jsonGameState.put("player", p);
-        JSONObject tiles = saveTiles(maze);
+
+        JSONObject tiles = saveTiles(maze); // save tile's information
         jsonGameState.put("maze", tiles);
+
+        JSONArray enemies = saveEnemy(); // save enemy's information
+        jsonGameState.put("enemies", enemies);
+
+        JSONArray keys = saveKeys(); // save key's information
+        jsonGameState.put("keys", keys);
+
+        JSONArray treasure = saveTreasure(); // save treasure's information
+        jsonGameState.put("treasures", treasure);
+
         record.put(jsonGameState); // add all the JSON object in the JSON array
     }
+
+    /**
+     * Saving the Entity enemy's information in the json file
+     */
+    private static JSONArray saveEnemy(){
+        JSONArray enemyList = new JSONArray();
+        ArrayList<Enemy> enemiesList = Domain.getEnemies();
+
+        for(int i = 0; i < enemiesList.size(); i++){
+            JSONObject enemy = new JSONObject();
+            enemy.put("x",enemiesList.get(i).getLocation().x());
+            enemy.put("y",enemiesList.get(i).getLocation().y());
+            enemyList.put(enemy);
+        }
+
+        return enemyList ;
+    }
+
+    /**
+     * Saving the Entity treasure's information in the json file
+     */
+    private static JSONArray saveTreasure(){
+        JSONArray treasureArray = new JSONArray();
+        ArrayList<Treasure> treasureList = Domain.getTreasure();
+
+        for(int i = 0; i < treasureList.size(); i++){
+            JSONObject key = new JSONObject();
+            key.put("x",treasureList.get(i).getLocation().x());
+            key.put("y",treasureList.get(i).getLocation().y());
+            treasureArray.put(key);
+        }
+        return treasureArray ;
+    }
+
+    /**
+     * Saving the Entity key's information in the json file
+     */
+    private static JSONArray saveKeys(){
+        JSONArray keyArray = new JSONArray();
+        ArrayList<Key> keyList = Domain.getKeys();
+
+        for(int i = 0; i < keyList.size(); i++){
+            JSONObject key = new JSONObject();
+            key.put("x",keyList.get(i).getLocation().x());
+            key.put("y",keyList.get(i).getLocation().y());
+            keyArray.put(key);
+        }
+        return keyArray ;
+    }
+
 
     /**
      * Record the game every time the GUI redraws.
@@ -51,7 +109,6 @@ public class Recorder {
      */
     private static JSONObject saveTiles(Tile[][] maze) {
         JSONObject tiles = new JSONObject();
-
         JSONObject exit = new JSONObject();
         JSONArray walls = new JSONArray();
         JSONArray lockedDoor = new JSONArray();
@@ -59,7 +116,7 @@ public class Recorder {
         JSONArray questionBlock = new JSONArray();
         JSONArray freeTiles = new JSONArray();
 
-        // for nested loop the maze
+        // for nested loop the maze to store individual
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[row].length; col++) {
                 Tile tile = maze[row][col];
@@ -114,10 +171,10 @@ public class Recorder {
     private static JSONObject savePlayer(Player p){
         JSONObject player = new JSONObject();
         JSONObject inventory = new JSONObject();
-
         JSONArray keys = new JSONArray();
         JSONArray treasures = new JSONArray();
 
+        //storing the player's keys
         for(int i = 0; i < p.getKeys().size(); i++){
             JSONObject key = new JSONObject();
 
@@ -128,6 +185,7 @@ public class Recorder {
 
         }
 
+        //storing the player's treasures
         for(int j = 0; j < p.getTreasure().size(); j++){
             JSONObject treasure = new JSONObject();
 
@@ -136,11 +194,11 @@ public class Recorder {
             treasures.put(treasure);
         }
 
-
-        //sets up the player inventory
+        //store keys and treasures in the player's inventory
         inventory.put("keys", keys);
         inventory.put("treasures", treasures);
 
+        //store player's information
         player.put("x", p.getX());
         player.put("y", p.getY());
         player.put("inventory", inventory);
