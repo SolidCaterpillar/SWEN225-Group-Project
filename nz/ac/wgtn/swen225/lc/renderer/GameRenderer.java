@@ -32,6 +32,9 @@ public class GameRenderer extends JPanel {
     private final List<Enemy> enemies;
     private final ImageIcon enemyIcon;
     private final SoundManager sound ;
+    private int playerX;
+    private  int playerY;
+
 
     /**
      * Constructor to initialize game-related variables and set up the game state and resources.
@@ -246,10 +249,6 @@ public class GameRenderer extends JPanel {
             default -> playerUpIcon;
         };
     }
-
-    // Declare class fields for playerX and playerY
-    private int playerX;
-    private int playerY;
 
     /**
      * Renders the game view on the canvas.
