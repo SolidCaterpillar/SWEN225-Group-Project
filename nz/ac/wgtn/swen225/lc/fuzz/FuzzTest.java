@@ -35,12 +35,12 @@ public class FuzzTest {
         int random;
 
 
-        // generate specified amount of random paths, of length X - WILL DECIDE LATER
-        for (int i = 0; i <= 10; i++) {
+        // generate specified amount of random paths, of length X
+        for (int i = 0; i <= 5; i++) {
             path = new ArrayList<Integer[]>();// reset path to empty list
 
-            // generate X random directions, append to path - WILL DECIDE AMOUNT LATER
-            for (int j = 0; j < 2; j++) {
+            // generate X random directions, append to path
+            for (int j = 0; j < 3; j++) {
                 random = new Random().nextInt(4); // Select the next direction in path by random
                 path.add(moves.get(random)); //appends a random move to
             }
@@ -106,20 +106,15 @@ public class FuzzTest {
 
                 char charDirection = getCharDirection(direction);
 
-
-                //Check if game has been won after move is made and apply score, need method from app
-                //Should i check if game has ended also?
-
-
-                //Should i check if game is over?
-
                 //get info on interactions before
                 int[] pastKeyCount = gui.keyInfo();
                 int[] pastTreasureCount = gui.treasureInfo();
                 int[] pastDoorCount = gui.doorInfo();
 
+                //Need this to see player pos reset
+                //Have set fast to test as many options as possible
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(20);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -127,14 +122,13 @@ public class FuzzTest {
                 //move player
                 gui.getPlayer().checkMove(charDirection);
 
+                //Have set fast to test as many options as possible
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(20);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
-//                //Check if game has been won after move is made and apply score, need method from app
-//                //Should i check if game has ended also?
 
                 //get info on interactions after
                 int[] currentKeyCount = gui.keyInfo();
@@ -294,16 +288,6 @@ public class FuzzTest {
 
     }
 
-
-    /**
-     * Closes the game by closing the GUI frame.
-     * This method is used to terminate the game after testing.
-     */
-    private void closeGame() {
-        //guiFrame.close(); //need implementation to close from app
-    }
-
-
     /**
      * Loads the specified game level for testing.
      * Places chap back in place of origin on load
@@ -313,7 +297,7 @@ public class FuzzTest {
     private void loadLevel(int level) {
         System.out.println("loading level " + level + "...");
         gui.replay(1);
-        //gui.reloadLevel(level);
+        gui.replay(level);
     }
 
 
@@ -358,12 +342,16 @@ public class FuzzTest {
 
     }
 
+    /**
+     *  Performs a fuzz test.
+     *  This test method initializes the GUI, and fzz tests for both level 1 and level 2.
+     */
     @Test
-    public void FuzzTest() {
+    public void RunFuzzTest() {
         gui = new GUI();
         levelTest1();
-        //testLevel(2);
+        levelTest2();
 
     }
 
-}
+}//final sub
