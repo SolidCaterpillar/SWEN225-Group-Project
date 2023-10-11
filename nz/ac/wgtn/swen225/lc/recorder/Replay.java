@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen225.lc.recorder;
 
 import java.util.*;
 
+import nz.ac.wgtn.swen225.lc.app.Main;
 import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
@@ -47,7 +48,7 @@ public class Replay {
             JSONArray record = new JSONArray(new JSONTokener(jsonContent));
             length = record.length();
             for (int i = 0; i < length; i++) {
-                ArrayList<Tile> tiles = new ArrayList<>();
+                Tile[][] mazeTile = new Tile[20][20];
 
                 JSONObject gameStateJson = (JSONObject) record.get(i);
                 int currentLevel = gameStateJson.getInt("currentLevel"); // get the level
@@ -94,7 +95,8 @@ public class Replay {
                     JSONObject wallObject = (JSONObject) wallArray.get(j);
                     int wallX = wallObject.getInt("x");
                     int wallY = wallObject.getInt("y");
-                    tiles.add(new Wall(new Coord(wallX,wallY)));
+
+                    mazeTile[wallX][wallX] = new Wall(new Coord(wallX,wallY));
                 }
 
                 // get the information's position from json
@@ -104,7 +106,7 @@ public class Replay {
                     int questionBlocksX = questionBlocks.getInt("x");
                     int questionBlocksY = questionBlocks.getInt("y");
                     String questionBlocksMessage = questionBlocks.getString("message");
-                    tiles.add(new InformationTile(new Coord(questionBlocksX,questionBlocksY), questionBlocksMessage));
+                    mazeTile[questionBlocksX][questionBlocksY] = new InformationTile(new Coord(questionBlocksX,questionBlocksY), questionBlocksMessage);
                 }
 
                 // get the information's position from json
@@ -113,7 +115,7 @@ public class Replay {
                     JSONObject exitLocks = (JSONObject) exitLocksArray.get(0);
                     int exitLocksX = exitLocks.getInt("x");
                     int exitLocksY = exitLocks.getInt("y");
-                    tiles.add(new ExitTile(new Coord(exitLocksX,exitLocksY)));
+                    mazeTile[exitLocksX][exitLocksY] = new ExitTile(new Coord(exitLocksX,exitLocksY));
                 }
 
                 // get the lockedDoor's position from json
@@ -124,7 +126,7 @@ public class Replay {
                         int lockedDoorsX = lockedDoors.getInt("x");
                         int lockedDoorsY = lockedDoors.getInt("y");
                         Colour color = parseColour(lockedDoors.getString("colour"));
-                        tiles.add(new LockedDoor(new Coord(lockedDoorsX, lockedDoorsY), color));
+                        mazeTile[lockedDoorsX][lockedDoorsY] = new LockedDoor(new Coord(lockedDoorsX, lockedDoorsY), color);
                     }
                 }
 
@@ -132,11 +134,12 @@ public class Replay {
                 JSONArray freeTileArray = (JSONArray) maze.get("free tiles");
                     for (int m = 0; m < freeTileArray.length(); m++) {
                         JSONObject freeTile = (JSONObject) freeTileArray.get(m);
-                        int lockedDoorsX = freeTile.getInt("x");
-                        int lockedDoorsY = freeTile.getInt("y");
-                        tiles.add(new FreeTile(new Coord(lockedDoorsX, lockedDoorsY)));
+                        int freeTileX = freeTile.getInt("x");
+                        int freeTileY = freeTile.getInt("y");
+                        mazeTile[freeTileX][freeTileY] = new FreeTile(new Coord(freeTileX, freeTileY));
                     }
-                replay.put(i,new GameState(currentLevel,timer,player,tiles));
+
+               replay.put(i,new GameState(currentLevel,timer,player,mazeTile));
             }
 
             System.out.println("Replay loaded successfully from " + fileName);
@@ -150,7 +153,7 @@ public class Replay {
      * @param i A number that increase or decrease by 1 to get the frame of the replay game.
      * @return A game state on particular frame base on index to load a replay game.
      */
-    private GameState replay(int i) {
+    public GameState replay(int i) {
         this.frame += i;
         if(frame <= 0){
             return replay.get(0);
@@ -185,6 +188,6 @@ public class Replay {
     /**
      * A record class to store level, timer, player and array of tile in each frame.
      */
-    private record GameState(int level, int timer,Player player, ArrayList<Tile> arrayTile){}
+    public record GameState(int level, int timer,Player player, Tile[][] maze){}
 
 }

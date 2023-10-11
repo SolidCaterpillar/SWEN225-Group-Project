@@ -134,7 +134,6 @@ public class Recorder {
             treasure.put("x",p.getTreasure().get(j).getLocation().x());
             treasure.put("y",p.getTreasure().get(j).getLocation().y());
             treasures.put(treasure);
-
         }
 
 
@@ -143,11 +142,9 @@ public class Recorder {
         inventory.put("treasures", treasures);
 
         player.put("x", p.getX());
-
         player.put("y", p.getY());
-
-
         player.put("inventory", inventory);
+
         return player ;
     }
 
