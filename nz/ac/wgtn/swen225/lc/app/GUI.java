@@ -6,6 +6,7 @@ import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 import nz.ac.wgtn.swen225.lc.persistency.*;
 import nz.ac.wgtn.swen225.lc.renderer.*;
+import nz.ac.wgtn.swen225.lc.recorder.*;
 
 
 import javax.swing.*;
@@ -59,6 +60,7 @@ public class GUI {
     private final int tileSize = 68; // Adjust this size as needed for inventory
     private boolean gamePaused = false; // Flag to track if the game is paused
     private boolean showInstructions = false;   // Tracking if Instructions are shown
+    private Recorder rec;
 
     /**
      * Creating the GUI class will create all the JPanel Components
@@ -79,6 +81,7 @@ public class GUI {
         this.d = new Domain();
         this.d.picKLevel(LevelE.LEVEL_ONE);
         this.ch = d.getPlayer();
+        this.rec = new Recorder();
 
         // Creating the render object and the canvas which display the board
         this.renderer = new GameRenderer(maze, ch, d);
@@ -275,7 +278,7 @@ public class GUI {
     }
 
 
-    public void moveChecker(char key){
+    public void moveChecker(char key) {
         soundManager.playPlayerMoveSound();
         if (ch.checkMove(key) == 1){
             showInstructions = !showInstructions;
@@ -285,6 +288,12 @@ public class GUI {
             System.out.println("Testtt");
             soundManager.playItemCollectSound();
             ch.interaftFalse();
+        }
+        rec.setRecord(currentLevel, timeLeft, ch, maze);
+        try {
+            rec.saveAsFile("game_state.json");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
