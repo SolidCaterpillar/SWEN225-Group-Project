@@ -11,12 +11,17 @@ import nz.ac.wgtn.swen225.lc.persistency.Level;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 
 
+/**
+ * Represents the game domain, handling game state and game entities.
+ * This class follows the Singleton pattern.
+ * @author gautamchai
+ */
 public class Domain {
 
-    // Singleton instance
+
     private static Domain instance;
 
-    // Convert static members to instance members
+
     private Board curBoard;
     private Player curPlayer;
 
@@ -28,6 +33,9 @@ public class Domain {
     private String currPath = null;
 
 
+    /**
+     * Resets the game domain by nullifying its attributes.
+     */
     public void reset() {
         curBoard = null;
         curPlayer = null;
@@ -37,12 +45,16 @@ public class Domain {
         gameWon = false;
     }
 
+    /**
+     * Private constructor to ensure only one instance of this class is ever created.
+     */
+    private Domain() {}
 
-    private Domain() {
 
-    }
-
-
+    /**
+     * Retrieves the singleton instance of the Domain class.
+     * @return The singleton instance.
+     */
     public static Domain getInstance() {
         if (instance == null) {
             instance = new Domain();
@@ -50,6 +62,12 @@ public class Domain {
         return instance;
     }
 
+
+
+    /**
+     * Loads the game level based on the provided level enum.
+     * @param level The desired game level.
+     */
     public void pickLevel(LevelE level){
         gameWon = false;
         Level curLevel = null;
@@ -101,29 +119,65 @@ public class Domain {
 
 
 
+    /**
+     * Getter method for the Singleton Domain class.
+     * @return returns Domain instance's Board.
+     */
     public Board getBoard(){
         return curBoard;
     }
 
+
+
+    /**
+     * Getter method for the Singleton Domain class.
+     * @return returns Domain instance's Player.
+     */
     public Player getPlayer(){
         return curPlayer;
     }
 
+
+
+
+    /**
+     * Getter method for the Singleton Domain class.
+     * @return returns Domain instance's Enemies.
+     */
     public ArrayList<Enemy> getEnemies(){return enemies;}
 
+
+
+    /**
+     * Getter method for the Singleton Domain class.
+     * @return returns Domain instance's Keys.
+     */
     public  ArrayList<Key> getKeys(){return keys;}
 
+
+    /**
+     * Getter method for the Singleton Domain class.
+     * @return returns Domain instance's Treasure.
+     */
     public  ArrayList<Treasure> getTreasure(){
         return treasures;
     }
 
 
-
+    /**
+     * Static nested class to represent the state of the game.
+     * It contains utilities for game state checks and transitions.
+     * @author gautamchai
+     */
     public static class StateClass {
         private static int currentLevel = 1; //starting level
 
 
-
+        /**
+         * Checks if the player character has been defeated by an enemy.
+         *
+         * @return true if the player is defeated; false otherwise.
+         */
         public static boolean isPlayerDead() {
             Coord playerLocation = Domain.getInstance().getPlayer().getLocation();
 
@@ -137,6 +191,12 @@ public class Domain {
         }
 
 
+        /**
+         * Evaluates the current game state.
+         *
+         * @param level The current game level.
+         * @return 0 if the player is dead, 1 if advanced to level 2, 2 if the game is won, 3 otherwise.
+         */
         public static int checkGameState(int level) {
 
             // Check if the player is still alive
@@ -148,7 +208,6 @@ public class Domain {
             Player curPlayer = Domain.getInstance().curPlayer;
             // Check if the player is on an exit tile
             if (curBoard.getTileAtLocation(curPlayer.getTrueLocation()) instanceof ExitTile extile) {
-                //currentLevel = extile.getNextLevel().ordinal();
                 currentLevel = level;
                 if (currentLevel == 1) {
                     System.out.println("Player reached the exit on level 1. Advancing to level 2...");
@@ -165,40 +224,48 @@ public class Domain {
             return 3;
         }
 
+        /**
+         * Method for implementing player movement for player object for Domain instance.
+         * @param move
+         * @return an int in response to the playerMove representing different player movement interactions 0 for No info Tile 1 for with InfoTile
+         */
         public static int movePlayer(char move){
             return Domain.getInstance().curPlayer.checkMove(move);
         }
 
+
+        /**
+         * Reload game level based on what it currently is.
+         * @return void
+         */
         public static void reloadCurrentLevel() {
             loadLevel(currentLevel == 1 ? LevelE.LEVEL_ONE : LevelE.LEVEL_TWO);
         }
 
+        /**
+         * Method for changing levels in the static class.
+         * @param level
+         */
         private static void loadLevel(LevelE level) {
             Domain.getInstance().pickLevel(level);
         }
 
-        private void loadLevel1() {
-            currentLevel = 1;
-            Domain.getInstance().pickLevel(LevelE.LEVEL_ONE);
-        }
-
-        private void loadLevel2() {
-            currentLevel = 2;
-            Domain.getInstance().pickLevel(LevelE.LEVEL_TWO);
-        }
-
+        /**
+         * Set game is won boolean True for Domain instance variable.
+         * @return void type
+         */
         private static void winState(){
             Domain.getInstance().gameWon = true;
         }
 
-        private static boolean checkWon(Domain domain){
-            return  Domain.getInstance().gameWon;
-        }
     }
 
 
-    //FOLLOWING TESTING ONLY
-    // FOR TESTING ONLY
+    /**
+     * Sets the enemies for testing purposes.
+     *
+     * @param en The list of enemies to be set.
+     */
     public void setEnemies(ArrayList<Enemy> en) {
         if (enemies == null) {
             enemies = new ArrayList<>();
@@ -209,6 +276,11 @@ public class Domain {
     }
 
 
+    /**
+     * Replaces a tile at a given location.
+     *
+     * @param tile The new tile to be placed.
+     */
     public void createTileAtLoc(Tile tile) {
         if (Board.checkInBound(tile.getLocation())) {
             curBoard.replaceTileAt(tile.getLocation(), tile); // Replace the old tile with the new
@@ -217,6 +289,12 @@ public class Domain {
 
 
 
+    /**
+     * Saves the current game state to a file.
+     *
+     * @param path The path where the game state will be saved.
+     * @return true if saving was successful; false otherwise.
+     */
     public static boolean setPath(String path){
         Domain.getInstance().currPath = path;
         Board curBoard = Domain.getInstance().curBoard;

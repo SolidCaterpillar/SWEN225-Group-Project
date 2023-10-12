@@ -9,6 +9,15 @@ import nz.ac.wgtn.swen225.lc.domain.Domain;
 import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
+
+
+/**
+ * Represents an enemy in the game. Enemies are dynamic entities that can move
+ * around the game board. Their movement is randomized but restricted by their movement history
+ * to avoid repetitive patterns.
+ *
+ * @author gautamchai
+ */
 public class Enemy implements Entity{
 
     protected Coord location;
@@ -16,8 +25,15 @@ public class Enemy implements Entity{
     //Takes random moves and if the last 2 tiles contain next tile in moves doesn't take it.
     private Queue<Coord> movementHistory = new LinkedList<>();
 
+
+
+    /**
+     * Constructor to initialize the enemy with its starting position.
+     *
+     * @param loc The starting position of the enemy.
+     */
     public Enemy(Coord loc){
-        location = loc; //starting pos
+        location = loc;
     }
 
     @Override
@@ -26,7 +42,10 @@ public class Enemy implements Entity{
     }
 
 
-
+    /**
+     * Updates the enemy's position on the board. The method determines valid random moves
+     * and then performs the movement.
+     */
     public void updateEnemy() {
         //set or random m0ves
         Coord[] adjacentCoords = {
@@ -42,33 +61,43 @@ public class Enemy implements Entity{
         for (Coord coord : adjacentCoords) {
             if (isValidMove(coord)) {
                 performMovement(coord);
-                break; // exit the loop after a valid move
+                break;
             }
         }
     }
 
 
+    /**
+     * Performs the movement of the enemy on the board from its current location to a new location.
+     *
+     * @param coord The new position the enemy should move to.
+     */
     private void performMovement(Coord coord) {
-        // Get tile for movement
         Tile oldPos = Tile.tileAtLoc(location, Domain.getInstance().getBoard()).orElseThrow(() -> new IllegalArgumentException("Original position not found!"));
 
         Tile newLoc = Tile.tileAtLoc(coord,Domain.getInstance().getBoard()).orElseThrow(() -> new IllegalArgumentException("New position not found!"));
 
         newLoc.moveEntity(oldPos);
 
-        // update the enemy's location
+
         location = coord;
 
-        // add the new location to the movement history
+
         movementHistory.offer(coord);
 
-        // Remove the oldest location from the history if it's longer than 2
         if (movementHistory.size() > 2) {
             movementHistory.poll();
         }
     }
 
 
+
+    /**
+     * Checks if moving to the specified coordinate is a valid move for the enemy.
+     *
+     * @param coord The coordinate to check.
+     * @return True if the move is valid; false otherwise.
+     */
     private boolean isValidMove(Coord coord) {
         // make it check if it's adjacent and on the board
         if (!Board.checkInBound(coord)) {
@@ -86,7 +115,12 @@ public class Enemy implements Entity{
 
 
 
-    //array shuffle algorithm
+    /**
+     * Implements the Fisher-Yates shuffle algorithm to shuffle an array of coordinates.
+     * This helps in randomizing the enemy's movements.
+     *
+     * @param array The array of coordinates to shuffle.
+     */
     private void shuffleArray(Coord[] array) {
         Random rand = new Random();
         for (int i = array.length - 1; i > 0; i--) {

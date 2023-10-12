@@ -1,4 +1,11 @@
 package nz.ac.wgtn.swen225.lc.domain;
+
+/**
+ * Represents the different game levels in the application.
+ * Each level corresponds to a unique configuration or setup in the game.
+ *
+ * @author gautamchai
+ */
 public enum LevelE{
         LEVEL_ONE,
         LEVEL_TWO,

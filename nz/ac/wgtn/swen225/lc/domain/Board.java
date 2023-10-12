@@ -9,7 +9,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-//sup
+
+/**
+ * Represents a game board with tiles and entities.
+ * @author gautamchai
+ */
 public class Board {
 
     int level;
@@ -19,17 +23,41 @@ public class Board {
     static final int tileSize = 122;
 
 
+
+    /**
+     * Constructs a Board with a given set of tiles.
+     *
+     * @param boardObj The 2D array of tiles representing the board.
+     */
     public Board( Tile[][] boardObj){
         board = boardObj;
 
     }
 
 
+    /**
+     * Gets the current state of the board.
+     *
+     * @return The 2D array of tiles.
+     */
     public Tile[][] getBoard(){ //For returning game
         return board;
     }
 
-public static int getDim(){return arrayDim; }
+
+    /**
+     * Returns the dimensions of the board.
+     *
+     * @return The dimension size.
+     */
+    public static int getDim(){return arrayDim; }
+
+
+    /**
+     * Provides a string representation of the board.
+     *
+     * @return A string representation of the board.
+     */
     public String toString(){
         String b = "";
         for(int x = 0; x < board.length; x++){
@@ -43,18 +71,34 @@ public static int getDim(){return arrayDim; }
 
 
 
-    //Tile at location
+    /**
+     * Gets the tile at a specific coordinate.
+     *
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     * @return The tile at the specified coordinate.
+     */
     public Tile getTileAt(int x, int y){
         return board[x][y];
     }
 
+    /**
+     * Gets the size of the tiles.
+     *
+     * @return The tile size.
+     */
     public int getSize(){
         return tileSize;
     }
 
 
 
-
+    /**
+     * Checks if a coordinate is within the board's bounds.
+     *
+     * @param check The coordinate to check.
+     * @return True if the coordinate is within bounds, otherwise false.
+     */
     public static boolean checkInBound(Coord check) {
         int x = check.x();
         int y = check.y();
@@ -67,7 +111,13 @@ public static int getDim(){return arrayDim; }
 
 
 
-
+    /**
+     * Retrieves the tile at a given coordinate location.
+     *
+     * @param location The location of the tile.
+     * @return The tile at the given location.
+     * @throws IllegalArgumentException if the location is out of bounds.
+     */
     public Tile getTileAtLocation(Coord location) {
         int x = location.x();
         int y = location.y();
@@ -80,7 +130,13 @@ public static int getDim(){return arrayDim; }
     }
 
 
-
+    /**
+     * Replaces a tile at a given coordinate with a new tile.
+     *
+     * @param coord The coordinate of the tile to replace.
+     * @param newTile The new tile to place at the coordinate.
+     * @throws IllegalArgumentException if the coordinate is out of bounds.
+     */
     public void replaceTileAt(Coord coord, Tile newTile) {
         int x = coord.x();
         int y = coord.y();
@@ -93,7 +149,12 @@ public static int getDim(){return arrayDim; }
     }
 
 
-    //TEST METHOD
+    /**
+     * Test method to add an entity to the game at a specified location.
+     *
+     * @param entity The entity to add.
+     * @param loc The location to place the entity.
+     */
     public void addEntityToGame(Entity entity, Coord loc){
         int x = loc.x();
         int y = loc.y();
@@ -102,6 +163,13 @@ public static int getDim(){return arrayDim; }
         curr.setEntity(entity);
     }
 
+
+    /**
+     * Retrieves a list of tiles based on given coordinates.
+     *
+     * @param coords The list of coordinates.
+     * @return A list of tiles corresponding to the coordinates.
+     */
     public static ArrayList<Tile> getTileList(ArrayList<Coord> coords){
             ArrayList<Tile> tiles = new ArrayList<>();
             for (Coord coord : coords) {
@@ -113,6 +181,12 @@ public static int getDim(){return arrayDim; }
             return tiles;
         }
 
+    /**
+     * Checks if two boards are equal based on their tile arrangement.
+     *
+     * @param obj The other board to compare with.
+     * @return True if the boards are equal, otherwise false.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -127,7 +201,11 @@ public static int getDim(){return arrayDim; }
     }
 
 
-
+    /**
+     * Initializes an array of FreeTile tiles.
+     *
+     * @return A 2D array of FreeTile tiles.
+     */
         public static Tile[][] initializeTiles() {
             Tile[][] tiles = new Tile[20][20];
             for (int i = 0; i < 20; i++) {
@@ -138,6 +216,13 @@ public static int getDim(){return arrayDim; }
             return tiles;
         }
 
+
+        /**
+     * Moves the player to a new location on the board.
+     *
+     * @param board The board containing the player.
+     * @param newLocation The new location to move the player to.
+     */
     public static void setPlacePlayer(Board board, Coord newLocation) {
         Tile[][] tiles = board.getBoard();
 
@@ -160,7 +245,12 @@ public static int getDim(){return arrayDim; }
     }
 
 
-    //String tester
+    /**
+     * Builds a string representation of a 2D tile array.
+     *
+     * @param stringBoard The 2D tile array.
+     * @return A string representation of the array.
+     */
     public static String buildString(Tile[][] stringBoard) {
         StringBuilder ret = new StringBuilder();
         for (int i = 0; i < stringBoard.length; i++) {
