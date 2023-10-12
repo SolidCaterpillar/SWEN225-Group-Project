@@ -26,6 +26,7 @@ public class SoundManager {
         loadSound("levelchange", "levelchange.wav");
         loadSound("death", "death.wav");
         loadSound("gamestart", "gamestart.wav");
+        loadSound("gamemusic", "gamemusic.wav");
     }
 
     /**
@@ -89,6 +90,31 @@ public class SoundManager {
         playSound("death");
     }
 
+
+    /**
+     * Play the background music.
+     */
+    public void playBackgroundMusic() {
+        Clip clip = soundClips.get("gamemusic");
+        if (clip != null) {
+            if (clip.isRunning()) {
+                clip.stop();
+            }
+            clip.setFramePosition(0);
+            clip.loop(5);
+        }
+    }
+
+    /**
+     * Stop background music sound clip.
+     *
+     */
+    public void stopBackgroundMusic() {
+        Clip clip = soundClips.get("gamemusic");
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+        }
+    }
 
     /**
      * Play a sound clip by name.
