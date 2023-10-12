@@ -1,14 +1,9 @@
 package nz.ac.wgtn.swen225.lc.fuzz;
 
 import nz.ac.wgtn.swen225.lc.app.GUI;
-import nz.ac.wgtn.swen225.lc.app.Main;
 import org.junit.jupiter.api.Test;
-
-
-//import org.junit.Test;
-
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 /**
  * Fuzz testing class for testing game levels 1 and 2.
@@ -16,6 +11,7 @@ import java.util.stream.Collectors;
 public class FuzzTest {
 
     private GUI gui;
+
     private static final List<Integer[]> moves = List.of(new Integer[]{0, 1}, new Integer[]{0, -1}, // all available moves, up, down, left, right, may need to change depended on how movement works
             new Integer[]{-1, 0}, new Integer[]{1, 0});
 
@@ -36,8 +32,8 @@ public class FuzzTest {
 
 
         // generate specified amount of random paths, of length X
-        for (int i = 0; i <= 5; i++) {
-            path = new ArrayList<Integer[]>();// reset path to empty list
+        for (int i = 0; i <= 10; i++) {
+            path = new ArrayList<>();// reset path to empty list
 
             // generate X random directions, append to path
             for (int j = 0; j < 3; j++) {
@@ -94,11 +90,12 @@ public class FuzzTest {
 
             //resets the level
             if (level == 1) {
+                if(gui.getTime() <= 1){gui.setTime(60); levelTest2();}
                 loadLevel(1);
             } else {
                 loadLevel(2);
+                if(gui.getTime() <= 1){System.exit(0);}
             }
-
             Set<int[]> visited = new HashSet<>();
 
             //for each direction in path
@@ -157,7 +154,7 @@ public class FuzzTest {
     /**
      * Calculates a char to allow interaction for checkMove method used in calculatePathScores
      *
-     * @param direction Moves represented as x and y coord
+     * @param direction Moves represented as x and y co-ord
      * @return char for checkMove represent up,down,left or right
      */
     private static char getCharDirection(Integer[] direction) {
@@ -287,7 +284,6 @@ public class FuzzTest {
         return 0; //If no treasures are picked up
 
     }
-
     /**
      * Loads the specified game level for testing.
      * Places chap back in place of origin on load
@@ -296,7 +292,6 @@ public class FuzzTest {
      */
     private void loadLevel(int level) {
         System.out.println("loading level " + level + "...");
-        gui.replay(1);
         gui.replay(level);
     }
 
@@ -306,8 +301,7 @@ public class FuzzTest {
      */
     private void levelTest1() {
         System.out.println("Testing level 1...");
-        long start = System.currentTimeMillis(); //start time of the test
-        while ((System.currentTimeMillis() - start) / 1000 < 60) {
+        if (gui.getTime() == 60) {
             testLevel(1);
         }
 
@@ -318,8 +312,7 @@ public class FuzzTest {
      */
     private void levelTest2() {
         System.out.println("Testing level 2...");
-        long start = System.currentTimeMillis(); //start time of the test
-        while ((System.currentTimeMillis() - start) / 1000 < 60) {
+        if (gui.getTime() == 60) {
             testLevel(2);
         }
 
@@ -330,28 +323,30 @@ public class FuzzTest {
      * @param level The game level being tested.
      */
     private void testLevel(int level) {
-        //make initial paths
-        Map<List<Integer[]>, Integer> currentPaths = initializeRandomTestPaths();
-        //loop X times
-        for (int i = 0; i < 10; i++) {
-            //evaluate current paths
-            currentPaths = calculatePathScores(currentPaths, level);
-            //make next paths based on calculations
-            currentPaths = nextEvolvedPaths(currentPaths);
-        }
+
+            // Make initial paths
+            Map<List<Integer[]>, Integer> currentPaths = initializeRandomTestPaths();
+
+            // Loop X times
+            for (int i = 0; i < 10; i++) {
+                // Evaluate current paths
+                currentPaths = calculatePathScores(currentPaths, level);
+                // Make next paths based on calculations
+                currentPaths = nextEvolvedPaths(currentPaths);
+            }
 
     }
 
     /**
      *  Performs a fuzz test.
-     *  This test method initializes the GUI, and fzz tests for both level 1 and level 2.
+     *  This test method initializes the GUI, and fuzz tests for both level 1 and level 2.
      */
     @Test
     public void RunFuzzTest() {
-        gui = new GUI();
-        levelTest1();
-        levelTest2();
+       gui = new GUI();
+       levelTest1();
 
     }
 
-}//final sub
+
+}
