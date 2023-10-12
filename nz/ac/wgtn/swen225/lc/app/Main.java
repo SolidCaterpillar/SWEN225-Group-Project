@@ -15,6 +15,7 @@ import nz.ac.wgtn.swen225.lc.recorder.*;
 /**
  * This is the Main class that runs the game.
  * This is named as per the specifications
+ * @author Deveremma (Emmanuel De Vera) 300602434
  */
 public class Main {
     /**

@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * This is the GUI object that create the entirety of App
  * GUI creates a JFrame that will contain all the key components
- * @author Devsdevera (Emmanuel De Vera)
+ * @author Deveremma (Emmanuel De Vera) 300602434
  */
 public class GUI {
     private int currentLevel = 1; // Current game level
@@ -310,11 +310,11 @@ public class GUI {
         }
         if(Player.getInteract(ch)){
             soundManager.playItemCollectSound();
-            ch.interaftFalse();
+            ch.interactFalse();
         }
         rec.setRecord(currentLevel, timeLeft, ch, maze, d);
         try {
-            rec.saveAsFile("game_save");
+            rec.saveAsFile("Larry_Croftâ€™s_Adventures");
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
