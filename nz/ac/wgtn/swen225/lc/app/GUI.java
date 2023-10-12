@@ -253,7 +253,7 @@ public class GUI {
 
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
-        this.d = new Domain();
+        //this.d = new Domain();
         this.rec = new Recorder();
 
         // Creating the render object and the canvas which display the board
@@ -326,7 +326,7 @@ public class GUI {
 
     public void moveChecker(char key) {
         soundManager.playPlayerMoveSound();
-        if (ch.checkMove(key) == 1){
+        if (Domain.StateClass.movePlayer(key) == 1){
             showInstructions = true;
         }else{
             showInstructions = false;
@@ -359,7 +359,7 @@ public class GUI {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             // Get the selected file
             File selectedFile = fileChooser.getSelectedFile();
-
+            Persistency.loadLevel("level/" + selectedFile.getName());
         } else {
             System.out.println("No file selected.");
         }
@@ -381,11 +381,7 @@ public class GUI {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             // Get the selected file
             File selectedFile = fileChooser.getSelectedFile();
-            try {
-                rec.saveAsFile(selectedFile.getName() + ".json");
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            System.out.println(Domain.setPath(selectedFile.getName() + ".json"));
         } else {
             System.out.println("No file selected.");
         }
@@ -401,7 +397,7 @@ public class GUI {
             if(!gamePaused){
                 // useful to always verify the state of the game
                 counter ++;
-                int status = Domain.StateClass.checkGameState();
+                int status = Domain.StateClass.checkGameState(currentLevel);
                 if(status == 1){
                     currentLevel = 2;
                     timeLeft = 60;
@@ -563,6 +559,7 @@ public class GUI {
             renderer.reDrawBoard();
         });
         replayMenuItem.addActionListener(e -> {
+            gamePaused = true;
             String currentDirectory = System.getProperty("user.dir");
             JFileChooser fileChooser = new JFileChooser(currentDirectory);
             int returnValue = fileChooser.showOpenDialog(null);
@@ -571,7 +568,7 @@ public class GUI {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 // Get the selected file
                 File selectedFile = fileChooser.getSelectedFile();
-                Replay replay = new Replay(selectedFile.getName());
+                Replay replay = new Replay(selectedFile.getName(), this);
             } else {
                 System.out.println("No file selected.");
             }
