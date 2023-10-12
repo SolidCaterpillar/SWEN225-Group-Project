@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * The SoundManager class is responsible for managing and playing various sound effects in the game.
  * It loads and stores sound clips and provides methods to play specific sounds.
- * @Author Arnav Dogra (@dograarna)
+ * @author Arnav Dogra (@dograarna)
  */
 public class SoundManager {
     private final Map<String, Clip> soundClips;
