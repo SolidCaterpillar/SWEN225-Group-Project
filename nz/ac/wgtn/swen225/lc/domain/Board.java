@@ -106,7 +106,7 @@ public static int getDim(){return arrayDim; }
             ArrayList<Tile> tiles = new ArrayList<>();
             for (Coord coord : coords) {
                 if (Board.checkInBound(coord)) {
-                    tiles.add(Domain.staticBoard().getTileAtLocation(coord));
+                    tiles.add(Domain.getInstance().getBoard().getTileAtLocation(coord));
                 }
             }
 

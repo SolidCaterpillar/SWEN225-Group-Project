@@ -21,10 +21,6 @@ public class Tile {
     }
 
 
-    void interact(Entity entity){
-
-        
-    }; // Define how the tile interacts with an entity
 
     public Entity getEntity() {
         return objEntity;
@@ -44,15 +40,10 @@ public class Tile {
         boolean locInBoard = Board.checkInBound(reverse);
 
         if(locInBoard){
-            Tile toReturn = Domain.staticBoard().getTileAtLocation(reverse);
+            Tile toReturn = Domain.getInstance().getBoard().getTileAtLocation(reverse);
             return Optional.of(toReturn);
         }
         return Optional.empty();
-    }
-
-
-    public ImageIcon draw(){
-        return null;
     }
 
     //Entity was mov

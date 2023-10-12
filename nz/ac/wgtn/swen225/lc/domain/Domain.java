@@ -13,18 +13,22 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 
 public class Domain {
 
-    static Board curBoard;
-    static Player curPlayer;
+    // Singleton instance
+    private static Domain instance;
 
-    static ArrayList<Treasure> treasures;
-    static ArrayList<Key> keys;
-    static ArrayList<Enemy> enemies;
+    // Convert static members to instance members
+    private Board curBoard;
+    private Player curPlayer;
 
-    static boolean gameWon = false;
+    private ArrayList<Treasure> treasures;
+    private ArrayList<Key> keys;
+    private ArrayList<Enemy> enemies;
 
-    static String currPath = null;
+    private boolean gameWon = false;
+    private String currPath = null;
 
-    public static void reset() {
+
+    public void reset() {
         curBoard = null;
         curPlayer = null;
         treasures = null;
@@ -34,7 +38,19 @@ public class Domain {
     }
 
 
-    public static void pickLevel(LevelE level){
+    private Domain() {
+
+    }
+
+
+    public static Domain getInstance() {
+        if (instance == null) {
+            instance = new Domain();
+        }
+        return instance;
+    }
+
+    public void pickLevel(LevelE level){
         gameWon = false;
         Level curLevel = null;
         switch(level){
@@ -80,6 +96,7 @@ public class Domain {
             curPlayer.setKeys(newPlayer.getKeys());
         }
 
+
     }
 
 
@@ -92,12 +109,11 @@ public class Domain {
         return curPlayer;
     }
 
-    public static Board staticBoard(){return curBoard;}
-    public static ArrayList<Enemy> getEnemies(){return enemies;}
+    public ArrayList<Enemy> getEnemies(){return enemies;}
 
-    public static ArrayList<Key> getKeys(){return keys;}
+    public  ArrayList<Key> getKeys(){return keys;}
 
-    public static ArrayList<Treasure> getTreasure(){
+    public  ArrayList<Treasure> getTreasure(){
         return treasures;
     }
 
@@ -107,12 +123,11 @@ public class Domain {
         private static int currentLevel = 1; //starting level
 
 
-        //Run in app to check every tick.
-        //then run checkGameState
-        public static boolean isPlayerDead() {
-            Coord playerLocation = curPlayer.getLocation();
 
-            for (Enemy enemy : enemies) {
+        public static boolean isPlayerDead() {
+            Coord playerLocation = Domain.getInstance().getPlayer().getLocation();
+
+            for (Enemy enemy : Domain.getInstance().getEnemies()) {
                 if (enemy.getLocation().equals(playerLocation)) {
                     return true;
                 }
@@ -129,8 +144,11 @@ public class Domain {
                 System.out.println("Player has died. Reloading current level...");
                 return 0;
             }
+            Board curBoard = Domain.getInstance().curBoard;
+            Player curPlayer = Domain.getInstance().curPlayer;
             // Check if the player is on an exit tile
-            if (curBoard.getTileAtLocation(curPlayer.getTrueLocation()) instanceof ExitTile) {
+            if (curBoard.getTileAtLocation(curPlayer.getTrueLocation()) instanceof ExitTile extile) {
+                //currentLevel = extile.getNextLevel().ordinal();
                 currentLevel = level;
                 if (currentLevel == 1) {
                     System.out.println("Player reached the exit on level 1. Advancing to level 2...");
@@ -140,7 +158,7 @@ public class Domain {
                 } else if (currentLevel == 2) {
                     System.out.println("Player reached the exit on level 2. You win!");
                     winState();
-                    System.out.println(gameWon);
+                    System.out.println(Domain.getInstance().gameWon);
                     return 2;
                 }
             }
@@ -148,7 +166,7 @@ public class Domain {
         }
 
         public static int movePlayer(char move){
-            return curPlayer.checkMove(move);
+            return Domain.getInstance().curPlayer.checkMove(move);
         }
 
         public static void reloadCurrentLevel() {
@@ -156,25 +174,25 @@ public class Domain {
         }
 
         private static void loadLevel(LevelE level) {
-            pickLevel(level);
+            Domain.getInstance().pickLevel(level);
         }
 
         private void loadLevel1() {
             currentLevel = 1;
-            pickLevel(LevelE.LEVEL_ONE);
+            Domain.getInstance().pickLevel(LevelE.LEVEL_ONE);
         }
 
         private void loadLevel2() {
             currentLevel = 2;
-            pickLevel(LevelE.LEVEL_TWO);
+            Domain.getInstance().pickLevel(LevelE.LEVEL_TWO);
         }
 
         private static void winState(){
-            gameWon = true;
+            Domain.getInstance().gameWon = true;
         }
 
         private static boolean checkWon(Domain domain){
-            return Domain.gameWon;
+            return  Domain.getInstance().gameWon;
         }
     }
 
@@ -200,7 +218,12 @@ public class Domain {
 
 
     public static boolean setPath(String path){
-        currPath = path;
+        Domain.getInstance().currPath = path;
+        Board curBoard = Domain.getInstance().curBoard;
+        Player curPlayer = Domain.getInstance().curPlayer;
+        var keys = Domain.getInstance().getKeys();
+        var treasures = Domain.getInstance().getTreasure();
+        var enemies = Domain.getInstance().getEnemies();
         return Persistency.saveLevel(path, new Level(curBoard,curPlayer, keys,treasures,enemies));
     }
 

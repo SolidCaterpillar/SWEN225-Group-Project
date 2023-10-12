@@ -51,7 +51,7 @@ public class Player implements Entity{
         };
         if (Board.checkInBound(loc)) {
             // get new tile
-            Optional<Tile> optionalTile = Tile.tileAtLoc(loc,Domain.staticBoard());
+            Optional<Tile> optionalTile = Tile.tileAtLoc(loc,Domain.getInstance().getBoard());
 
             // if no tile present
             if (!optionalTile.isPresent()) {
@@ -69,7 +69,9 @@ public class Player implements Entity{
 
                 Player.interact(this, loc);
                 movePlayer(newPos, loc);
-                this.tryOpenAdjacentLockedDoor();
+                if(this.tryOpenAdjacentLockedDoor()){
+                    return 2;
+                }
             }
         } else {
             throw new IllegalArgumentException("Tile not in board boundary");
@@ -78,7 +80,7 @@ public class Player implements Entity{
     }
 
     //check if player has key for locked door
-    public void tryOpenAdjacentLockedDoor() {
+    public boolean tryOpenAdjacentLockedDoor() {
         Coord currentLoc = this.location;
 
         // Define the true adjacent locations
@@ -91,13 +93,10 @@ public class Player implements Entity{
 
         ArrayList<Tile> doors = Board.getTileList(tiles);
 
-        lockedDoorOpen(doors);
-
-        checkTreasures(doors);
-
+        return(lockedDoorOpen(doors) || checkTreasures(doors));
     }
 
-    public void lockedDoorOpen(ArrayList<Tile> doors){
+    public boolean lockedDoorOpen(ArrayList<Tile> doors){
         for (Tile door : doors) {
             if (door instanceof LockedDoor lock) {
                 Colour currentColour = lock.getColour();
@@ -105,10 +104,12 @@ public class Player implements Entity{
                 // Check if the player has a key of the same color
                 if (hasMatchingKey(currentColour)) {
                     // Open the current LockedDoor
-                    Domain.staticBoard().replaceTileAt(door.getLocation(), new FreeTile(door.getLocation()));
+                    Domain.getInstance().getBoard().replaceTileAt(door.getLocation(), new FreeTile(door.getLocation()));
+                    return true;
                 }
             }
         }
+        return false;
     }
     private boolean hasMatchingKey(Colour color) {
         for (Key key : keys) {
@@ -122,7 +123,7 @@ public class Player implements Entity{
 
 
     public void movePlayer(Tile newPos, Coord loc){
-        Tile oldPos = Tile.tileAtLoc(this.location, Domain.staticBoard()).orElseThrow(
+        Tile oldPos = Tile.tileAtLoc(this.location, Domain.getInstance().getBoard()).orElseThrow(
                 () -> new IllegalArgumentException("OG player position not found")
         );
 
@@ -132,15 +133,17 @@ public class Player implements Entity{
     }
 
 
-    public void checkTreasures(ArrayList<Tile> doors) {
-        boolean checkTreasures = this.treasures.containsAll(Domain.getTreasure());
+    public boolean checkTreasures(ArrayList<Tile> doors) {
+        boolean checkTreasures = this.treasures.containsAll(Domain.getInstance().getTreasure());
         for (Tile tile : doors) {
             if (tile instanceof ExitLock) {
                 if (checkTreasures) {
-                    Domain.staticBoard().replaceTileAt(tile.getLocation(), new FreeTile(tile.getLocation()));
+                    Domain.getInstance().getBoard().replaceTileAt(tile.getLocation(), new FreeTile(tile.getLocation()));
+                    return true;
                 }
             }
         }
+        return false;
     }
 
 
@@ -190,7 +193,7 @@ public class Player implements Entity{
 
     public static void interact(Player player, Coord loc) {
         // get the tile at the player's current location
-        Optional<Tile> currentTileOptional = Tile.tileAtLoc(loc,Domain.staticBoard());
+        Optional<Tile> currentTileOptional = Tile.tileAtLoc(loc,Domain.getInstance().getBoard());
 
         if (currentTileOptional.isPresent()) {
             Tile currentTile = currentTileOptional.get();

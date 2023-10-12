@@ -50,9 +50,9 @@ public class Enemy implements Entity{
 
     private void performMovement(Coord coord) {
         // Get tile for movement
-        Tile oldPos = Tile.tileAtLoc(location, Domain.staticBoard()).orElseThrow(() -> new IllegalArgumentException("Original position not found!"));
+        Tile oldPos = Tile.tileAtLoc(location, Domain.getInstance().getBoard()).orElseThrow(() -> new IllegalArgumentException("Original position not found!"));
 
-        Tile newLoc = Tile.tileAtLoc(coord,Domain.staticBoard()).orElseThrow(() -> new IllegalArgumentException("New position not found!"));
+        Tile newLoc = Tile.tileAtLoc(coord,Domain.getInstance().getBoard()).orElseThrow(() -> new IllegalArgumentException("New position not found!"));
 
         newLoc.moveEntity(oldPos);
 
@@ -80,7 +80,7 @@ public class Enemy implements Entity{
             return false;
         }
 
-        Tile destinationTile = Tile.tileAtLoc(coord,Domain.staticBoard()).orElseThrow(()-> new IllegalArgumentException("Tile to move to does not exist!"));
+        Tile destinationTile = Tile.tileAtLoc(coord,Domain.getInstance().getBoard()).orElseThrow(()-> new IllegalArgumentException("Tile to move to does not exist!"));
         return destinationTile.enemyWalkeable();
     }
 
