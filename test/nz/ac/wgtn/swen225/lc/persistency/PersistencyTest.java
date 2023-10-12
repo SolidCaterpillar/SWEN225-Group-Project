@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 class PersistencyTest {
 
     /**
-    * Test for loading:
-    *
-    * loads chap onto the board
-    *
-    * @author Alvien T. Salvador (Salvadalvi) 300614650
-    * */
+     * Test for loading:
+     *
+     * loads chap onto the board
+     *
+     * @author Alvien T. Salvador (Salvadalvi) 300614650
+     * */
     @Test
     void loadLevel1() {
 
@@ -174,7 +174,7 @@ class PersistencyTest {
         Level l1Model = initalizeLevel(player, new ArrayList<>(), new ArrayList<>());
 
         //saves game
-        Persistency.saveLevel("junitTest7.json", l1Model);
+        Persistency.saveLevel("level/junitTest7.json", l1Model);
 
         Level l1 = Persistency.loadLevel("level/junitTest7.json");
 
@@ -194,9 +194,9 @@ class PersistencyTest {
 
         Level l1Model = initalizeLevel(player, new ArrayList<>(), new ArrayList<>());
 
-        Persistency.saveLevel("junitTest8.json", l1Model);
+        Persistency.saveLevel("level/junitTest8.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("junitTest8.json");
+        Level l1 = Persistency.loadLevel("level/junitTest8.json");
 
         //checks if boards are identical
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
@@ -221,9 +221,9 @@ class PersistencyTest {
         Level l1Model = initalizeLevel(player, walls, new ArrayList<>());
 
         //saves the game
-        Persistency.saveLevel("junitTest9.json", l1Model);
+        Persistency.saveLevel("level/junitTest9.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("junitTest9.json");
+        Level l1 = Persistency.loadLevel("level/junitTest9.json");
 
         //checks if level is the same as as saved one
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
@@ -251,9 +251,9 @@ class PersistencyTest {
 
 
         //saves the game
-        Persistency.saveLevel("junitTest9.json", l1Model);
+        Persistency.saveLevel("level/junitTest9.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("junitTest9.json");
+        Level l1 = Persistency.loadLevel("level/junitTest9.json");
 
         //checks if level is the same as as saved one
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
@@ -286,9 +286,9 @@ class PersistencyTest {
 
 
         //saves the game
-        Persistency.saveLevel("junitTest8.json", l1Model);
+        Persistency.saveLevel("level/junitTest8.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("junitTest8.json");
+        Level l1 = Persistency.loadLevel("level/junitTest8.json");
 
 
         //checks if level is the same as as saved one
@@ -334,9 +334,9 @@ class PersistencyTest {
 
 
         //saves level
-        Persistency.saveLevel("junitTest9.json", l1Model);
+        Persistency.saveLevel("level/junitTest9.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("junitTest9.json");
+        Level l1 = Persistency.loadLevel("level/junitTest9.json");
 
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
 
@@ -414,7 +414,7 @@ class PersistencyTest {
 
                     return null;}
 
-        ).collect(Collectors.toCollection(ArrayList::new));
+                ).collect(Collectors.toCollection(ArrayList::new));
 
         //gets treastures from arrayList of en
         ArrayList<Treasure> treasures = en.stream()
