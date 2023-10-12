@@ -20,14 +20,16 @@ import nz.ac.wgtn.swen225.lc.persistency.ParseJson.*;
  * The main class in Persistency, that loads and saves
  * the game
  * 
- * @author Alvien T. Salvador (Salvadalvi)
+ * @author Alvien T. Salvador (Salvadalvi) 300614650
  * **/
 public class Persistency{
 
-    /*
+    /**
      * Reads a json file, and loads the starting postion
-     * of the level.
+     * of the level
+     * .
      * @param path of the json file
+     *
      * @return level holds objects needed to start the
      * current game
      */
@@ -42,8 +44,9 @@ public class Persistency{
         return setupLevel(levelObjs);
     }
 
-    /*
-     * Loads the first level of the game
+    /**
+    /* * Loads the first level of the game
+
      * @return level that holds objects to load level 1
      */
     public static Level loadLevel1(){
@@ -52,8 +55,9 @@ public class Persistency{
 
     }
 
-    /*
+    /**
      * Loads the second level of the game
+     *
      * @return level that holds objects to load level 2
      */
     public static Level loadLevel2(){
@@ -61,17 +65,7 @@ public class Persistency{
         return loadLevel("level/level2.json");
     }
 
-    /*
-     * Loads the test level of the game, that contains
-     * all game assets.
-     * @return level that holds objects to load test level
-     */
-    public static Level loadLevelTest(){
-
-        return loadLevel("level/Test.json");
-    }
-
-    /*
+    /**
      * Saves the current format of the game
      * 
      * @param filename, new name for the saved level
@@ -101,7 +95,7 @@ public class Persistency{
         return true;
     }
 
-    /*
+    /**
      * Saves the current format of the game
      * 
      * @param path, finds and opens where json is
@@ -132,11 +126,11 @@ public class Persistency{
         return new JSONObject(json.toString());
     }
 
-    /*
+    /**
      * Combies all game objects in to a board to be
      * used
      * 
-     * @objs, the objects exctracted from the json
+     * @param objs, the objects exctracted from the json
      * 
      * @return level, game to be loaded
      * 
@@ -172,7 +166,7 @@ public class Persistency{
         }
         
         //constructs level object and return it
-        return new Level(new Board(1,board), gameEntites.player(), gameEntites.keys(),gameEntites.treasures(),gameEntites.enemies());
+        return new Level(new Board(board), gameEntites.player(), gameEntites.keys(),gameEntites.treasures(),gameEntites.enemies());
     }
 
 }

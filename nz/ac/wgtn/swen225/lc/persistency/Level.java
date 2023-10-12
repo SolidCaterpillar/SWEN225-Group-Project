@@ -7,9 +7,9 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Treasure;
-/*
+/**
  * record that holds all objects needed to load the game
- * @author Alvien T. Salvador (Salvadalvi)
+ * @author Alvien T. Salvador (Salvadalvi) 300614650
  */
 public record Level(Board board,Player player, ArrayList<Key> keys,ArrayList<Treasure> treasures,ArrayList<Enemy> enemies){
 

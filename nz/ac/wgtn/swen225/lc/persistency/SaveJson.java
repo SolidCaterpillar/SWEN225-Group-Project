@@ -11,14 +11,14 @@ import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
 import nz.ac.wgtn.swen225.lc.domain.Board;
-/*
+/**
  * class that reads game objects, and saves them in a
  * Json format.
- * @author Alvien T. Salvador (Salvadalvi)
+ * @author Alvien T. Salvador (Salvadalvi) 300614650
  */
 public class SaveJson {
 
-    /*
+    /**
      * Turns the game objects into a jsonobject
      * so it be written on to a .json file
      *
@@ -52,7 +52,7 @@ public class SaveJson {
     }
     /*INTERNAL METHODS FOR SAVING THE TILES INTO JSON */
 
-    /*
+    /**
      * Takes the a board, and turns the speical tiles into
      * json objects
      *
@@ -150,11 +150,12 @@ public class SaveJson {
 
     /*INTERNAL METHODS FOR SAVING THE ENTITES INTO JSON */
 
-    /*
+    /**
      * Takes the entites in the level, and turns them into
      * a json format.
      *
      * @param l, level where the entites have to be saved
+     *
      * @return JsonObject, json object with \entitiy info
      */
     private static JSONObject saveEntites(Level l){
@@ -173,44 +174,22 @@ public class SaveJson {
         return entites;
     }
 
-    /*
+    /**
      * Takes the player, and turns it into a JSONobject
      *
      * @param p, player to be saved
+     *
      * @return JsonObject, json object with player info
      */
     private static JSONObject savePlayer(Player p){
         JSONObject player = new JSONObject();
         JSONObject inventory = new  JSONObject();
 
-        JSONArray keys = new JSONArray();
-        JSONArray treasures = new JSONArray();
 
-        for(Key k : p.getKeys()){
-            JSONObject key = new JSONObject();
-
-            Coord loc = k.getLocation();
-
-            key.put("x", loc.x());
-            key.put("y", loc.y());
-            key.put("colour", loadColour(k.getColour()));
-            keys.put(key);
-        }
-
-        for(Treasure tre : p.getTreasure()){
-            JSONObject treasure = new JSONObject();
-
-            Coord loc = tre.getLocation();
-
-            treasure.put("x", loc.x());
-            treasure.put("y", loc.y());
-
-            treasures.put(treasure);
-        }
         //sets up the player inventory
-        inventory.put("keys", keys);
+        inventory.put("keys", saveKeys(p.getKeys()));
 
-        inventory.put("treasures", treasures);
+        inventory.put("treasures", saveTreasure(p.getTreasure()));
 
         player.put("x", p.getX());
 
@@ -222,11 +201,12 @@ public class SaveJson {
         return player ;
     }
 
-    /*
+    /**
      * Takes the Keys, and turns it into a JSONobject
      * adding it to a greater JSON array
      *
      * @param key, keys to be saved
+     *
      * @return JSONarray, json Array with jSONobjects with
      * key info
      */
@@ -243,11 +223,12 @@ public class SaveJson {
         return keys;
     }
 
-    /*
+    /**
      * Takes the Treasure, and turns it into a JSONobject
      * adding it to a greater JSON array
      *
-     * @param treasure, treasures to be saved
+     * @param tre, treasures to be saved
+     *
      * @return JSONarray, json Array with jSONobjects with
      * treasure info
      */
@@ -261,15 +242,17 @@ public class SaveJson {
             obj.put("x", t.getLocation().x());
             obj.put("y", t.getLocation().y());
             treasure.put(obj);
+
         }
         return treasure;
     }
 
-    /*
+    /**
      * Takes the enemies, and turns it into a JSONobject
      * adding it to a greater JSON array
      *
-     * @param enemies, enemies to be saved
+     * @param ens, enemies to be saved
+     *
      * @return JSONarray, json Array with jSONobjects with
      *  enemy info
      */
@@ -285,26 +268,22 @@ public class SaveJson {
         return enemies;
     }
 
-    /*
+    /**
      * Takes a enum colour, and turns it into
      * string representation
      *
      * @param colour, enum rep of colour
+     *
      * @return colour, string rep of colour
     */
 
        private static String loadColour(Colour colour){
-        switch(colour){
-            case PINK:
-                return "pink";
-            case PURPLE:
-                return "purple";
-            case RED:
-                return "red";
-            case YELLOW:
-                return "yellow";
-        }
-        throw new IllegalArgumentException();
-    }
+           return switch (colour) {
+               case PINK -> "pink";
+               case PURPLE -> "purple";
+               case RED -> "red";
+               case YELLOW -> "yellow";
+           };
+       }
 }
 

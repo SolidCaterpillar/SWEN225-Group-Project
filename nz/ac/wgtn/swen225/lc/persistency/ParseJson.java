@@ -13,15 +13,15 @@ import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 
 import nz.ac.wgtn.swen225.lc.domain.Colour;
-/*
+/**
  * class that parses the json into game objects
- *@author Alvien T. Salvador (Salvadalvi)
+ * @author Alvien T. Salvador (Salvadalvi) 300614650
  */
 public class ParseJson {
     
-        /**
+    /**
      * Parses the json file into usable game objs
-     * @param JSONObject, contains all info to construct game
+     * @param json, contains all info to construct game
      * objs
      * @return ReadJson, obj that contains all parsed game objs
      * 
@@ -42,7 +42,9 @@ public class ParseJson {
     }
     /**
      * Parses the entity objects from a JSONobj
+     *
      * @param entites, contains all info to construct entites
+     *
      * @return Entites, all entites in play 
      * 
      *  **/
@@ -109,7 +111,8 @@ public class ParseJson {
      * in array list of tiles, that will be used to update
      * the board.
      * 
-     * @param JsonTiles, JSON containing info to construct tiles
+     * @param jsonTiles, JSON containing info to construct tiles
+     *
      * @return ArrayList<Tile>, returns all tiles in the game
      *  **/
     private static ArrayList<Tile> parseTiles(JSONObject jsonTiles){
@@ -208,6 +211,7 @@ public class ParseJson {
      * inventory
      * 
      * @param jsonPlayer, json with player info
+         *
      * @return Player, new constructed player
      * 
      *  **/
@@ -247,9 +251,10 @@ public class ParseJson {
      * it into the enum version.
      * 
      * @param col, String rep of colour
+     *
      * @return Colour, enum of colour
      * 
-     * @exception IlleglaArgumentException, if a invalid colour
+     * @exception IllegalArgumentException, if a invalid colour
      * as found
      *  **/
     
@@ -278,6 +283,8 @@ public class ParseJson {
      * @param keys, all keys in play
      * @param enemies, all enemies
      * @param entites, combination of all entites in the game
+     *
+     * @author Alvien T. Salvador (Salvadalvi) 300614650
      *  **/
     protected record Entites(Player player, ArrayList<Treasure> treasures, ArrayList<Key> keys ,ArrayList<Enemy> enemies, ArrayList<Entity> entites){
 
@@ -290,6 +297,8 @@ public class ParseJson {
      * @param length, board length
      * @param entites, all entites in the game
      * @param tiles, all tiles in the game
+     *
+     * @author Alvien T. Salvador (Salvadalvi) 300614650
      *  **/
     protected record ReadJson(int width, int length, Entites entites, ArrayList<Tile> tiles){
 
