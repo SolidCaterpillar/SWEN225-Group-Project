@@ -126,7 +126,6 @@ public class GUI {
                         case KeyEvent.VK_X -> {
                             // CTRL-X: Exit the game and lose current game state
                             // Implement game state reset logic and exit
-                            chipsText = "CTRL-X";
                             int choice = JOptionPane.showConfirmDialog(mainFrame, "Custom JOptionPane: wanna leave bro?", "Exit Confirmation", JOptionPane.YES_NO_OPTION);
                             if (choice == JOptionPane.YES_OPTION) {
                                 System.exit(0);
@@ -135,19 +134,16 @@ public class GUI {
                         case KeyEvent.VK_S -> {
                             // CTRL-S: Save the game state
                             // Implement game state save logic
-                            chipsText = "CTRL-S";
                             writeFile();
                         }
                         case KeyEvent.VK_R -> {
                             // CTRL-R: Resume a saved game
                             // Implement game state loading logic using a file selector
-                            chipsText = "CTRL-R";
                             loadFile();
                         }
                         case KeyEvent.VK_1 -> {
                             // CTRL-1: Start a new game at level 1
                             // Implement logic to start a new game at level 1
-                            chipsText = "CTRL-1";
                             currentLevel = 1;
                             timeLeft = maxTime;
                             if (timer.isRunning()) {
@@ -158,7 +154,6 @@ public class GUI {
                         case KeyEvent.VK_2 -> {
                             // CTRL-2: Start a new game at level 2
                             // Implement logic to start a new game at level 2
-                            chipsText = "CTRL-2";
                             currentLevel = 2;
                             timeLeft = maxTime;
                             if (timer.isRunning()) {
@@ -178,51 +173,42 @@ public class GUI {
                     if(!gamePaused){
                         switch (keyCode) {
                             case KeyEvent.VK_ESCAPE -> {
-                                chipsText = "Escape";
                                 gamePaused = true;
                                 levelText = "Paused";
                             }
                             case KeyEvent.VK_UP -> {
                                 // Handle UP arrow key press (e.g., move up)
-                                chipsText = "UP";
                                 moveChecker('w');
                             }
                             case KeyEvent.VK_LEFT -> {
                                 // Handle LEFT arrow key press (e.g., move left)
-                                chipsText = "LEFT";
                                 moveChecker('a');
                             }
                             case KeyEvent.VK_DOWN -> {
                                 // Handle DOWN arrow key press (e.g., move down)
-                                chipsText = "DOWN";
                                 moveChecker('s');
                             }
                             case KeyEvent.VK_RIGHT -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
-                                chipsText = "RIGHT";
                                 moveChecker('d');
                             }
                             case KeyEvent.VK_W -> {
                                 // Handle UP arrow key press (e.g., move up)
-                                chipsText = "UP";
                                 soundManager.playPlayerMoveSound();
                                 moveChecker('w');
                             }
                             case KeyEvent.VK_A -> {
                                 // Handle LEFT arrow key press (e.g., move left)
-                                chipsText = "LEFT";
                                 soundManager.playPlayerMoveSound();
                                 moveChecker('a');
                             }
                             case KeyEvent.VK_S -> {
                                 // Handle DOWN arrow key press (e.g., move down)
-                                chipsText = "DOWN";
                                 soundManager.playPlayerMoveSound();
                                 moveChecker('s');
                             }
                             case KeyEvent.VK_D -> {
                                 // Handle RIGHT arrow key press (e.g., move right)
-                                chipsText = "RIGHT";
                                 soundManager.playPlayerMoveSound();
                                 moveChecker('d');
                             }
@@ -230,7 +216,6 @@ public class GUI {
                     }else{
                         // This is to prevent pause conflicts
                         if (keyCode == KeyEvent.VK_ESCAPE) {
-                            chipsText = "Escape";
                             gamePaused = showInstructions;
                             levelText = "Level";
                         }
@@ -247,8 +232,6 @@ public class GUI {
         // Remove all components from the content pane
         Container contentPane = mainFrame.getContentPane();
         contentPane.removeAll();
-
-        soundManager = new SoundManager();
 
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
@@ -283,23 +266,15 @@ public class GUI {
         contentPane.removeAll();
 
         // Reinitialize all necessary objects and components
-        soundManager = new SoundManager();
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
         this.d = Domain.getInstance();
         this.currentLevel = level;
         if(level == 1){
-            this.play = Persistency.loadLevel1();
-            this.maze = play.board().getBoard();
-            this.d = Domain.getInstance();
             this.d.pickLevel(LevelE.LEVEL_ONE);
         }else{
-            this.play = Persistency.loadLevel1();
-            this.maze = play.board().getBoard();
-            this.d = Domain.getInstance();
             this.d.pickLevel(LevelE.LEVEL_TWO);
         }
-
         this.ch = d.getPlayer();
         this.ch.changeDir('s');
         this.renderer = new GameRenderer(maze, ch, d);
@@ -316,9 +291,7 @@ public class GUI {
         mapPanel.setFocusable(true);
         mapPanel.requestFocus();
         // Add your key listener code here
-
         addKeyListener();
-
         // Revalidate and repaint the content pane
         contentPane.revalidate();
         contentPane.repaint();
@@ -339,7 +312,7 @@ public class GUI {
             soundManager.playItemCollectSound();
             ch.interaftFalse();
         }
-        rec.setRecord(currentLevel, timeLeft, ch, maze);
+        rec.setRecord(currentLevel, timeLeft, ch, maze, d);
         try {
             rec.saveAsFile("game_state.json");
         } catch (IOException ex) {
@@ -352,7 +325,6 @@ public class GUI {
      * This is used to bring up a saved state of the game.
      */
     public void loadFile() {    //static
-
         // Create a file chooser
         String currentDirectory = System.getProperty("user.dir");
         JFileChooser fileChooser = new JFileChooser(currentDirectory);
@@ -366,9 +338,7 @@ public class GUI {
         } else {
             System.out.println("No file selected.");
         }
-
     }
-
     /**
      * Used after Save functionality, menu Save or CTRL-S
      * Will save all the actions made by the user
@@ -421,8 +391,6 @@ public class GUI {
                         redrawGUI();
                         renderer.reDrawBoard();
                     }
-                    //rec.setRecord(currentLevel, timeLeft, maze);
-
                 }
             }
         });
@@ -446,12 +414,10 @@ public class GUI {
         // Create a border to show the background with equal proportions
         backPanel.setBorder(BorderFactory.createEmptyBorder(60, 150, 60, 150));
         backPanel.setPreferredSize(new Dimension(1280, 720));
-
         // The mapPanel is now the canvas / board that Renderer has made
         mapPanel = this.canvas;
         mapPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         mapPanel.setOpaque(false);
-
         // The Central board and background container is added to the Frame
         backPanel.add(mapPanel, BorderLayout.CENTER);
         mainFrame.add(backPanel);
@@ -588,7 +554,6 @@ public class GUI {
                     g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 }
             };
-
             JButton okButton = new JButton("Play Again");
             okButton.addActionListener(e -> {
                 // Close the dialog
@@ -613,8 +578,6 @@ public class GUI {
     }
 
 
-
-
     /**
      * Basic logic for decrementTime
      * If it hits 0 seconds left a basic JOptionPane is shown
@@ -629,9 +592,6 @@ public class GUI {
             dialogBackground("time");
         }
     }
-
-
-
 
 
     /**
