@@ -8,7 +8,6 @@ import nz.ac.wgtn.swen225.lc.domain.Tile.Tile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,11 +24,11 @@ public class GameRenderer extends JPanel implements Renderable {
     private final SoundManager sound;
     private final Composite renderables = new Composite();
     private final Player player;
-    private Tile[][] maze;
-    private List<Enemy> enemies;
-    private BoardRenderer boardRenderer;
-    private PlayerRenderer playerRenderer;
-    private EnemyRenderer enemyRenderer;
+    private final Tile[][] maze;
+    private final List<Enemy> enemies;
+    private final BoardRenderer boardRenderer;
+    private final PlayerRenderer playerRenderer;
+    private final EnemyRenderer enemyRenderer;
 
 
 
@@ -45,7 +44,7 @@ public class GameRenderer extends JPanel implements Renderable {
         this.tileSize = domainObj.getBoard().getSize();
         this.maze = maze;
         this.player = player;
-        enemies = domainObj.getEnemies();
+        this.enemies = domainObj.getEnemies();
         this.sound = new SoundManager();
         boardRenderer= new BoardRenderer(maze, tileSize, ICONS_FOLDER);
         playerRenderer= new PlayerRenderer(player, tileSize, ICONS_FOLDER);
@@ -118,7 +117,6 @@ public class GameRenderer extends JPanel implements Renderable {
     public void renderGameView(Graphics g) {
         int playerRow = player.getY();
         int playerCol = player.getX();
-        int tileSize = domainObj.getBoard().getSize();
         int startRow = Math.max(0, Math.min(playerRow - 2, maze.length - 5));
         int startCol = Math.max(0, Math.min(playerCol - 2, maze[0].length - 5));
         int endRow = startRow + 5;

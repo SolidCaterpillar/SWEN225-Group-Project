@@ -1,6 +1,5 @@
 package nz.ac.wgtn.swen225.lc.renderer;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
-import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,10 +9,8 @@ import java.util.List;
 /**
  * The EnemyRenderer class is responsible for rendering enemy entities on the game board.
  * It implements the `Renderable` interface, which defines the rendering behavior for game elements.
- *
  * This class manages the rendering of enemy entities using provided data such as the list of enemies, tile size, and icon folder.
  *@author Arnav Dogra (@dograarna)
- *
  *
  * @see Renderable
  * @see Enemy
@@ -26,7 +23,6 @@ public class EnemyRenderer implements Renderable {
     private final String iconFolder;
     private final ImageIcon enemyIcon;
 
-    private SoundManager sound;
 
     /**
      * Constructs an EnemyRenderer object with the given list of enemies, tile size, and icon folder.
@@ -41,7 +37,6 @@ public class EnemyRenderer implements Renderable {
         this.tileSize = tileSize;
         this.iconFolder = iconFolder;
         enemyIcon = loadImageIcon("actor1.png");
-        this.sound = new SoundManager();
     }
 
 

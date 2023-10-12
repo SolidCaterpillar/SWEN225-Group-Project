@@ -14,7 +14,6 @@ import java.awt.*;
 /**
  * The `BoardRenderer` class is responsible for rendering the game board, including tiles, entities, and their icons.
  * It implements the `Renderable` interface, which defines the rendering behavior for game elements.
- *
  * The class loads and manages tile icons, maps them to the corresponding tiles and entities, and draws the entire maze
  * on the board
  * @author Arnav Dogra (@dograarna)

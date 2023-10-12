@@ -10,7 +10,6 @@ import java.awt.*;
 /**
  * The `PlayerRenderer class is responsible for rendering the player character on the game board. It implements the
  * `Renderable` interface, defining the rendering behavior for game elements.
- *
  * This class manages the rendering of the player character using provided data such as the player object, tile size, and
  * icon folder. It supports rendering the player character facing different directions.
  *

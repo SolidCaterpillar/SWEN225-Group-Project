@@ -9,10 +9,8 @@ import java.util.List;
 /**
  * The `Composite` class represents a composite renderer that can contain multiple `Renderable` objects and render them
  * as a group. It implements the `Renderable` interface, allowing it to be used as a single rendering entity.
- *
  * This class can be used to group and manage a collection of renderable objects and render them collectively on the same
  * graphics context.
- *
  *  * @author Arnav Dogra (@dograarna)
  *
  * @see Renderable
