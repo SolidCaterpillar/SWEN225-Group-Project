@@ -327,8 +327,11 @@ public class GUI {
 
     public void moveChecker(char key) {
         soundManager.playPlayerMoveSound();
-        if (Domain.StateClass.movePlayer(key) == 1){
+        int stepState = Domain.StateClass.movePlayer(key);
+        if (stepState == 1){
             showInstructions = true;
+        }else if(stepState == 2) {
+            soundManager.playDoorOpenSound();
         }else{
             showInstructions = false;
         }
