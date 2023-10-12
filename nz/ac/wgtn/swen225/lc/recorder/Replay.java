@@ -3,20 +3,14 @@ package nz.ac.wgtn.swen225.lc.recorder;
 import java.util.*;
 
 import nz.ac.wgtn.swen225.lc.app.GUI;
-import nz.ac.wgtn.swen225.lc.app.Main;
-import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
 import nz.ac.wgtn.swen225.lc.domain.Entity.*;
+import nz.ac.wgtn.swen225.lc.domain.LevelE;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
-import nz.ac.wgtn.swen225.lc.persistency.Level;
-import nz.ac.wgtn.swen225.lc.persistency.ParseJson;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import nz.ac.wgtn.swen225.lc.recorder.plugin.main.java.org.json.*;
 
 import javax.swing.*;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -30,12 +24,9 @@ import java.util.Timer;
  **/
 public class Replay {
     private String fileName;
-
     private HashMap<Integer, GameState> replay;
-
     private int totalFrames;
     private int frame;
-
     private GUI gui;
     private boolean autoReplay = false;
     private Timer autoReplayTimer;
@@ -75,7 +66,7 @@ public class Replay {
      */
     private void loadReplay() {
         try {
-            String jsonContent = new String(Files.readAllBytes(Paths.get(fileName)));
+            String jsonContent = new String(Files.readAllBytes(Paths.get("replay/"+fileName)));
             JSONArray record = new JSONArray(new JSONTokener(jsonContent));
             totalFrames = record.length();
             for (int i = 0; i < totalFrames; i++) {
@@ -84,7 +75,6 @@ public class Replay {
                 JSONObject gameStateJson = (JSONObject) record.get(i);
                 int currentLevel = gameStateJson.getInt("currentLevel");
                 int timer = gameStateJson.getInt("timer");
-
 
                 Player player = createPlayer(gameStateJson.getJSONObject("player"));
                 mazeTile = createMazeTiles(gameStateJson.getJSONObject("maze"));
@@ -97,7 +87,7 @@ public class Replay {
             }
             System.out.println("Replay loaded successfully from " + fileName);
         } catch (IOException e) {
-            System.err.println("Error loading replay: " + e.getMessage());
+            System.err.println("Error loading replay, the file should be in replay folder or file should be .json: " + e.getMessage());
         }
     }
 
@@ -227,7 +217,7 @@ public class Replay {
             JSONObject exitLocks = (JSONObject) exitLocksArray.get(l);
             int exitLocksX = exitLocks.getInt("x");
             int exitLocksY = exitLocks.getInt("y");
-            mazeTile[exitLocksX][exitLocksY] = new ExitTile(new Coord(exitLocksX, exitLocksY));
+            mazeTile[exitLocksX][exitLocksY] = new ExitLock(new Coord(exitLocksX, exitLocksY));
         }
 
         JSONArray lockedDoorsArray = (JSONArray) maze.get("lockedDoors");
@@ -246,6 +236,16 @@ public class Replay {
             int freeTileY = freeTile.getInt("y");
             mazeTile[freeTileX][freeTileY] = new FreeTile(new Coord(freeTileX, freeTileY));
         }
+
+        JSONArray exitTileArray = (JSONArray) maze.get("exit");
+        for (int l = 0; l < exitTileArray.length(); l++) {
+            JSONObject exitTile = (JSONObject) exitLocksArray.get(l);
+            int exitLocksX = exitTile.getInt("x");
+            int exitLocksY = exitTile.getInt("y");
+            LevelE level = parseLevel(exitTile.getString("colour"));
+            mazeTile[exitLocksX][exitLocksY] = new ExitTile(new Coord(exitLocksX, exitLocksY),level);
+        }
+
         return mazeTile;
     }
 
@@ -318,6 +318,24 @@ public class Replay {
                 return Colour.RED;
             case "yellow":
                 return Colour.YELLOW;
+        }
+        //if color is no valid, will throw error
+        throw new IllegalArgumentException();
+    }
+
+    /**
+     * Get the colour from enum base on given colour of the door or key.
+     * @param level Getting level from enum.
+     * @return A level of the game.
+     */
+    private static LevelE parseLevel(String level){
+
+        switch(level){
+
+            case "level1":
+                return LevelE.LEVEL_ONE;
+            case "level2":
+                return LevelE.LEVEL_TWO;
         }
         //if color is no valid, will throw error
         throw new IllegalArgumentException();

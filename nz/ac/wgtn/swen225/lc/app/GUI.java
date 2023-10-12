@@ -314,7 +314,7 @@ public class GUI {
         }
         rec.setRecord(currentLevel, timeLeft, ch, maze, d);
         try {
-            rec.saveAsFile("game_state.json");
+            rec.saveAsFile("Larry_Croftâ€™s_Adventures");
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

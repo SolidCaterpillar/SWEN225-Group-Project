@@ -5,9 +5,10 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Treasure;
+import nz.ac.wgtn.swen225.lc.domain.LevelE;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import nz.ac.wgtn.swen225.lc.recorder.plugin.main.java.org.json.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -20,16 +21,20 @@ import java.util.*;
 public class Recorder {
 
     private JSONArray record;
+    private static Domain domain;
+    private int count;
 
-    public Recorder() { this.record = new JSONArray(); }
+    public Recorder() { this.record = new JSONArray(); count = 1; }
 
     /**
      * record the game everytime the gui redraw when the player move
      * @param currentLevel record the current level of the game
      * @param timer record the timer of the ongoing game
      * @param maze record the 2d maze of the ongoing game
+     * @param domain use domain to extract entity .
      */
-    public void setRecord(int currentLevel, int timer, Player player , Tile[][] maze) {
+    public void setRecord(int currentLevel, int timer, Player player , Tile[][] maze , Domain domain) {
+        this.domain = domain;
         JSONObject jsonGameState = new JSONObject();
         jsonGameState.put("currentLevel", currentLevel); // save current level
         jsonGameState.put("timer", timer); // save timer
@@ -57,7 +62,7 @@ public class Recorder {
      */
     private static JSONArray saveEnemy(){
         JSONArray enemyList = new JSONArray();
-        ArrayList<Enemy> enemiesList = Domain.getEnemies();
+        ArrayList<Enemy> enemiesList = domain.getEnemies();
 
         for(int i = 0; i < enemiesList.size(); i++){
             JSONObject enemy = new JSONObject();
@@ -73,7 +78,7 @@ public class Recorder {
      */
     private static JSONArray saveTreasure(){
         JSONArray treasureArray = new JSONArray();
-        ArrayList<Treasure> treasureList = Domain.getTreasure();
+        ArrayList<Treasure> treasureList = domain.getTreasure();
 
         for(int i = 0; i < treasureList.size(); i++){
             JSONObject key = new JSONObject();
@@ -89,7 +94,7 @@ public class Recorder {
      */
     private static JSONArray saveKeys(){
         JSONArray keyArray = new JSONArray();
-        ArrayList<Key> keyList = Domain.getKeys();
+        ArrayList<Key> keyList = domain.getKeys();
 
         for(int i = 0; i < keyList.size(); i++){
             JSONObject key = new JSONObject();
@@ -126,6 +131,7 @@ public class Recorder {
                 if (tile instanceof FreeTile) {
                     freeTiles.put(obj);
                 } else if (tile instanceof ExitTile) {
+                    obj.put("level", (getStringLevel(((ExitTile) tile).getNextLevel())));
                     exitTiles.put(obj);
                 } else if (tile instanceof Wall) {
                     wallTiles.put(obj);
@@ -169,7 +175,6 @@ public class Recorder {
             key.put("y",p.getKeys().get(i).getLocation().y());
             key.put("colour",getStringColour(p.getKeys().get(i).getColour()));
             keys.put(key);
-
         }
 
         //storing the player's treasures
@@ -213,14 +218,38 @@ public class Recorder {
     }
 
     /**
+     * Get the string level base on enum base on given level the game.
+     * @param level Getting string colour from enum.
+     * @return A level of the game.
+     */
+    private static String getStringLevel(LevelE level){
+        switch(level){
+            case LEVEL_ONE:
+                return "level1";
+            case LEVEL_TWO:
+                return "level2";
+        }
+        throw new IllegalArgumentException();
+    }
+
+    /**
      * Save the record game when player finish or end (quit) the game
      * @param fileName record the current level of the game
      */
     public void saveAsFile(String fileName) throws IOException {
-        FileWriter fileWriter = new FileWriter(fileName);
-        fileWriter.write(record.toString(4));
-        fileWriter.close();
-        System.out.println("Game state saved successfully to " + fileName);
+        if(record.length() < 50) { // save the file if the record frame is less than 50
+            FileWriter fileWriter = new FileWriter("replay/"+fileName+"_Record_"+count+".json");
+            fileWriter.write(record.toString(4));
+            fileWriter.close();
+            System.out.println("Game state saved successfully to " + fileName);
+        }
+        else if(record.length() == 50) { // save the file if the record frame is more than 50
+            FileWriter fileWriter = new FileWriter("replay/"+fileName+"_Record_"+count+".json");
+            fileWriter.write(record.toString(4));
+            fileWriter.close();
+            System.out.println("Game state saved successfully to " + fileName);
+            count++;
+            record = new JSONArray();
+        }
     }
-
 }
