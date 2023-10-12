@@ -37,7 +37,6 @@ public class Replay {
     private int frame;
 
     private GUI gui;
-
     private boolean isAutoReplaying = false;
     private Timer autoReplayTimer;
 
@@ -59,7 +58,7 @@ public class Replay {
         nextButton.addActionListener(e -> replay(1));
 
         JButton autoButton = new JButton("Auto replay");
-        //autoButton.addActionListener(e -> autoReplay());
+        autoButton.addActionListener(e -> autoReplay());
 
         panel.add(prevButton);
         panel.add(nextButton);
@@ -240,14 +239,13 @@ public class Replay {
             mazeTile[lockedDoorsX][lockedDoorsY] = new LockedDoor(new Coord(lockedDoorsX, lockedDoorsY), color);
         }
 
-        JSONArray freeTileArray = (JSONArray) maze.get("free tiles");
+        JSONArray freeTileArray = (JSONArray) maze.get("freeTiles");
         for (int m = 0; m < freeTileArray.length(); m++) {
             JSONObject freeTile = (JSONObject) freeTileArray.get(m);
             int freeTileX = freeTile.getInt("x");
             int freeTileY = freeTile.getInt("y");
             mazeTile[freeTileX][freeTileY] = new FreeTile(new Coord(freeTileX, freeTileY));
         }
-
         return mazeTile;
     }
 
@@ -260,6 +258,11 @@ public class Replay {
     public void replay(int i) {
         this.frame += i;
 
+        if (isAutoReplaying) {
+            autoReplayTimer.cancel(); // Stop the auto replay
+            isAutoReplaying = false; // Auto replay is no longer in progress
+        }
+
         if(frame <= 0){
             gui.replayPane(replay.get(0).maze, replay.get(0).player,  replay.get(0).timer,  replay.get(0).level);
             frame = 0;
@@ -271,6 +274,26 @@ public class Replay {
         }
     }
 
+    public void autoReplay() {
+        int delay = 1000; // 1000 milliseconds (1 second)
+        int period = 1000; // 1000 milliseconds (1 second)
+        int totalFrames = length; // Use the length of the "replay" array
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            int currentFrame = 1;
+
+            @Override
+            public void run() {
+                if (currentFrame < totalFrames) {
+                    gui.replayPane(replay.get(currentFrame - 1).maze, replay.get(currentFrame - 1).player, replay.get(currentFrame - 1).timer, replay.get(currentFrame - 1).level);
+                    currentFrame++;
+                } else {
+                    timer.cancel(); // Stop the timer when all frames have been replayed
+                }
+            }
+        }, delay, period);
+    }
 
     /**
      * Get the colour from enum base on given colour of the door or key.

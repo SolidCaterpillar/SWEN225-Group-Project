@@ -65,7 +65,6 @@ public class Recorder {
             enemy.put("y",enemiesList.get(i).getLocation().y());
             enemyList.put(enemy);
         }
-
         return enemyList ;
     }
 
@@ -100,7 +99,6 @@ public class Recorder {
             keyArray.put(key);
         }
         return keyArray ;
-
     }
 
 
@@ -111,58 +109,44 @@ public class Recorder {
      */
     private static JSONObject saveTiles(Tile[][] maze) {
         JSONObject tiles = new JSONObject();
-        JSONObject exit = new JSONObject();
-        JSONArray walls = new JSONArray();
-        JSONArray lockedDoor = new JSONArray();
-        JSONArray exitLock = new JSONArray();
-        JSONArray questionBlock = new JSONArray();
+        JSONArray exitTiles = new JSONArray();
+        JSONArray wallTiles = new JSONArray();
+        JSONArray lockedDoorTiles = new JSONArray();
+        JSONArray exitLockTiles = new JSONArray();
+        JSONArray questionBlockTiles = new JSONArray();
         JSONArray freeTiles = new JSONArray();
 
-        // for nested loop the maze to store individual
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[row].length; col++) {
                 Tile tile = maze[row][col];
                 JSONObject obj = new JSONObject();
-                if(tile instanceof FreeTile) {
-                    obj.put("x", tile.getLocation().x());
-                    obj.put("y", tile.getLocation().y());
+                obj.put("x", tile.getLocation().x());
+                obj.put("y", tile.getLocation().y());
+
+                if (tile instanceof FreeTile) {
                     freeTiles.put(obj);
-
-                }else if(tile instanceof ExitTile){
-                    exit.put("x",tile.getLocation().x());
-                    exit.put("y",tile.getLocation().y());
-
-                }else if(tile instanceof Wall){
-                    obj.put("x",tile.getLocation().x());
-                    obj.put("y",tile.getLocation().y());
-                    walls.put(obj);
-
-                }else if(tile instanceof LockedDoor lo){
-                    obj.put("x",lo.getLocation().x());
-                    obj.put("y",lo.getLocation().y());
-                    obj.put("colour", getStringColour(lo.getColour()));
-                    lockedDoor.put(obj);
-
-                }else if(tile instanceof ExitLock){
-                    obj.put("x",tile.getLocation().x());
-                    obj.put("y",tile.getLocation().y());
-                    exitLock.put(obj);
-
-                }else if(tile instanceof InformationTile msg){
-                    System.out.println("msg");
-                    obj.put("x",msg.getLocation().x());
-                    obj.put("y",msg.getLocation().y());
-                    obj.put("message",msg.getInformation() );
-                    questionBlock.put(obj);
+                } else if (tile instanceof ExitTile) {
+                    exitTiles.put(obj);
+                } else if (tile instanceof Wall) {
+                    wallTiles.put(obj);
+                } else if (tile instanceof LockedDoor) {
+                    obj.put("colour", getStringColour(((LockedDoor) tile).getColour()));
+                    lockedDoorTiles.put(obj);
+                } else if (tile instanceof ExitLock) {
+                    exitLockTiles.put(obj);
+                } else if (tile instanceof InformationTile) {
+                    obj.put("message", ((InformationTile) tile).getInformation());
+                    questionBlockTiles.put(obj);
                 }
             }
         }
-        tiles.put("exit", exit);
-        tiles.put("walls", walls);
-        tiles.put("lockedDoors", lockedDoor);
-        tiles.put("exitLocks", exitLock);
-        tiles.put("questionBlocks", questionBlock);
-        tiles.put("free tiles", freeTiles);
+
+        tiles.put("exit", exitTiles);
+        tiles.put("walls", wallTiles);
+        tiles.put("lockedDoors", lockedDoorTiles);
+        tiles.put("exitLocks", exitLockTiles);
+        tiles.put("questionBlocks", questionBlockTiles);
+        tiles.put("freeTiles", freeTiles);
 
         return tiles;
     }
@@ -238,4 +222,5 @@ public class Recorder {
         fileWriter.close();
         System.out.println("Game state saved successfully to " + fileName);
     }
+
 }
