@@ -149,6 +149,7 @@ public class Recorder {
                     exitLock.put(obj);
 
                 }else if(tile instanceof InformationTile msg){
+                    System.out.println("msg");
                     obj.put("x",msg.getLocation().x());
                     obj.put("y",msg.getLocation().y());
                     obj.put("message",msg.getInformation() );
@@ -156,7 +157,7 @@ public class Recorder {
                 }
             }
         }
-
+        tiles.put("exit", exit);
         tiles.put("walls", walls);
         tiles.put("lockedDoors", lockedDoor);
         tiles.put("exitLocks", exitLock);

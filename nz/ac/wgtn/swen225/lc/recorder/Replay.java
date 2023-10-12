@@ -2,6 +2,7 @@ package nz.ac.wgtn.swen225.lc.recorder;
 
 import java.util.*;
 
+import nz.ac.wgtn.swen225.lc.app.GUI;
 import nz.ac.wgtn.swen225.lc.app.Main;
 import nz.ac.wgtn.swen225.lc.domain.Board;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
@@ -19,6 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Timer;
 
 /**
  * @author Ricky Fong 300500545
@@ -34,11 +36,16 @@ public class Replay {
     private int length;
     private int frame;
 
-    public Replay(String fileName) {
+    private GUI gui;
+
+    private boolean isAutoReplaying = false;
+    private Timer autoReplayTimer;
+
+    public Replay(String fileName, GUI gui ) {
+        this.gui = gui;
         this.fileName = fileName; // get the file name from when player select or type
         this.replay = new HashMap<>();
         loadReplay(); // load the file
-        frame = 0;
 
         JFrame frame = new JFrame("Replay Menu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,17 +53,17 @@ public class Replay {
 
         JPanel panel = new JPanel();
 
-        JButton button = new JButton("Previous");
-        button.addActionListener(e -> showPopup());
-        JButton button2 = new JButton("Next");
-        button.addActionListener(e -> showPopup());
+        JButton prevButton = new JButton("Previous");
+        prevButton.addActionListener(e -> replay(-1));
+        JButton nextButton = new JButton("Next");
+        nextButton.addActionListener(e -> replay(1));
 
-        JButton button3 = new JButton("Show Popup3");
-        button.addActionListener(e -> showPopup());
+        JButton autoButton = new JButton("Auto replay");
+        //autoButton.addActionListener(e -> autoReplay());
 
-        panel.add(button);
-        panel.add(button2);
-        panel.add(button3);
+        panel.add(prevButton);
+        panel.add(nextButton);
+        panel.add(autoButton);
 
         frame.add(panel);
         frame.setLocation(700,500);
@@ -79,25 +86,27 @@ public class Replay {
                 int currentLevel = gameStateJson.getInt("currentLevel");
                 int timer = gameStateJson.getInt("timer");
 
-                ArrayList<Entity> entityKeys =  createEntityKeys((JSONArray) gameStateJson.get("keys"));
-                ArrayList<Entity> entityTreasures = createEntityTreasures((JSONArray) gameStateJson.get("treasures"));
-                ArrayList<Entity> entityEnemies = createEnemies((JSONArray) gameStateJson.get("enemies"));
-
 
                 Player player = createPlayer(gameStateJson.getJSONObject("player"));
                 mazeTile = createMazeTiles(gameStateJson.getJSONObject("maze"));
 
-
+                createEntityKeys((JSONArray) gameStateJson.get("keys"),mazeTile);
+                createEntityTreasures((JSONArray) gameStateJson.get("treasures"),mazeTile);
+                createEnemies((JSONArray) gameStateJson.get("enemies"),mazeTile);
 
                 replay.put(i, new GameState(currentLevel, timer, player, mazeTile));
             }
-
             System.out.println("Replay loaded successfully from " + fileName);
         } catch (IOException e) {
             System.err.println("Error loading replay: " + e.getMessage());
         }
     }
 
+    /**
+     * Create a player using information from json
+     * @param playerObj A number that increase or decrease by 1 to get the frame of the replay game.
+     * @return A player
+     */
     private Player createPlayer(JSONObject playerObj) {
         int playerX = playerObj.getInt("x");
         int playerY = playerObj.getInt("y");
@@ -113,40 +122,54 @@ public class Replay {
         return player;
     }
 
-    private ArrayList<Entity> createEnemies(JSONArray enemiesArray) {
-        ArrayList<Entity> enemiesList = new ArrayList<>();
+    /**
+     * Create a player using information from json
+     * @param enemiesArray An array list of enemies to get their information from json
+     * @param mazeTile A 2d tiles to store enemies at their specific location
+     */
+    private void createEnemies(JSONArray enemiesArray, Tile[][] mazeTile) {
         for (int p = 0; p < enemiesArray.length(); p++) {
             JSONObject enemiesObject = (JSONObject) enemiesArray.get(p);
             int treasureX = enemiesObject.getInt("x");
             int treasureY = enemiesObject.getInt("y");
-            enemiesList.add(new Treasure(new Coord(treasureX, treasureY)));
+            mazeTile[treasureX][treasureY].setEntity(new Treasure(new Coord(treasureX, treasureY)));
         }
-        return enemiesList;
     }
 
-    private ArrayList<Entity> createEntityKeys(JSONArray keysArray) {
-        ArrayList<Entity> keyList = new ArrayList<>();
+    /**
+     * Create a player using information from json
+     * @param keysArray An array list of keys to get their information from json
+     * @param mazeTile A 2d tiles to store keys at their specific location
+     */
+    private void createEntityKeys(JSONArray keysArray, Tile[][] mazeTile) {
         for (int o = 0; o < keysArray.length(); o++) {
             JSONObject keyObject = (JSONObject) keysArray.get(o);
             int keyX = keyObject.getInt("x");
             int keyY = keyObject.getInt("y");
             Colour color = parseColour(keyObject.getString("colour"));
-            keyList.add(new Key(new Coord(keyX, keyY), color));
+            mazeTile[keyX][keyY].setEntity(new Key(new Coord(keyX, keyY), color));
         }
-        return keyList;
     }
 
-    private ArrayList<Entity> createEntityTreasures(JSONArray treasuresArray) {
-        ArrayList<Entity> treasureList = new ArrayList<>();
+    /**
+     * Create a player using information from json
+     * @param treasuresArray An array list of treasure to get their information from json
+     * @param mazeTile A 2d tiles to store keys at their specific location
+     */
+    private void createEntityTreasures(JSONArray treasuresArray, Tile[][] mazeTile) {
         for (int p = 0; p < treasuresArray.length(); p++) {
             JSONObject treasureObject = (JSONObject) treasuresArray.get(p);
             int treasureX = treasureObject.getInt("x");
             int treasureY = treasureObject.getInt("y");
-            treasureList.add(new Treasure(new Coord(treasureX, treasureY)));
+            mazeTile[treasureX][treasureY].setEntity(new Treasure(new Coord(treasureX, treasureY)));
         }
-        return treasureList;
     }
 
+    /**
+     * Create a key from player's inventory using information from json
+     * @param keysArray An array list of treasure to get their information from json
+     * @return An array of keys
+     */
     private ArrayList<Key> createKeys(JSONArray keysArray) {
         ArrayList<Key> keyList = new ArrayList<>();
         for (int o = 0; o < keysArray.length(); o++) {
@@ -159,6 +182,11 @@ public class Replay {
         return keyList;
     }
 
+    /**
+     * Create a treasures from player's inventory using information from json
+     * @param treasuresArray An array list of treasure to get their information from json
+     * @return An array of treasures
+     */
     private ArrayList<Treasure> createTreasures(JSONArray treasuresArray) {
         ArrayList<Treasure> treasureList = new ArrayList<>();
         for (int p = 0; p < treasuresArray.length(); p++) {
@@ -170,6 +198,11 @@ public class Replay {
         return treasureList;
     }
 
+    /**
+     * Create a 2d array to create maze to store type of tiles information from json
+     * @param maze An array list of treasure to get their information from json
+     * @return A 2d array of tiles
+     */
     private Tile[][] createMazeTiles(JSONObject maze) {
         Tile[][] mazeTile = new Tile[20][20];
 
@@ -219,21 +252,25 @@ public class Replay {
     }
 
 
-
     /**
      * Send a frame to the App to display a replay game.
      * @param i A number that increase or decrease by 1 to get the frame of the replay game.
      * @return A game state on particular frame base on index to load a replay game.
      */
-    public GameState replay(int i) {
+    public void replay(int i) {
         this.frame += i;
+
         if(frame <= 0){
-            return replay.get(0);
+            gui.replayPane(replay.get(0).maze, replay.get(0).player,  replay.get(0).timer,  replay.get(0).level);
+            frame = 0;
         } else if (frame > length) {
-            return replay.get(length - 1);
+            gui.replayPane(replay.get(length - 1).maze, replay.get(length - 1).player, replay.get(length - 1).timer, replay.get(length - 1).level);
+            frame = length;
+        }else {
+            gui.replayPane(replay.get(frame - 1).maze, replay.get(frame - 1).player, replay.get(frame - 1).timer, replay.get(frame - 1).level);
         }
-        return replay.get(frame-1);
     }
+
 
     /**
      * Get the colour from enum base on given colour of the door or key.
@@ -257,38 +294,9 @@ public class Replay {
         throw new IllegalArgumentException();
     }
 
-
-    private static void showPopup() {
-        JButton popupButton = new JButton("OK");
-        JPanel popupPanel = new JPanel();
-        popupPanel.add(popupButton);
-
-        int option = JOptionPane.showOptionDialog(
-                null,
-                "This is a pop-up message with a button.",
-                "Popup Message",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                new Object[] { popupButton },
-                popupButton
-        );
-
-        if (option == 0) {
-            JOptionPane.showMessageDialog(null, "You clicked the OK button!");
-        }
-    }
-
-
     /**
      * A record class to store level, timer, player and array of tile in each frame.
      */
     public record GameState(int level, int timer,Player player, Tile[][] maze){}
-/*
-    public static void main(String[] args) {
-      Replay replay1 = new Replay("game_state.json");
-    }
-    
- */
 
 }
