@@ -127,23 +127,7 @@ public class GameRenderer extends JPanel implements Renderable {
         boardRenderer.renderTiles(g, startRow, endRow, startCol, endCol, tileSize);
         playerRenderer.renderPlayer(g, startRow, startCol, playerRow, playerCol, tileSize);
         enemyRenderer.renderEnemies(g, startRow, startCol, tileSize);
-        playWiningSound(playerRow, playerCol);
-
     }
-
-    /**
-     * Plays a winning sound effect if the player is on an exit tile.
-     *
-     * @param playerRow The row position of the player.
-     * @param playerCol The column position of the player.
-     */
-    private void playWiningSound(int playerRow, int playerCol) {
-        Tile playerTile = maze[playerRow][playerCol];
-        if (playerTile instanceof ExitTile) {
-            sound.playLevelCompleteSound();
-        }
-    }
-
 
 }
 

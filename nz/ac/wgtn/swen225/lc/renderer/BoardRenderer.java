@@ -68,9 +68,9 @@ public class BoardRenderer implements Renderable {
                 Tile tile = maze[row][col];
                 if (tile != null) {
                     String iconName;
-                    if (tile instanceof FreeTile freeTile) {
+                    if (tile instanceof FreeTile freeTile) { // spotbugs keeps saying issue but i need to check tile type
                         Entity entity = freeTile.getEntity();
-                        if (entity instanceof Key key) {
+                        if (entity instanceof Key key) { // same here
                             // Get the color of the key and construct the icon name
                             String colorName = key.getColour().toString().toLowerCase();
                             iconName = "key" + colorName + ".png";
