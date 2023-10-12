@@ -33,14 +33,14 @@ public class Replay {
 
     private HashMap<Integer, GameState> replay;
 
-    private int length;
+    private int totalFrames;
     private int frame;
 
     private GUI gui;
-    private boolean isAutoReplaying = false;
+    private boolean autoReplay = false;
     private Timer autoReplayTimer;
 
-    public Replay(String fileName, GUI gui ) {
+    public Replay(String fileName, GUI gui) {
         this.gui = gui;
         this.fileName = fileName; // get the file name from when player select or type
         this.replay = new HashMap<>();
@@ -48,7 +48,7 @@ public class Replay {
 
         JFrame frame = new JFrame("Replay Menu");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 100);
+        frame.setSize(300, 75);
 
         JPanel panel = new JPanel();
 
@@ -77,8 +77,8 @@ public class Replay {
         try {
             String jsonContent = new String(Files.readAllBytes(Paths.get(fileName)));
             JSONArray record = new JSONArray(new JSONTokener(jsonContent));
-            length = record.length();
-            for (int i = 0; i < length; i++) {
+            totalFrames = record.length();
+            for (int i = 0; i < totalFrames; i++) {
                 Tile[][] mazeTile;
 
                 JSONObject gameStateJson = (JSONObject) record.get(i);
@@ -258,38 +258,44 @@ public class Replay {
     public void replay(int i) {
         this.frame += i;
 
-        if (isAutoReplaying) {
-            autoReplayTimer.cancel(); // Stop the auto replay
-            isAutoReplaying = false; // Auto replay is no longer in progress
+        if (autoReplay) {
+            autoReplayTimer.cancel(); // stop the auto replay
+            autoReplay = false; // auto replay is no longer in progress
         }
 
         if(frame <= 0){
             gui.replayPane(replay.get(0).maze, replay.get(0).player,  replay.get(0).timer,  replay.get(0).level);
             frame = 0;
-        } else if (frame > length) {
-            gui.replayPane(replay.get(length - 1).maze, replay.get(length - 1).player, replay.get(length - 1).timer, replay.get(length - 1).level);
-            frame = length;
+        } else if (frame > totalFrames) {
+            int lastIndex = totalFrames - 1;
+            gui.replayPane(replay.get(lastIndex).maze, replay.get(lastIndex).player, replay.get(lastIndex).timer, replay.get(lastIndex).level);
+            frame = totalFrames;
         }else {
             gui.replayPane(replay.get(frame - 1).maze, replay.get(frame - 1).player, replay.get(frame - 1).timer, replay.get(frame - 1).level);
         }
     }
 
+    /**
+     * Automatic replaying recorded game in frames creating a scene.
+     */
     public void autoReplay() {
-        int delay = 1000; // 1000 milliseconds (1 second)
-        int period = 1000; // 1000 milliseconds (1 second)
-        int totalFrames = length; // Use the length of the "replay" array
+        if (autoReplay) { return; }  // if auto replay is true, do nothing
+        int delay = 750; // 750 milliseconds
+        int period = 750; // 750 milliseconds
 
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            int currentFrame = 1;
+        autoReplay = true;
+
+        autoReplayTimer = new Timer();
+        autoReplayTimer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
             public void run() {
-                if (currentFrame < totalFrames) {
-                    gui.replayPane(replay.get(currentFrame - 1).maze, replay.get(currentFrame - 1).player, replay.get(currentFrame - 1).timer, replay.get(currentFrame - 1).level);
-                    currentFrame++;
+                if (frame < totalFrames) {
+                    gui.replayPane(replay.get(frame).maze, replay.get(frame).player, replay.get(frame).timer, replay.get(frame).level);
+                    frame++;
                 } else {
-                    timer.cancel(); // Stop the timer when all frames have been replayed
+                    autoReplayTimer.cancel(); // Stop the timer when all frames
+                    autoReplay = false; // Auto replay has finished
                 }
             }
         }, delay, period);
