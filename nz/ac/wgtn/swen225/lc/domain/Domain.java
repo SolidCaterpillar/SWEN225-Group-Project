@@ -33,10 +33,6 @@ public class Domain {
         gameWon = false;
     }
 
-    public Domain(){
-      reset();
-
-    }
 
     public static void pickLevel(LevelE level){
         gameWon = false;
@@ -126,36 +122,34 @@ public class Domain {
         }
 
 
+        public static int checkGameState(int level) {
 
-        public static void checkGameState() {
             // Check if the player is still alive
             if (isPlayerDead()) {
                 System.out.println("Player has died. Reloading current level...");
-
-                try {
-                    Thread.sleep(2000); // Sleep for 2 seconds
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                reloadCurrentLevel();
-                return;
+                return 0;
             }
-
             // Check if the player is on an exit tile
             if (curBoard.getTileAtLocation(curPlayer.getTrueLocation()) instanceof ExitTile) {
+                currentLevel = level;
                 if (currentLevel == 1) {
                     System.out.println("Player reached the exit on level 1. Advancing to level 2...");
                     currentLevel = 2;
                     loadLevel(LevelE.LEVEL_TWO);
+                    return 1;
                 } else if (currentLevel == 2) {
                     System.out.println("Player reached the exit on level 2. You win!");
                     winState();
                     System.out.println(gameWon);
+                    return 2;
                 }
             }
-
+            return 3;
         }
 
+        public static int movePlayer(char move){
+            return curPlayer.checkMove(move);
+        }
 
         public static void reloadCurrentLevel() {
             loadLevel(currentLevel == 1 ? LevelE.LEVEL_ONE : LevelE.LEVEL_TWO);

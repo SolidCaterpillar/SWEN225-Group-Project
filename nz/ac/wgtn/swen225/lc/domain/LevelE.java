@@ -3,5 +3,5 @@ public enum LevelE{
         LEVEL_ONE,
         LEVEL_TWO,
 
-        TEST_ONE
+    LEVEL_2, LEVEL_3, TEST_ONE
 }

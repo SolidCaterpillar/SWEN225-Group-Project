@@ -6,10 +6,8 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 public class LockedDoor extends Wall {
 
     protected Colour colour;
-    private Key unlockKey;
     public LockedDoor(Coord loc, Colour col){
         super(loc);
-        this.unlockKey = unlockKey;
         colour = col;
     }
 

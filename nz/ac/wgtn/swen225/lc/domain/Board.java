@@ -26,7 +26,7 @@ public class Board {
 
 
     public Tile[][] getBoard(){ //For returning game
-        return board; //Unecessary copy was playing around
+        return board;
     }
 
 public static int getDim(){return arrayDim; }
@@ -118,22 +118,14 @@ public static int getDim(){return arrayDim; }
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Board board = (Board) obj;
-
+        String newBoard = Board.buildString(board.getBoard());
+        String thisBoard = Board.buildString(this.getBoard());
         // Compare attributes of the Board here. For example:
-        return Arrays.equals(this.getBoard(), board.getBoard());
+        System.out.println(newBoard);
+        System.out.println(thisBoard);
+        return newBoard.equals(thisBoard);
     }
 
-
-    @Override
-    public int hashCode() {
-        int result = Integer.hashCode(level);
-        for (int i = 0; i < arrayDim; i++) {
-            for (int j = 0; j < arrayDim; j++) {
-                result = 31 * result + board[i][j].hashCode();
-            }
-        }
-        return result;
-    }
 
 
         public static Tile[][] initializeTiles() {
@@ -166,6 +158,23 @@ public static int getDim(){return arrayDim; }
             }
         }
     }
+
+
+    //String tester
+    public static String buildString(Tile[][] stringBoard) {
+        StringBuilder ret = new StringBuilder();
+        for (int i = 0; i < stringBoard.length; i++) {
+            for (int j = 0; j < stringBoard[0].length; j++) {
+                ret.append(stringBoard[i][j].toString());
+                if (j == stringBoard[0].length - 1) {
+                    ret.append("\n");
+                }
+            }
+        }
+        System.out.println(ret.toString());
+        return ret.toString();
+    }
+
 
 
 }
