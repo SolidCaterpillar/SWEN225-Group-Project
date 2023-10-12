@@ -11,13 +11,33 @@ import javax.swing.*;
 import java.awt.*;
 
 
-
+/**
+ * The `BoardRenderer` class is responsible for rendering the game board, including tiles, entities, and their icons.
+ * It implements the `Renderable` interface, which defines the rendering behavior for game elements.
+ *
+ * The class loads and manages tile icons, maps them to the corresponding tiles and entities, and draws the entire maze
+ * on the board
+ * @author Arnav Dogra (@dograarna)
+ *
+ * @see Renderable
+ * @see Tile
+ * @see Entity
+ * @see ImageIcon
+ */
 public class BoardRenderer implements Renderable {
     private final Tile[][] maze;
     private final int tileSize;
     private final String iconFolder;
     private final ImageIcon[][] tileIcons;
 
+
+    /**
+     * Constructs a `BoardRenderer` object with the given maze, tile size, and icon folder.
+     *
+     * @param maze       The 2D array of tiles representing the game board.
+     * @param tileSize   The size of each tile in pixels.
+     * @param iconFolder The folder path where tile icons are located.
+     */
     public BoardRenderer(Tile[][] maze, int tileSize, String iconFolder) {
         this.maze = maze;
         this.tileSize = tileSize;
@@ -26,12 +46,23 @@ public class BoardRenderer implements Renderable {
         loadTileIcons( maze);
     }
 
+
+    /**
+     * Renders the game board.
+     *
+     * @param g The graphics context on which the game board should be rendered.
+     */
     @Override
     public void render(Graphics g) {
         drawMaze(g);
     }
 
 
+    /**
+     * Loads tile icons based on the provided maze and assigns them to the corresponding tiles and entities.
+     *
+     * @param maze The 2D array of tiles representing the game board.
+     */
     public void loadTileIcons(Tile[][] maze) {
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
@@ -59,6 +90,13 @@ public class BoardRenderer implements Renderable {
         }
     }
 
+
+    /**
+     * Maps a tile to its corresponding icon filename.
+     *
+     * @param tile The tile for which to determine the icon filename.
+     * @return The filename of the icon associated with the tile.
+     */
     private String getIconNameForTile(Tile tile) {
         if (tile == null) {
             return "unknown.png";
@@ -74,11 +112,25 @@ public class BoardRenderer implements Renderable {
         };
     }
 
+
+    /**
+     * Loads an ImageIcon from a file with the given filename.
+     *
+     * @param filename The name of the image file.
+     * @return An ImageIcon loaded from the specified file.
+     */
+
     private ImageIcon loadImageIcon(String filename) {
         String path = iconFolder + filename;
         return new ImageIcon(path);
     }
 
+
+    /**
+     * Draws the maze on the graphics context, including tiles and their associated icons.
+     *
+     * @param g The graphics context on which to draw the maze.
+     */
     private void drawMaze(Graphics g) {
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
@@ -97,6 +149,18 @@ public class BoardRenderer implements Renderable {
         }
     }
 
+
+
+    /**
+     * Renders focus region of tiles within the game board
+     *
+     * @param g         The graphics context on which to render the tiles.
+     * @param startRow  The starting row of the region.
+     * @param endRow    The ending row of the region.
+     * @param startCol  The starting column of the region.
+     * @param endCol    The ending column of the region.
+     * @param tileSize  The size of each tile.
+     */
     public void renderTiles(Graphics g, int startRow, int endRow, int startCol, int endCol, int tileSize) {
         for (int row = startRow; row < endRow; row++) {
             for (int col = startCol; col < endCol; col++) {

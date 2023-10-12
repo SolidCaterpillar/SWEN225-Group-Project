@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * The GameRenderer class is responsible for handling the rendering logic for the game.
  * It renders the game board, player, and enemy actors on the game canvas.
- * @Author Arnav Dogra (@dograarna)
+ *
+ * @author Arnav Dogra (@dograarna)
  */
 public class GameRenderer extends JPanel implements Renderable {
 
@@ -30,6 +31,15 @@ public class GameRenderer extends JPanel implements Renderable {
     private PlayerRenderer playerRenderer;
     private EnemyRenderer enemyRenderer;
 
+
+
+    /**
+     * Constructs a `GameRenderer` object with the given game board, player, and domain.
+     *
+     * @param maze   The 2D array representing the game board.
+     * @param player The player entity.
+     * @param dom    The domain object.
+     */
     public GameRenderer(Tile[][] maze, Player player, Domain dom) {
         this.domainObj = dom;
         this.tileSize = domainObj.getBoard().getSize();
@@ -45,6 +55,11 @@ public class GameRenderer extends JPanel implements Renderable {
 
     }
 
+
+    /**
+     * Sets the preferred size of the rendering panel to the specified width and height.
+     *
+     */
     private void initializeRenderer() {
         // Set the preferred size of the rendering panel
         int panelWidth = 800;
@@ -52,18 +67,32 @@ public class GameRenderer extends JPanel implements Renderable {
         setPreferredSize(new Dimension(panelWidth, panelHeight));
     }
 
+
+
+    /**
+     * Loads renderable objects into the composite renderer.
+     */
     private void loadRenderables() {
         renderables.add(boardRenderer);
         renderables.add(playerRenderer);
         renderables.add(playerRenderer);
     }
 
+    /**
+     * Redraws the game board based on the updated data and requests the JPanel to repaint itself.
+     */
     public void reDrawBoard() {
-        maze = domainObj.getBoard().getBoard(); // Fetch the updated game board
-        boardRenderer.loadTileIcons(maze); // Reload tile icons based on the updated board
-        repaint(); // Request the JPanel to repaint itself
+        maze = domainObj.getBoard().getBoard();
+        boardRenderer.loadTileIcons(maze);
+        repaint();
     }
 
+
+    /**
+     * Paints the game components on the JPanel using the specified Graphics context.
+     *
+     * @param g The Graphics context for rendering.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -71,11 +100,16 @@ public class GameRenderer extends JPanel implements Renderable {
     }
 
 
-
+    /**
+     * Renders the game
+     *
+     * @param g The graphics context on which the game character should be rendered.
+     */
     @Override
     public void render(Graphics g) {
         renderGameView(g);
     }
+
     /**
      * Renders the game view on the canvas.
      *
@@ -99,7 +133,12 @@ public class GameRenderer extends JPanel implements Renderable {
 
     }
 
-
+    /**
+     * Plays a winning sound effect if the player is on an exit tile.
+     *
+     * @param playerRow The row position of the player.
+     * @param playerCol The column position of the player.
+     */
     private void playWiningSound(int playerRow, int playerCol) {
         Tile playerTile = maze[playerRow][playerCol];
         if (playerTile instanceof ExitTile) {
