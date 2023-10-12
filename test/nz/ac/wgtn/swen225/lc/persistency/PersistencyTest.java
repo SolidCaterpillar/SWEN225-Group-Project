@@ -144,12 +144,15 @@ class PersistencyTest {
         Player player = new Player(new Coord(10,10));
         ArrayList<Key> entites = new ArrayList<>();
 
+        ArrayList<Tile> LockedDoors = new ArrayList<>();
+
         Level l1 = Persistency.loadLevel("level/junitTest6.json");
 
-
+        entites.add(new Key(new Coord(0,0), Colour.RED));
+        LockedDoors.add(new LockedDoor(new Coord(0,0), Colour.RED));
         player.setKeys(entites);
 
-        Level l1Model = initalizeLevel(player, new ArrayList<>(), new ArrayList<>());
+        Level l1Model = initalizeLevel(player, LockedDoors , new ArrayList<>());
 
 
         assertTrue(l1.player().getKeys().equals(l1.player().getKeys()));
@@ -193,7 +196,7 @@ class PersistencyTest {
 
         Persistency.saveLevel("junitTest8.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("level/junitTest8.json");
+        Level l1 = Persistency.loadLevel("junitTest8.json");
 
         //checks if boards are identical
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
@@ -220,7 +223,7 @@ class PersistencyTest {
         //saves the game
         Persistency.saveLevel("junitTest9.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("level/junitTest9.json");
+        Level l1 = Persistency.loadLevel("junitTest9.json");
 
         //checks if level is the same as as saved one
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
@@ -239,7 +242,7 @@ class PersistencyTest {
         Player player = new Player(new Coord(5,5));
 
         ArrayList<Tile> walls = new ArrayList<>();
-        walls.add(new ExitTile(new Coord(0,0)));
+        walls.add(new ExitTile(new Coord(0,0),LevelE.LEVEL_ONE));
         walls.add(new Wall(new Coord(10,10)));
         walls.add(new Wall(new Coord(10,11)));
         //makes level
@@ -250,7 +253,7 @@ class PersistencyTest {
         //saves the game
         Persistency.saveLevel("junitTest9.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("level/junitTest9.json");
+        Level l1 = Persistency.loadLevel("junitTest9.json");
 
         //checks if level is the same as as saved one
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
@@ -285,7 +288,7 @@ class PersistencyTest {
         //saves the game
         Persistency.saveLevel("junitTest8.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("level/junitTest8.json");
+        Level l1 = Persistency.loadLevel("junitTest8.json");
 
 
         //checks if level is the same as as saved one
@@ -298,7 +301,7 @@ class PersistencyTest {
      * Test for saving:
      *
      * saves chap and board and walls and speical tiles
-     * also saving inventory
+     * also saving inventory, and tests if there are any errors
      * */
     @Test
     void saveLevel6(){
@@ -318,7 +321,8 @@ class PersistencyTest {
 
         walls.add(new LockedDoor(new Coord(10,5), Colour.PINK));
 
-       keys.add(new Key(new Coord(9,9), Colour.PINK));
+        keys.add(new Key(new Coord(9,9), Colour.PINK));
+
         treasures.add(new Treasure(new Coord(3,3)));
 
         player.setKeys(keys);
@@ -327,10 +331,12 @@ class PersistencyTest {
         Level l1Model = initalizeLevel(player, walls, entites);
 
 
+
+
         //saves level
         Persistency.saveLevel("junitTest9.json", l1Model);
 
-        Level l1 = Persistency.loadLevel("level/junitTest9.json");
+        Level l1 = Persistency.loadLevel("junitTest9.json");
 
         assertTrue(l1.board().toString().equals(l1Model.board().toString()));
 

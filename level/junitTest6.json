@@ -8,7 +8,8 @@
 
     "exit" : {
       "x" : 0,
-      "y" : 0
+      "y" : 0,
+      "next_level" : "1"
     },
     "walls" : [
       {
@@ -17,14 +18,14 @@
         "length_down" : 1,
         "length_up" : 0,
         "length_right" : 0,
-        "Length_left" : 0
+        "length_left" : 0
       }
     ],
     "lock_Door" : [
       {
-        "x": 1,
+        "x": 0,
         "y": 0,
-        "colour" : "pink"
+        "colour" : "red"
       }
     ],
     "exit_Lock" : [
@@ -52,9 +53,9 @@
       "inventory" : {
         "keys" : [
           {
-            "x" : 9,
-            "y" : 9,
-            "colour" : "pink"
+            "x" : 0,
+            "y" : 0,
+            "colour" : "red"
           }
         ],
         "treasures" : [
@@ -63,13 +64,8 @@
       }
 
     },
-
     "keys" : [
-      {
-        "x" : 9,
-        "y" : 9,
-        "colour" : "pink"
-      }
+
     ],
     "treasures" : [
       {

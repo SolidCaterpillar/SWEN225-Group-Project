@@ -34,6 +34,9 @@ public class Persistency{
      * current game
      */
     public static Level loadLevel(String path){
+        //pre-conditions to check for valid files
+        if(!path.contains(".json")) throw new IllegalArgumentException("file to be read is not json");
+
         //turns json file into json object
         JSONObject json = getJson(path);
 
@@ -75,12 +78,16 @@ public class Persistency{
      *
      */
     public static boolean saveLevel(String filename, Level savedLevel){
+
+        //pre-conditions to check for valid jsonfiles
+        if(!filename.contains(".json")) throw new IllegalArgumentException("File has to end with \".json\" extention ");
+
         //turns the objects of the level into a JSONobject
         JSONObject savedJson = SaveJson.saveAsJson(savedLevel);
         try{
             
             //save this JSONobject string into a file format
-            File nFile = new File("level/"+filename);
+            File nFile = new File(filename);
 
             FileWriter jsonLevel = new FileWriter(nFile);
 
@@ -88,6 +95,7 @@ public class Persistency{
             //format followed is identical to how the levels
             //are written
             jsonLevel.close();
+            
         }catch(IOException e){
             return false;
         }
@@ -119,7 +127,7 @@ public class Persistency{
             }
 
         }catch (IOException e){
-            System.out.println(e.toString());
+        
         }
 
         //turn that string in to json

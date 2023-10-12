@@ -1,4 +1,7 @@
 {
+
+    "level": 1,
+
     "dimension" : {
         "width" : 20,
         "length" : 20
@@ -8,7 +11,8 @@
 
         "exit" : {
             "x" : 9,
-            "y" : 5
+            "y" : 5,
+            "next_level" : "2"
         },
         "walls" : [
             {
@@ -17,7 +21,7 @@
                 "length_down" : 8,
                 "length_up" : 0,
                 "length_right" : 10,
-                "Length_left" : 0
+                "length_left" : 0
             },
             {
                 "x" : 14,
@@ -25,7 +29,7 @@
                 "length_down" : 0,
                 "length_up" : 8,
                 "length_right" : 0,
-                "Length_left" : 10
+                "length_left" : 10
             },
 
             {
@@ -34,7 +38,7 @@
                 "length_down" : 0,
                 "length_up" : 1,
                 "length_right" : 0,
-                "Length_left" : 0
+                "length_left" : 0
             },
 
             {
@@ -43,7 +47,7 @@
                 "length_down" : 0,
                 "length_up" : 1,
                 "length_right" : 0,
-                "Length_left" : 0
+                "length_left" : 0
             },
 
             {
@@ -52,7 +56,7 @@
                 "length_down" : 0,
                 "length_up" : 0,
                 "length_right" : 1,
-                "Length_left" : 0
+                "length_left" : 0
             }
         ],
         "lock_Door" : [
@@ -66,6 +70,7 @@
             {
                 "x" : 11,
                 "y" : 6
+
             }
         ],
         "question_Block" : [
@@ -97,11 +102,12 @@
         "keys" : [
             {
                 "x" : 13,
-                "y" : 9,
+                "y" : 5,
                 "colour" : "pink"
             }
+
         ],
-        
+
         "treasures" : [
             {
                 "x" : 7,
@@ -110,7 +116,7 @@
             {
                 "x" : 7,
                 "y" : 10
-            },
+            }
 
         ],
 

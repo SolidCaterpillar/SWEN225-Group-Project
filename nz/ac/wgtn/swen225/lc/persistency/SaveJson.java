@@ -8,6 +8,7 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Treasure;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
+import nz.ac.wgtn.swen225.lc.domain.LevelE;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 import nz.ac.wgtn.swen225.lc.domain.Colour;
 import nz.ac.wgtn.swen225.lc.domain.Board;
@@ -23,6 +24,7 @@ public class SaveJson {
      * so it be written on to a .json file
      *
      * @param saveLevel, level to be turned into a json obj
+     * 
      * @return JsonObject, json object with level field
      */
     public static JSONObject saveAsJson(Level saveLevel){
@@ -57,9 +59,12 @@ public class SaveJson {
      * json objects
      *
      * @param board, the board to be turned into a json
+     * 
      * @return JsonObject, json object with board info
+     * 
      */
     private static JSONObject saveTiles(Board board){
+
         JSONObject tiles = new JSONObject();
 
        //intalizes all json objects
@@ -80,12 +85,15 @@ public class SaveJson {
                 //checks what kind of tile
 
                 //if exit tile add to exitTile jsonObj
-                if(tile instanceof ExitTile){
-                    exit.put("x",tile.getLocation().x());
+                if(tile instanceof ExitTile ex){
+                    exit.put("x",ex.getLocation().x());
 
-                    exit.put("y",tile.getLocation().y());
+                    exit.put("y",ex.getLocation().y());
 
-                //if wall tile create new json obj, and add to WallJsonArray
+                    exit.put("next_level",loadNextLevel(ex.getNextLevel()));
+
+                // if locked door create new json obj, add to locked door
+                //json
                 }else if(tile instanceof LockedDoor lo){
 
                     obj.put("x",lo.getLocation().x());
@@ -95,7 +103,15 @@ public class SaveJson {
                     obj.put("colour", loadColour(lo.getColour()));
                     lockedDoor.put(obj);
 
-                    //if ExitLock create new json obj, add to LockedDoorArray
+                //if ExitLock create new json obj, add to LockedDoorArray
+                }else if(tile instanceof ExitLock){
+                    obj.put("x",tile.getLocation().x());
+
+                    obj.put("y",tile.getLocation().y());
+
+                    exitLock.put(obj);
+
+                //if wall tile create new json obj, and add to WallJsonArray
                 }else if(tile instanceof Wall){
 
                     obj.put("x",tile.getLocation().x());
@@ -105,18 +121,11 @@ public class SaveJson {
                     obj.put("length_down", 0);
                     obj.put("length_up", 0);
                     obj.put("length_right", 0);
-                    obj.put("Length_left", 0);
+                    obj.put("length_left", 0);
 
                     walls.put(obj);
 
-                //if LockedDoor create new json obj, add to LockedDoorArray
-                }else if(tile instanceof ExitLock){
-                    obj.put("x",tile.getLocation().x());
-
-                    obj.put("y",tile.getLocation().y());
-
-                    exitLock.put(obj);
-
+                
                 //if infoTile create new json obj, add to infoTileArray
                 }else if(tile instanceof InformationTile msg){
                     obj.put("x",msg.getLocation().x());
@@ -126,7 +135,7 @@ public class SaveJson {
                     obj.put("message",msg.getInformation() );
 
                     questionBlock.put(obj);
-                    break;
+                   
                 }
             }
 
@@ -182,6 +191,7 @@ public class SaveJson {
      * @return JsonObject, json object with player info
      */
     private static JSONObject savePlayer(Player p){
+
         JSONObject player = new JSONObject();
         JSONObject inventory = new  JSONObject();
 
@@ -275,6 +285,8 @@ public class SaveJson {
      * @param colour, enum rep of colour
      *
      * @return colour, string rep of colour
+     * 
+     * @exception IllegalArgumentException, if string colour not valid
     */
 
        private static String loadColour(Colour colour){
@@ -283,7 +295,31 @@ public class SaveJson {
                case PURPLE -> "purple";
                case RED -> "red";
                case YELLOW -> "yellow";
+               default -> throw new IllegalArgumentException();
            };
+       }
+
+           /**
+     * Takes a enum level, and turns it into
+     * string representation
+     *
+     * @param l, enum rep of level
+     *
+     * @return level, string rep of level
+     * 
+     * @exception IllegalArgumentException, if string level not valid
+    */
+
+
+       private static String loadNextLevel(LevelE l){
+            if (l == null)  return "null";
+            switch (l){
+                case LEVEL_ONE:
+                    return "1";
+                case LEVEL_TWO:
+                    return "2";
+            }
+            throw new IllegalArgumentException();
        }
 }
 

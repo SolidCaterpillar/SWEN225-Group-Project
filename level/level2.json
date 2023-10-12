@@ -8,7 +8,8 @@
 
         "exit" : {
             "x" : 9,
-            "y" : 3
+            "y" : 3,
+            "next_level" : "2"
         },
         "walls" : [
             {
@@ -17,7 +18,7 @@
                 "length_down" : 19,
                 "length_up" : 0,
                 "length_right" : 19,
-                "Length_left" : 0
+                "length_left" : 0
             },
             {
                 "x" : 19,
@@ -25,7 +26,7 @@
                 "length_down" : 0,
                 "length_up" : 19,
                 "length_right" : 0,
-                "Length_left" : 19
+                "length_left" : 19
             },
             {
                 "x" : 6,
@@ -33,7 +34,7 @@
                 "length_down" : 2,
                 "length_up" : 0,
                 "length_right" : 2,
-                "Length_left" : 0
+                "length_left" : 0
             },
 
             {
@@ -42,7 +43,7 @@
                 "length_down" : 1,
                 "length_up" : 0,
                 "length_right" : 0,
-                "Length_left" : 2
+                "length_left" : 2
             },
 
             {
@@ -51,7 +52,7 @@
                 "length_down" : 0,
                 "length_up" : 2,
                 "length_right" : 2,
-                "Length_left" : 0
+                "length_left" : 0
             },
 
             {
@@ -60,7 +61,7 @@
                 "length_down" : 0,
                 "length_up" : 1,
                 "length_right" : 0,
-                "Length_left" : 2
+                "length_left" : 2
             },
             {
                 "x" : 13,
@@ -68,7 +69,7 @@
                 "length_down" : 0,
                 "length_up" : 0,
                 "length_right" : 5,
-                "Length_left" : 0
+                "length_left" : 0
             },
             {
                 "x" : 13,
@@ -76,7 +77,7 @@
                 "length_down" : 0,
                 "length_up" : 0,
                 "length_right" : 5,
-                "Length_left" : 0
+                "length_left" : 0
             },
             {
                 "x" : 5,
@@ -84,7 +85,7 @@
                 "length_down" : 0,
                 "length_up" : 0,
                 "length_right" : 0,
-                "Length_left" : 4
+                "length_left" : 4
             },
             {
                 "x" : 5,
@@ -92,7 +93,7 @@
                 "length_down" : 0,
                 "length_up" : 0,
                 "length_right" : 0,
-                "Length_left" : 4
+                "length_left" : 4
             },
             {
                 "x" : 6,
@@ -100,7 +101,7 @@
                 "length_down" : 0,
                 "length_up" : 4,
                 "length_right" : 0,
-                "Length_left" : 0
+                "length_left" : 0
             },
             {
                 "x" : 12,
@@ -108,7 +109,7 @@
                 "length_down" : 0,
                 "length_up" : 4,
                 "length_right" : 0,
-                "Length_left" : 0
+                "length_left" : 0
             }
 
         ],
@@ -127,7 +128,8 @@
         "exit_Lock" : [
             {
                 "x" : 9,
-                "y" : 12
+                "y" : 12,
+                "next_level" : "null"
             }
         ],
         "question_Block" : [
@@ -168,7 +170,7 @@
                 "colour" : "red"
             }
         ],
-        
+
         "treasures" : [
             {
                 "x" : 14,
@@ -210,7 +212,7 @@
                 "x" : 9,
                 "y" : 11
             }
-  
+
         ],
 
         "enemies" : [

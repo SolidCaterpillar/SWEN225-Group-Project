@@ -3,6 +3,8 @@ package nz.ac.wgtn.swen225.lc.persistency;
 import nz.ac.wgtn.swen225.lc.persistency.plugin.main.java.org.json.*;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import nz.ac.wgtn.swen225.lc.domain.Entity.Enemy;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
@@ -10,6 +12,8 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Key;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
 import nz.ac.wgtn.swen225.lc.domain.Entity.Treasure;
 import nz.ac.wgtn.swen225.lc.domain.Coord;
+import nz.ac.wgtn.swen225.lc.domain.Domain;
+import nz.ac.wgtn.swen225.lc.domain.LevelE;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
 
 import nz.ac.wgtn.swen225.lc.domain.Colour;
@@ -26,8 +30,12 @@ public class ParseJson {
      * @return ReadJson, obj that contains all parsed game objs
      * 
      *  **/
-    public static ReadJson parse(JSONObject json){
-        
+    public static ReadJson parse(JSONObject json){ 
+
+        //pre-condtion to check if json objects are there
+        preCondition(json, List.of("dimension","tiles", "entites")," not found in main json file");
+
+
         //breaks apart the  "json" into the main 3 JSONObjs
         JSONObject dimensions = json.getJSONObject("dimension");
         JSONObject tilesJson = json.getJSONObject("tiles");
@@ -50,6 +58,9 @@ public class ParseJson {
      *  **/
     private static Entites parseEntites(JSONObject entites){
 
+        preCondition(entites, List.of("player","keys", "treasures", "enemies")," not found in entites");
+
+    
         //breaks apart "entites" JSON obj into the main
         //entites
         JSONObject jsonPlayer = entites.getJSONObject("player");
@@ -57,6 +68,8 @@ public class ParseJson {
         JSONArray jsonTreasure = entites.getJSONArray("treasures");
         JSONArray jsonEnemies = entites.getJSONArray("enemies");
         
+
+
         //creates vars to hold these entites
         Player player = createPlayer(jsonPlayer);
         ArrayList<Entity> allEntity = new ArrayList<>();
@@ -64,11 +77,14 @@ public class ParseJson {
         ArrayList<Treasure> treasures = new ArrayList<>();
         ArrayList<Enemy> enemies = new ArrayList<>();
 
-
+        
 
         //parses and creates new keys
         for(Object o : jsonKeys){
             if(o instanceof JSONObject key){
+
+                preCondition(key, List.of("x","y", "colour")," not found in key");
+
                 int x = key.getInt("x");
                 int y = key.getInt("y");
                 Colour keyColour = parseColour(key.getString("colour"));
@@ -79,6 +95,9 @@ public class ParseJson {
         //parses and creates new treasures
         for(Object o : jsonTreasure){
             if(o instanceof JSONObject treasure){
+
+                preCondition(treasure, List.of("x","y")," not found in treasure");
+
                 int x = treasure.getInt("x");
                 int y = treasure.getInt("y");
 
@@ -89,6 +108,9 @@ public class ParseJson {
         //parses and creates enemies in the game
         for(Object o : jsonEnemies){
             if(o instanceof JSONObject enemy){
+
+                preCondition(enemy, List.of("x","y")," not found in enemy");
+
                 int x = enemy.getInt("x");
                 int y = enemy.getInt("y");
 
@@ -106,6 +128,9 @@ public class ParseJson {
         return new Entites(player, treasures,keys,enemies, allEntity);
     }
 
+
+
+
     /**
      * Parses the tile objects from the json and puts them
      * in array list of tiles, that will be used to update
@@ -114,10 +139,15 @@ public class ParseJson {
      * @param jsonTiles, JSON containing info to construct tiles
      *
      * @return ArrayList<Tile>, returns all tiles in the game
+     * 
+     * @exception IllegalArgumentException if proper json
+     * fields are not read
      *  **/
     private static ArrayList<Tile> parseTiles(JSONObject jsonTiles){
-        ArrayList<Tile> tiles = new ArrayList<>();
 
+        preCondition(jsonTiles, List.of("exit","walls", "lock_Door", "exit_Lock", "question_Block")," not found in tiles");
+        ArrayList<Tile> tiles = new ArrayList<>();
+        
         //breaks apart "jsonTiles" into all spesific entity classes
         JSONObject exit = jsonTiles.getJSONObject("exit");
         JSONArray walls = jsonTiles.getJSONArray("walls");
@@ -128,16 +158,21 @@ public class ParseJson {
 
         //parses and constructs exit
         if(!exit.isEmpty()) {
+            
+            preCondition(exit, List.of("x", "y", "next_level")," not found in exit tile");
 
             int exitX = exit.getInt("x");
             int exitY = exit.getInt("y");
 
-            tiles.add(new ExitTile(new Coord(exitX, exitY)));
+            LevelE nextLevel = parseLevel(exit.getString("next_level"));
+            tiles.add(new ExitTile(new Coord(exitX, exitY), nextLevel));
         }
         //parses wall tiles
         for(Object o : walls){
             if(o instanceof JSONObject wall){
                 //starts where wall to be drawn
+                preCondition(wall, List.of("x", "y", "length_down", "length_up", "length_right", "length_left")," not found in walls");
+
 
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
@@ -145,7 +180,7 @@ public class ParseJson {
                 int lengthDown = wall.getInt("length_down");
                 int lengthUp = wall.getInt("length_up");
                 int lengthRight = wall.getInt("length_right"); 
-                int lengthLeft = wall.getInt( "Length_left");
+                int lengthLeft = wall.getInt( "length_left");
 
                 //creates new wall
                 tiles.add(new Wall(new Coord(x,y)));
@@ -172,11 +207,12 @@ public class ParseJson {
         //parses lock doors
         for(Object o : lockDoor){
             if(o instanceof JSONObject wall){
+                 preCondition(wall, List.of("x", "y")," not found in lockDoor");
+                 
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
                 Colour doorColour = parseColour(wall.getString("colour"));
 
-                //Key keyDoor = keys.stream().filter(e-> e.getColour() == doorColor).findFirst().orElseThrow(()-> new IllegalArgumentException());
                 tiles.add(new LockedDoor(new Coord(x,y),doorColour));
 
             }
@@ -185,6 +221,7 @@ public class ParseJson {
         //parses exit lock
             for(Object o : exitLock){
             if(o instanceof JSONObject wall){
+                preCondition(wall, List.of("x", "y")," not found in exit lock");
                 int x = wall.getInt("x");
                 int y = wall.getInt("y");
 
@@ -195,6 +232,9 @@ public class ParseJson {
         //parses question tiles 
         for(Object o : questionBlock){
              if(o instanceof JSONObject wall){
+
+                preCondition(wall, List.of("x", "y")," not found in question block");
+
                     int x = wall.getInt("x");
                     int y = wall.getInt("y");
                     String info = wall.getString("message");
@@ -214,10 +254,17 @@ public class ParseJson {
          *
      * @return Player, new constructed player
      * 
+     * @exception IllegalArgumentException if proper json
+     * fields are not read
+     * 
      *  **/
 
     public static Player createPlayer(JSONObject jsonPlayer){
-                //parses and creates new player
+        //parses and creates new player
+
+        //pre-condtion of player has valid field
+        preCondition(jsonPlayer, List.of("x", "y", "inventory")," not found in player");
+
         Player player = new Player(new Coord(jsonPlayer.getInt("x"), jsonPlayer.getInt("y")));
 
         JSONObject jsonInventory  =  jsonPlayer.getJSONObject("inventory");
@@ -225,9 +272,15 @@ public class ParseJson {
         ArrayList<Key> inventoryKey = new ArrayList<>();
         ArrayList<Treasure> inventoryTreasure = new ArrayList<>();
 
+        //pre-conditions for inventory
+        preCondition(jsonInventory, List.of("keys", "treasures")," not found in inventory");
+
         //adds key to player invetory
         for(Object o : jsonInventory.getJSONArray("keys")){
             if(o instanceof JSONObject key){
+
+                 preCondition(key, List.of("x", "y", "colour")," not found in keys in inventory");
+
                 Coord keyCO = new Coord(key.getInt("x"), key.getInt("y"));
 
                 inventoryKey.add(new Key(keyCO,parseColour(key.getString("colour"))));
@@ -238,6 +291,9 @@ public class ParseJson {
         //adds treasures to player inventory
         for(Object o : jsonInventory.getJSONArray("treasures")){
             if(o instanceof JSONObject tre){
+
+                preCondition(tre, List.of("x", "y")," not found in treasures in inventory");
+
                 Coord treCO = new Coord(tre.getInt("x"), tre.getInt("y"));
                 inventoryTreasure.add(new Treasure(treCO));
             }
@@ -246,6 +302,28 @@ public class ParseJson {
         player.setTreasure(inventoryTreasure);
         return player;
     }
+
+
+    /**
+     * preCondtions for parsing json objects. Checks if
+     * json objects needed to parse game object are
+     * present
+     * @param obj JSONObject to parsed
+     * @param conds all fields expected to be parsed
+     * @param text text for error messager
+     * 
+     * @exception IllegalArgumentException if proper json
+     * fields are not read
+     *
+     */
+
+    private static void preCondition(JSONObject obj, List<String> conds, String text){
+        
+        for(String cond : conds){
+            if(!obj.has(cond)) throw new IllegalArgumentException(cond+text+" while parsing json file");
+        }
+    }
+
     /**
      * Takes the string representation of the colour turning 
      * it into the enum version.
@@ -255,7 +333,7 @@ public class ParseJson {
      * @return Colour, enum of colour
      * 
      * @exception IllegalArgumentException, if a invalid colour
-     * as found
+     * is found
      *  **/
     
     private static Colour parseColour(String col){
@@ -271,7 +349,37 @@ public class ParseJson {
             case "yellow":
                 return Colour.YELLOW;
         }
+        //post condition
         //if color is not valid, will throw error
+        throw new IllegalArgumentException(); 
+    }
+
+    
+    /**
+     * Takes the int representation of the level turning 
+     * it into the enum version.
+     * 
+     * @param level, String rep of level
+     *
+     * @return LevelE, enum of level
+     * 
+     * @exception IllegalArgumentException, if a invalid level
+     * is found
+     *  **/
+
+     private static LevelE parseLevel(String level){
+        
+        switch(level){
+
+            case "1":
+                return LevelE.LEVEL_ONE;
+            case "2":
+                return LevelE.LEVEL_TWO;
+            case "null":
+                return null;
+        }
+        //post condition
+        //if int is not valid, will throw error
         throw new IllegalArgumentException(); 
     }
 
@@ -288,6 +396,15 @@ public class ParseJson {
      *  **/
     protected record Entites(Player player, ArrayList<Treasure> treasures, ArrayList<Key> keys ,ArrayList<Enemy> enemies, ArrayList<Entity> entites){
 
+        //compact constructor to check for pre-conditions
+        protected Entites {
+            if(player == null) throw new IllegalArgumentException("Player is invalid");
+            if(treasures == null) throw new IllegalArgumentException("treasures are invalid");
+            if(keys == null) throw new IllegalArgumentException("keys are invalid");
+            if(enemies == null) throw new IllegalArgumentException("enemies are invalid");
+            if(entites == null) throw new IllegalArgumentException("entites are invalid");
+
+        }
     }
 
     /**
@@ -302,5 +419,31 @@ public class ParseJson {
      *  **/
     protected record ReadJson(int width, int length, Entites entites, ArrayList<Tile> tiles){
 
+        protected ReadJson{
+            //compact constructor to check for pre-conditions
+            if(entites == null) throw new IllegalArgumentException("entites is invalid");
+            if(tiles == null) throw new IllegalArgumentException("tiles are invalid");
+
+
+            //finds all locked doors
+            ArrayList<LockedDoor> lockedDoors = tiles.stream()
+            .filter(t-> t instanceof LockedDoor).map(t->{return (LockedDoor) t;})
+            .collect(Collectors.toCollection(ArrayList::new));
+            
+            // post condition to make surre that a door 
+            // HAS 1 key corresponding
+            //adds all keys on the board, and player inventory
+            ArrayList<Key> keys = entites.keys();
+            keys.addAll(entites.player().getKeys());
+            int i = 0;
+            for(LockedDoor d : lockedDoors){
+            
+                int numOfKeys = keys.stream().filter(k-> k.getColour() == d.getColour()).toList().size();
+
+
+                if(numOfKeys == 0) throw new  IllegalArgumentException("no key correspond to one locked door");
+                if(numOfKeys != 1) throw new  IllegalArgumentException("more than one key correspond to one locked door");
+            }
+        }
     }
 }
