@@ -12,21 +12,22 @@ import nz.ac.wgtn.swen225.lc.recorder.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.util.Objects;
+import java.io.File;
+import java.io.IOException;
+
 
 /**
  * This is the GUI object that create the entirety of App
  * GUI creates a JFrame that will contain all the key components
+ * @author Devsdevera (Emmanuel De Vera)
  */
 public class GUI {
-
     private int currentLevel = 1; // Current game level
     private final int maxTime = 60;   // Sets up the time limit to count down from
     private int timeLeft = maxTime; // Time left for the current level
     private Timer timer; // Timer for counting down the time
     private int counter = 0; // Used with Modulus to turn milliseconds into seconds
-
 
 
     private JFrame mainFrame;   // This is the JFrame that contains everything
@@ -44,17 +45,13 @@ public class GUI {
     private Domain d;
     private GameCanvas canvas;
     private GameRenderer  renderer;
-
     private Tile[][] maze;
-
     private SoundManager soundManager;
-
 
 
     private String levelText = "Level";
     private String timeText = "Time";
     private String chipsText = "Chips";
-
 
 
     private final int tileSize = 68; // Adjust this size as needed for inventory
@@ -107,6 +104,9 @@ public class GUI {
         mainFrame.setVisible(true);
     }
 
+    /**
+     * Creating the GUI class will create all the JPanel Components
+     */
     private void addKeyListener(){
         mapPanel.addKeyListener(new KeyListener() {
             @Override
@@ -243,15 +243,6 @@ public class GUI {
         });
     }
 
-//    public static void sendToGUI(Tile[][] Maze, Player player, int Time, int Level){
-//
-//        if(replay.replay(frameNum).level() == 1) {
-//            this.d.pickLevel(LevelE.LEVEL_ONE);
-//            this.ch = replay.replay(3).player();
-//            this.maze = replay.replay(3).maze();
-//        }
-//
-//    }
 
     public void replayPane(Tile[][] Maze, Player player, int Time, int Level) {
         // Remove all components from the content pane
@@ -261,7 +252,7 @@ public class GUI {
         soundManager = new SoundManager();
 
         this.play = Persistency.loadLevel1();
-        // this.maze = play.board().getBoard();
+        this.maze = play.board().getBoard();
         this.d = new Domain();
         this.rec = new Recorder();
 
@@ -275,17 +266,13 @@ public class GUI {
         drawBoard();
         createSideBar();
         createMenuBar();
-
         // Reset Timer will initial create and start the timer
         resetTimer();
 
         // Add the key listener to the panel. All of these lines are required
         mapPanel.setFocusable(true);
         mapPanel.requestFocus();
-
         addKeyListener();
-
-
         // Revalidate and repaint the content pane
         contentPane.revalidate();
         contentPane.repaint();
@@ -414,7 +401,17 @@ public class GUI {
             if(!gamePaused){
                 // useful to always verify the state of the game
                 counter ++;
-                Domain.StateClass.checkGameState();
+                int status = Domain.StateClass.checkGameState();
+                if(status == 1){
+                    currentLevel = 2;
+                    timeLeft = 60;
+                }else if(status == 0){
+                    dialogBackground();
+                    timer.stop();
+                }else if(status == 2){
+                    dialogBackground();
+                    timer.stop();
+                }
                 redrawGUI();
                 renderer.reDrawBoard();
                 // Using modulus, every second the enemies move and the time decreases
@@ -580,32 +577,55 @@ public class GUI {
             }
         });
     }
-
-    private static boolean isNumeric(String str) {
-        if (str == null) {
-            return false;
-        }
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    public void dialogBackground(){
+        SwingUtilities.invokeLater(() -> {
+            JPanel customDialog = new JPanel(new BorderLayout()) {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    // Load the background image
+                    ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/background.png")));
+                    g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+                }
+            };
+            customDialog.setLayout(new FlowLayout());
+            JButton okButton = new JButton("OK");
+            okButton.addActionListener(e -> {
+                // Close the dialog
+                Window parentWindow = SwingUtilities.getWindowAncestor(okButton);
+                parentWindow.dispose();
+                timeLeft = maxTime;
+                replay(currentLevel);
+            });
+            customDialog.add(okButton);
+            JDialog dialog = new JDialog();
+            dialog.setContentPane(customDialog);
+            dialog.setSize(720, 405);
+            dialog.setLocationRelativeTo(null);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+            dialog.setVisible(true);
+        });
     }
+
+
 
     /**
      * Basic logic for decrementTime
      * If it hits 0 seconds left a basic JOptionPane is shown
      */
-    public void decrementTime(){
-        timeLeft --;
-        if(timeLeft < 1){
+    public void decrementTime() {
+        timeLeft--;
+        if (timeLeft < 1) {
             timer.stop();
             redrawGUI();
             renderer.reDrawBoard();
-            JOptionPane.showMessageDialog(null, "Replace this with a function to stop movement", "Information", JOptionPane.INFORMATION_MESSAGE);
+            dialogBackground();
         }
     }
+
+
+
 
 
     /**
@@ -947,8 +967,10 @@ public class GUI {
     public Player getPlayer(){
         return ch;
     }
-
-    public int getTimeLeft(){
+    public int getTime(){
         return timeLeft;
+    }
+    public void setTime(int time){
+        timeLeft = time;
     }
 }
