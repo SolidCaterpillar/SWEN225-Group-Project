@@ -24,7 +24,7 @@ public class GameRenderer extends JPanel implements Renderable {
     private final SoundManager sound;
     private final Composite renderables = new Composite();
     private final Player player;
-    private final Tile[][] maze;
+    private Tile[][] maze;
     private final List<Enemy> enemies;
     private final BoardRenderer boardRenderer;
     private final PlayerRenderer playerRenderer;
