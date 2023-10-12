@@ -69,6 +69,12 @@ public class GUI {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setResizable(false);
 
+        // Calculate the center of the screen
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - mainFrame.getWidth()) / 4;
+        int y = (screenSize.height - mainFrame.getHeight()) / 4;
+        mainFrame.setLocation(x, y); // Set the location to the center
+
         // Creating the objects of the other modules
         // The Following are Integrations of previous Modules
         soundManager = new SoundManager();
@@ -76,7 +82,7 @@ public class GUI {
 
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
-        this.d = new Domain();
+        this.d = Domain.getInstance();
         this.d.pickLevel(LevelE.LEVEL_ONE);
         this.ch = d.getPlayer();
         this.rec = new Recorder();
@@ -89,14 +95,11 @@ public class GUI {
         drawBoard();
         createSideBar();
         createMenuBar();
-
-        // Reset Timer will initial create and start the timer
         resetTimer();
 
         // Add the key listener to the panel. All of these lines are required
         mapPanel.setFocusable(true);
         mapPanel.requestFocus();
-
         addKeyListener();
 
         // complete the mainFrame functionality
@@ -114,11 +117,6 @@ public class GUI {
             public void keyTyped(KeyEvent e) {}  // This method is called when a key is typed
             @Override
             public void keyReleased(KeyEvent e) {} // This method is called when a key is released
-            /**
-             * All the input logic occurs below
-             * The following is lengthy but necessary
-             * @param e KeyEvent
-             */
             @Override
             public void keyPressed(KeyEvent e) {
                 // This method is called when a key is pressed
@@ -254,7 +252,7 @@ public class GUI {
 
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
-        //this.d = new Domain();
+        this.d = Domain.getInstance();
         this.rec = new Recorder();
 
         // Creating the render object and the canvas which display the board
@@ -288,20 +286,22 @@ public class GUI {
         soundManager = new SoundManager();
         this.play = Persistency.loadLevel1();
         this.maze = play.board().getBoard();
-        this.d = new Domain();
+        this.d = Domain.getInstance();
+        this.currentLevel = level;
         if(level == 1){
             this.play = Persistency.loadLevel1();
             this.maze = play.board().getBoard();
-            this.d = new Domain();
+            this.d = Domain.getInstance();
             this.d.pickLevel(LevelE.LEVEL_ONE);
         }else{
             this.play = Persistency.loadLevel1();
             this.maze = play.board().getBoard();
-            this.d = new Domain();
+            this.d = Domain.getInstance();
             this.d.pickLevel(LevelE.LEVEL_TWO);
         }
 
         this.ch = d.getPlayer();
+        this.ch.changeDir('s');
         this.renderer = new GameRenderer(maze, ch, d);
         this.canvas = new GameCanvas(renderer);
 
@@ -336,7 +336,6 @@ public class GUI {
             showInstructions = false;
         }
         if(Player.getInteract(ch)){
-            System.out.println("Testtt");
             soundManager.playItemCollectSound();
             ch.interaftFalse();
         }
@@ -406,10 +405,10 @@ public class GUI {
                     currentLevel = 2;
                     timeLeft = 60;
                 }else if(status == 0){
-                    dialogBackground();
+                    dialogBackground("died");
                     timer.stop();
                 }else if(status == 2){
-                    dialogBackground();
+                    dialogBackground("win");
                     timer.stop();
                 }
                 redrawGUI();
@@ -417,7 +416,7 @@ public class GUI {
                 // Using modulus, every second the enemies move and the time decreases
                 if(counter % 50 == 0) {
                     decrementTime();
-                    for (Enemy enemy : Domain.getEnemies()) {
+                    for (Enemy enemy : Domain.getInstance().getEnemies()) {
                         enemy.updateEnemy();
                         redrawGUI();
                         renderer.reDrawBoard();
@@ -578,36 +577,41 @@ public class GUI {
             }
         });
     }
-    public void dialogBackground(){
+    public void dialogBackground(String filename) {
         SwingUtilities.invokeLater(() -> {
             JPanel customDialog = new JPanel(new BorderLayout()) {
                 @Override
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     // Load the background image
-                    ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/background.png")));
+                    ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + filename + ".png")));
                     g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
                 }
             };
-            customDialog.setLayout(new FlowLayout());
-            JButton okButton = new JButton("OK");
+
+            JButton okButton = new JButton("Play Again");
             okButton.addActionListener(e -> {
                 // Close the dialog
                 Window parentWindow = SwingUtilities.getWindowAncestor(okButton);
                 parentWindow.dispose();
                 timeLeft = maxTime;
-                replay(currentLevel);
+                replay(filename.equals("win") ? 1 : currentLevel);
             });
-            customDialog.add(okButton);
+            okButton.setFocusable(false);
+            // Add the "OK" button to the SOUTH position of the BorderLayout
+            customDialog.add(okButton, BorderLayout.SOUTH);
+
             JDialog dialog = new JDialog();
+            dialog.setUndecorated(true);
             dialog.setContentPane(customDialog);
             dialog.setSize(720, 405);
-            dialog.setLocationRelativeTo(null);
+            dialog.setLocationRelativeTo(mainFrame);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
             dialog.setVisible(true);
         });
     }
+
 
 
 
@@ -621,7 +625,8 @@ public class GUI {
             timer.stop();
             redrawGUI();
             renderer.reDrawBoard();
-            dialogBackground();
+            soundManager.playDeathSound();
+            dialogBackground("time");
         }
     }
 
@@ -799,7 +804,7 @@ public class GUI {
             sprite2.setOpaque(false);
 
             ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
-            int z = (Domain.getTreasure().size() - ch.getTreasure().size()) + (Domain.getKeys().size() - ch.getKeys().size());
+            int z = (Domain.getInstance().getTreasure().size() - ch.getTreasure().size()) + (Domain.getInstance().getKeys().size() - ch.getKeys().size());
             for (int i = 0; i < 3; i++) {
                 // Create a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel();
@@ -868,6 +873,7 @@ public class GUI {
                     }
                 }
             };
+            cell.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             cell.setOpaque(false);
             inventoryPanel.add(cell);
         }
@@ -927,7 +933,7 @@ public class GUI {
      */
     public int[] keyInfo(){
         int x = ch.getKeys().size();
-        int y = Domain.getKeys().size();
+        int y = Domain.getInstance().getKeys().size();
 
         return new int[]{x, y};
     }
@@ -937,7 +943,7 @@ public class GUI {
      */
     public int[] treasureInfo(){
         int x = ch.getTreasure().size();
-        int y = Domain.getTreasure().size();
+        int y = Domain.getInstance().getTreasure().size();
 
         return new int[]{x, y};
     }
@@ -947,7 +953,7 @@ public class GUI {
      */
     public int[] doorInfo(){
         int x = ch.getTreasure().size();
-        int y = Domain.getTreasure().size();
+        int y = Domain.getInstance().getTreasure().size();
 
         return new int[]{x, y};
     }
