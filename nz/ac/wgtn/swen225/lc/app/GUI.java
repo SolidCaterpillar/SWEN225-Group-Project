@@ -154,7 +154,6 @@ public class GUI {
                             if (timer.isRunning()) {
                                 timer.stop();
                             }
-                            resetTimer();
                             replay(1);
                         }
                         case KeyEvent.VK_2 -> {
@@ -166,7 +165,6 @@ public class GUI {
                             if (timer.isRunning()) {
                                 timer.stop();
                             }
-                            resetTimer();
                             replay(2);
 
                         }
@@ -245,7 +243,17 @@ public class GUI {
         });
     }
 
-    public void replay2(String filename, int frameNum) {
+//    public static void sendToGUI(Tile[][] Maze, Player player, int Time, int Level){
+//
+//        if(replay.replay(frameNum).level() == 1) {
+//            this.d.pickLevel(LevelE.LEVEL_ONE);
+//            this.ch = replay.replay(3).player();
+//            this.maze = replay.replay(3).maze();
+//        }
+//
+//    }
+
+    public void replayPane(Tile[][] Maze, Player player, int Time, int Level) {
         // Remove all components from the content pane
         Container contentPane = mainFrame.getContentPane();
         contentPane.removeAll();
@@ -257,18 +265,10 @@ public class GUI {
         this.d = new Domain();
         this.rec = new Recorder();
 
-
-        Replay replay = new Replay(filename);
-
-        if(replay.replay(frameNum).level() == 1) {
-            this.d.pickLevel(LevelE.LEVEL_ONE);
-            this.ch = replay.replay(3).player();
-            this.maze = replay.replay(3).maze();
-        }
-
-
         // Creating the render object and the canvas which display the board
-        this.renderer = new GameRenderer(maze, ch, d);
+        this.timeLeft = Time;
+        this.currentLevel = Level;
+        this.renderer = new GameRenderer(Maze, player, d);
         this.canvas = new GameCanvas(renderer);
 
         // functions to draw App components
@@ -302,8 +302,14 @@ public class GUI {
         this.maze = play.board().getBoard();
         this.d = new Domain();
         if(level == 1){
+            this.play = Persistency.loadLevel1();
+            this.maze = play.board().getBoard();
+            this.d = new Domain();
             this.d.pickLevel(LevelE.LEVEL_ONE);
         }else{
+            this.play = Persistency.loadLevel1();
+            this.maze = play.board().getBoard();
+            this.d = new Domain();
             this.d.pickLevel(LevelE.LEVEL_TWO);
         }
 
@@ -334,8 +340,9 @@ public class GUI {
     public void moveChecker(char key) {
         soundManager.playPlayerMoveSound();
         if (ch.checkMove(key) == 1){
-            showInstructions = !showInstructions;
-            gamePaused = showInstructions;
+            showInstructions = true;
+        }else{
+            showInstructions = false;
         }
         if(Player.getInteract(ch)){
             System.out.println("Testtt");
@@ -365,21 +372,7 @@ public class GUI {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             // Get the selected file
             File selectedFile = fileChooser.getSelectedFile();
-            // Read the contents of the file
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(selectedFile));
-                String line;
-                timeText = selectedFile.getName();
-                System.out.println("Contents of " + selectedFile.getName() + ":");
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-                reader.close();
-                // used to catch IOException
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Error reading the file.");
-            }
+
         } else {
             System.out.println("No file selected.");
         }
@@ -401,16 +394,10 @@ public class GUI {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             // Get the selected file
             File selectedFile = fileChooser.getSelectedFile();
-            // Write "Hello, World!" to the file
             try {
-                FileWriter writer = new FileWriter(selectedFile);
-                writer.write("Hello, World!");
-                writer.close();
-                System.out.println("Successfully wrote 'Hello, World!' to " + selectedFile.getName());
-                timeText = selectedFile.getName();
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.err.println("Error writing to the file.");
+                rec.saveAsFile(selectedFile.getName() + ".json");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
             }
         } else {
             System.out.println("No file selected.");
@@ -553,10 +540,9 @@ public class GUI {
             if (timer.isRunning()) {
                 timer.stop();
             }
-            resetTimer();
             redrawGUI();
             renderer.reDrawBoard();
-            replay(2);
+            replay(1);
         });
         level2MenuItem.addActionListener(e -> {
             // Turn the current Level to two and reset
@@ -565,7 +551,6 @@ public class GUI {
             if (timer.isRunning()) {
                 timer.stop();
             }
-            resetTimer();
             redrawGUI();
             renderer.reDrawBoard();
             replay(2);
@@ -581,7 +566,6 @@ public class GUI {
             renderer.reDrawBoard();
         });
         replayMenuItem.addActionListener(e -> {
-            gamePaused = true;
             String currentDirectory = System.getProperty("user.dir");
             JFileChooser fileChooser = new JFileChooser(currentDirectory);
             int returnValue = fileChooser.showOpenDialog(null);
@@ -590,31 +574,7 @@ public class GUI {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 // Get the selected file
                 File selectedFile = fileChooser.getSelectedFile();
-                System.out.println(selectedFile.getName());
-
-                JTextField inputField = new JTextField(10);
-
-                // Create an array of JComponents to be displayed in the dialog
-                JComponent[] components = new JComponent[] {
-                        new JLabel("Enter a number:"),
-                        inputField
-                };
-
-                int result = JOptionPane.showConfirmDialog(null, components, "Number Input", JOptionPane.OK_CANCEL_OPTION);
-
-                if (result == JOptionPane.OK_OPTION) {
-                    String inputText = inputField.getText();
-                    if (isNumeric(inputText)) {
-                        int number = Integer.parseInt(inputText);
-                        replay2(selectedFile.getName(), number);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-
-
-
-                // Read the contents of the file
+                Replay replay = new Replay(selectedFile.getName());
             } else {
                 System.out.println("No file selected.");
             }
@@ -804,7 +764,7 @@ public class GUI {
 
         if(!showInstructions) {
             // Centered label at the first row
-            JLabel chipsLabel = new JLabel(chipsText);
+            JLabel chipsLabel = new JLabel("Relics");
             Font font = new Font("Arial", Font.BOLD, 20);
             chipsLabel.setFont(font);
 
@@ -818,11 +778,19 @@ public class GUI {
             sprite2.setOpaque(false);
 
             ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
+            int z = (Domain.getTreasure().size() - ch.getTreasure().size()) + (Domain.getKeys().size() - ch.getKeys().size());
             for (int i = 0; i < 3; i++) {
                 // Create a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel();
                 cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
                 cell.setBackground(Color.WHITE);
+
+                if (i == 1) {
+                    imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (z / 10) + ".png")));
+                }
+                if (i == 2) {
+                    imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (z % 10) + ".png")));
+                }
 
                 JLabel sprite = new JLabel();
                 sprite.setIcon(imageIcon);
@@ -850,8 +818,8 @@ public class GUI {
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inventoryPanel.setOpaque(false);
 
-        java.util.ArrayList<Entity> inven = new java.util.ArrayList<Entity>(ch.getTreasure());
-        inven.addAll(ch.getKeys());
+        java.util.ArrayList<Entity> inven = new java.util.ArrayList<Entity>(ch.getKeys());
+        inven.addAll(ch.getTreasure());
 
         for (int i = 0; i < 8; i++) {
             final Entity item;  // Declare item as final reference
@@ -938,8 +906,7 @@ public class GUI {
      */
     public int[] keyInfo(){
         int x = ch.getKeys().size();
-        //int y = Domain.getKeys().size();
-        int y = 5;
+        int y = Domain.getKeys().size();
 
         return new int[]{x, y};
     }
@@ -979,5 +946,9 @@ public class GUI {
      */
     public Player getPlayer(){
         return ch;
+    }
+
+    public int getTimeLeft(){
+        return timeLeft;
     }
 }
