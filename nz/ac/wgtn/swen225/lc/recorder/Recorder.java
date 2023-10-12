@@ -96,9 +96,11 @@ public class Recorder {
             JSONObject key = new JSONObject();
             key.put("x",keyList.get(i).getLocation().x());
             key.put("y",keyList.get(i).getLocation().y());
+            key.put("colour",getStringColour(keyList.get(i).getColour()));
             keyArray.put(key);
         }
         return keyArray ;
+
     }
 
 
