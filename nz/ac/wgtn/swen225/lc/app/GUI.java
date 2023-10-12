@@ -314,7 +314,7 @@ public class GUI {
         }
         rec.setRecord(currentLevel, timeLeft, ch, maze, d);
         try {
-            rec.saveAsFile("Larry_Croftâ€™s_Adventures");
+            rec.saveAsFile("game_save");
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -372,12 +372,15 @@ public class GUI {
                 counter ++;
                 int status = Domain.StateClass.checkGameState(currentLevel);
                 if(status == 1){
+                    soundManager.playLevelCompleteSound();
                     currentLevel = 2;
                     timeLeft = 60;
                 }else if(status == 0){
+                    soundManager.playDeathSound();
                     dialogBackground("died");
                     timer.stop();
                 }else if(status == 2){
+                    soundManager.playLevelCompleteSound();
                     dialogBackground("win");
                     timer.stop();
                 }
