@@ -102,6 +102,7 @@ public class GUI {
         // complete the mainFrame functionality
         mainFrame.pack();
         mainFrame.setVisible(true);
+        soundManager.playBackgroundMusic();
     }
 
     /**
