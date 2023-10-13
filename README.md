@@ -29,6 +29,9 @@ This is invalid as we should be able to compare Subtype instances to super Types
 
 * The other bugs are all detected inside the JSON plugins and not in our code or implementations.
 
+IMPORTANT:
+Recorder Violates package/module dependency as they have implemented packages from Domain which they shouldn't have and this shows up in UML.
+
 
 ## Game Display
 
