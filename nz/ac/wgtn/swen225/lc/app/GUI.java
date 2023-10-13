@@ -579,7 +579,7 @@ public class GUI {
      */
     public void decrementTime() {
         timeLeft--;
-        if (timeLeft < 1) {
+        if (timeLeft < 1 && !testing) {
             timer.stop();
             redrawGUI();
             soundManager.playDeathSound();
