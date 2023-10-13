@@ -1,4 +1,5 @@
 package nz.ac.wgtn.swen225.lc.fuzz;
+// Author: Takoda Teal
 
 import nz.ac.wgtn.swen225.lc.app.GUI;
 import org.junit.jupiter.api.Test;
@@ -96,6 +97,7 @@ public class FuzzTest {
                 loadLevel(2);
                 if(gui.getTime() <= 1){System.exit(0);}
             }
+
             Set<int[]> visited = new HashSet<>();
 
             //for each direction in path
@@ -115,6 +117,8 @@ public class FuzzTest {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                if(gui.isGameWon()){score += 500;}
 
                 //move player
                 gui.getPlayer().checkMove(charDirection);
@@ -324,29 +328,29 @@ public class FuzzTest {
      */
     private void testLevel(int level) {
 
-            // Make initial paths
-            Map<List<Integer[]>, Integer> currentPaths = initializeRandomTestPaths();
+        // Make initial paths
+        Map<List<Integer[]>, Integer> currentPaths = initializeRandomTestPaths();
 
-            // Loop X times
-            for (int i = 0; i < 10; i++) {
-                // Evaluate current paths
-                currentPaths = calculatePathScores(currentPaths, level);
-                // Make next paths based on calculations
-                currentPaths = nextEvolvedPaths(currentPaths);
-            }
+        // Loop X times
+        for (int i = 0; i < 10; i++) {
+            // Evaluate current paths
+            currentPaths = calculatePathScores(currentPaths, level);
+            // Make next paths based on calculations
+            currentPaths = nextEvolvedPaths(currentPaths);
+        }
 
     }
 
     /**
      *  Performs a fuzz test.
+     *  Sets gui into testing mode to avoid timer resets on death.
      *  This test method initializes the GUI, and fuzz tests for both level 1 and level 2.
      */
     @Test
     public void RunFuzzTest() {
-       gui = new GUI();
-       levelTest1();
+        gui = new GUI();
+        gui.setTesting();
+        levelTest1();
 
     }
-
-
-}
+}//final
