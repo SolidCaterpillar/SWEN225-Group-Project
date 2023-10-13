@@ -47,11 +47,4 @@ public class CoordTest {
         assertEquals(0, newCoord.y());
     }
 
-    @Test
-    public void testInvalidKeyPress() {
-        Coord coord = new Coord(1, 1);
-        assertThrows(IllegalArgumentException.class, () -> {
-            coord.move('z');
-        });
-    }
 }

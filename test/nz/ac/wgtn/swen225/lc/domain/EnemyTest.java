@@ -29,7 +29,6 @@ public class EnemyTest {
 
     @Test
     public void testUpdateEnemy() {
-        Board board = new Board(Board.initializeTiles());
         enemy.updateEnemy();
         assertNotEquals(new Coord(5, 5), enemy.getLocation());
     }
