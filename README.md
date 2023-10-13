@@ -17,7 +17,10 @@ The game has green tiles as background and trees as wall.
 
 There is also sound in game,it might be loud depending on the volume of testing machine.
 
+Preferably run on IntelliJ/Eclipse.
 
+Spotbugs:There are false positives for Scariest when Tile instances are compared to their subtypes. 
+This is invalid as we should be able to compare Subtype instances to super Types to confirm the subType is of the right subType.
 
 
 ## Game Display
