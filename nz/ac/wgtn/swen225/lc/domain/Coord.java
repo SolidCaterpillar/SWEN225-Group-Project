@@ -4,7 +4,7 @@ package nz.ac.wgtn.swen225.lc.domain;
 
 /**
  * Represents a 2D coordinate with x and y values.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public record Coord(int x, int y){
     //Storing location in an object.

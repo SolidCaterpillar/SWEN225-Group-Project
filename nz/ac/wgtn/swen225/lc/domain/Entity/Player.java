@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 /**
  * Represents the Player character in the game, providing functionality
  * for movement, interaction with game items, and game status checks.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public class Player implements Entity{
 

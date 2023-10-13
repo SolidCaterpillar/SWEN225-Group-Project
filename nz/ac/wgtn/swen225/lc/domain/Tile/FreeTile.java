@@ -11,7 +11,7 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
  * A FreeTile is a type of tile that players and certain entities can traverse. It can be empty or contain
  * specific entities like a player. This class extends the general Tile class to provide specific behavior
  * for tiles that are walkable by entities.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 
 public class FreeTile extends Tile{

@@ -16,7 +16,7 @@ import nz.ac.wgtn.swen225.lc.domain.Tile.*;
  * around the game board. Their movement is randomized but restricted by their movement history
  * to avoid repetitive patterns.
  *
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public class Enemy implements Entity{
 

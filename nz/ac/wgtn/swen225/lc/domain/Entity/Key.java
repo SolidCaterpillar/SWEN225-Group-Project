@@ -10,7 +10,7 @@ import nz.ac.wgtn.swen225.lc.domain.Coord;
  * to unlock doors of a specific colour. Each key has a unique colour associated
  * with it, which determines the type of door it can unlock.
  *
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 
 

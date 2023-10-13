@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * Represents a generic tile in the game board.
  * This class provides the base for all tile types, defining common attributes and operations.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 
 public class Tile {

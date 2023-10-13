@@ -8,7 +8,7 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Player;
  * Represents an information tile on the game board.
  * An InformationTile provides players with necessary details or hints about the game or its mechanics.
  * It inherits properties from the FreeTile but introduces an additional concept of carrying information.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 
 public class InformationTile extends FreeTile{

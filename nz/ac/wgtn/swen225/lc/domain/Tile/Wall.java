@@ -7,7 +7,7 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.Entity;
 /**
  * Represents a wall tile in the game board.
  * Wall tiles are barriers that prevent movement through them.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public class Wall extends Tile{
     

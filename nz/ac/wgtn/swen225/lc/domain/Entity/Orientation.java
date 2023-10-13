@@ -5,7 +5,7 @@ package nz.ac.wgtn.swen225.lc.domain.Entity;
  * Used to specify the direction of entities like players or enemies,
  * or to indicate the direction of movement or interaction.
  *
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public enum Orientation {
         NORTH,

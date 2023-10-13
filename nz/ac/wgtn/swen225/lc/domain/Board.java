@@ -12,7 +12,7 @@ import java.util.Arrays;
 
 /**
  * Represents a game board with tiles and entities.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public class Board {
 

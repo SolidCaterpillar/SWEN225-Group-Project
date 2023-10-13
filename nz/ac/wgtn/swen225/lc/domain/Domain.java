@@ -14,7 +14,7 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 /**
  * Represents the game domain, handling game state and game entities.
  * This class follows the Singleton pattern.
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public class Domain {
 

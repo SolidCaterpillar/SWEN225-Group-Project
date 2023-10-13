@@ -7,7 +7,7 @@ import nz.ac.wgtn.swen225.lc.domain.Coord;
  * Represents a treasure in the game world.
  * Treasures are collectible items that players might need to acquire as part of the game's objectives.
  *
- * @author gautamchai
+ * @author gautamchai ID: 300505029
  */
 public class Treasure implements Entity{
 
