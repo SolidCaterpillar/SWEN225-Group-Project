@@ -19,7 +19,7 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 public class Domain {
 
 
-    private static Domain instance;
+    private static Domain instance = new Domain();
 
 
     private Board curBoard;
@@ -56,9 +56,6 @@ public class Domain {
      * @return The singleton instance.
      */
     public static Domain getInstance() {
-        if (instance == null) {
-            instance = new Domain();
-        }
         return instance;
     }
 
@@ -84,6 +81,8 @@ public class Domain {
             case LEVEL_TWO:
                 curLevel = Persistency.loadLevel2();
                 break;
+            default:
+            	return;
         }
 
 
@@ -169,7 +168,7 @@ public class Domain {
      * It contains utilities for game state checks and transitions.
      * @author gautamchai
      */
-    public static class StateClass {
+    public static final class StateClass extends Domain {
         private static int currentLevel = 1; //starting level
 
 
@@ -207,7 +206,7 @@ public class Domain {
             Board curBoard = Domain.getInstance().curBoard;
             Player curPlayer = Domain.getInstance().curPlayer;
             // Check if the player is on an exit tile
-            if (curBoard.getTileAtLocation(curPlayer.getTrueLocation()) instanceof ExitTile extile) {
+            if (curBoard.getTileAtLocation(curPlayer.getTrueLocation()) instanceof ExitTile) {
                 currentLevel = level;
                 if (currentLevel == 1) {
                     System.out.println("Player reached the exit on level 1. Advancing to level 2...");
@@ -288,6 +287,13 @@ public class Domain {
     }
 
 
+    /**
+     * Indicates the state of the game in terms of won or running.
+     * @return boolean indicating whether game was won or not
+     */
+    public boolean getGameWon(){
+        return gameWon;
+    }
 
     /**
      * Saves the current game state to a file.

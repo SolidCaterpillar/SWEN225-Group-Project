@@ -85,7 +85,7 @@ public class Enemy implements Entity{
 
         movementHistory.offer(coord);
 
-        if (movementHistory.size() > 2) {
+        if (movementHistory.size() > 3) {
             movementHistory.poll();
         }
     }
