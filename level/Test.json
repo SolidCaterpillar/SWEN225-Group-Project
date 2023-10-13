@@ -1,0 +1,135 @@
+{
+
+    "dimension" : {
+        "length" : 20,
+        "width" : 20
+    },
+
+    "tiles" : {
+        "exit" : {
+            "x" : 7,
+            "y" : 5
+        },
+
+        "walls" : [
+            {
+                "x" : 4,
+                "y" : 4,
+                "length_down" : 8,
+                "length_up" : 0,
+                "length_right" : 10,
+                "Length_left" : 0
+            },
+            {
+                "x" : 14,
+                "y" : 12,
+                "length_down" : 0,
+                "length_up" : 8,
+                "length_right" : 0,
+                "Length_left" : 10
+            },
+
+            {
+                "x" : 6,
+                "y" : 5,
+                "length_down" : 1,
+                "length_up" : 0,
+                "length_right" : 0,
+                "Length_left" : 0
+            },
+
+            {
+                "x" : 8,
+                "y" : 5,
+                "length_down" : 1,
+                "length_up" : 0,
+                "length_right" : 0,
+                "Length_left" : 0
+            },
+
+            {
+                "x" : 10,
+                "y" : 5,
+                "length_down" : 1,
+                "length_up" : 0,
+                "length_right" : 0,
+                "Length_left" : 0
+            },
+
+            
+            {
+                "x" : 13,
+                "y" : 6,
+                "length_down" : 0,
+                "length_up" : 0,
+                "length_right" : 0,
+                "Length_left" : 1
+            }
+        ],
+
+        "lock_Door" : [
+            {
+                "x" : 7,
+                "y" : 6,
+                "colour" : "pink"
+                
+            }
+        ],
+        "exit_Lock" : [
+            {
+                "x" : 11,
+                "y" : 6
+            }
+        ],
+        "question_Block" : [
+            {
+                "x" : 12,
+                "y" : 7,
+                "message" : "Hi, please pick up all treasure to end the game"
+            }
+        ]
+    },
+
+    "entites" : {
+
+        "player" : {
+            "x" : 9,
+            "y" : 9,
+            "inventory" : []
+
+        },
+
+        "keys" : [
+            {
+                "x" : 9,
+                "y" : 5,
+                "colour" : "pink"
+            }
+        ],
+        
+        "treasures" : [
+            {
+                "x" : 7,
+                "y" : 8
+            },
+            {
+                "x" : 7,
+                "y" : 10
+            },
+            {
+                "x" : 11,
+                "y" : 8
+            },
+            {
+                "x" : 11,
+                "y" : 10
+            }
+        ],
+
+        "enemies" : []
+
+    }
+
+
+
+}
