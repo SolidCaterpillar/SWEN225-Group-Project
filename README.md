@@ -31,6 +31,7 @@ This is invalid as we should be able to compare Subtype instances to super Types
 
 IMPORTANT:
 Recorder Violates package/module dependency as they have implemented packages from Domain which they shouldn't have and this shows up in UML.
+Also causes Errors in the game when replay functionality is used as its not finished or working properly.
 
 
 ## Game Display
