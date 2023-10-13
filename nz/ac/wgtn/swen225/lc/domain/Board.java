@@ -200,6 +200,10 @@ public class Board {
         return newBoard.equals(thisBoard);
     }
 
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(board)*2;
+    }
 
     /**
      * Initializes an array of FreeTile tiles.

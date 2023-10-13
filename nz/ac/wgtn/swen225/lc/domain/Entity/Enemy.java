@@ -25,7 +25,7 @@ public class Enemy implements Entity{
     //Takes random moves and if the last 2 tiles contain next tile in moves doesn't take it.
     private Queue<Coord> movementHistory = new LinkedList<>();
 
-
+    Random rand = new Random();
 
     /**
      * Constructor to initialize the enemy with its starting position.
@@ -122,7 +122,7 @@ public class Enemy implements Entity{
      * @param array The array of coordinates to shuffle.
      */
     private void shuffleArray(Coord[] array) {
-        Random rand = new Random();
+
         for (int i = array.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
             Coord temp = array[index];

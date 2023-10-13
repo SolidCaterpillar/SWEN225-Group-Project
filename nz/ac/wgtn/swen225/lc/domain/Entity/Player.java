@@ -426,6 +426,9 @@ public class Player implements Entity{
         return true;
     }
 
+    public int hashCode() {
+        return location.hashCode()+ direction.hashCode();
+    }
 
 
 }
