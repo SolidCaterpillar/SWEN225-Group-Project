@@ -12,3 +12,9 @@ Level 1 simple with only 2 treasuresa and 1 key to collect
 Level 2 is with 5 actors/enemy  and 12 items to collect.
 There is also sound in game,it might be loud ddepending on the volume of testing machine.
 The game has green tiles as background and trees as wall. 
+
+
+
+## Game Display
+
+![image info](ReadMe.png)
