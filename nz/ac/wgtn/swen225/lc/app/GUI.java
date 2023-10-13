@@ -1,5 +1,4 @@
 package nz.ac.wgtn.swen225.lc.app;
-// Author: Emmanuel De Vera
 
 import nz.ac.wgtn.swen225.lc.domain.*;
 import nz.ac.wgtn.swen225.lc.domain.Tile.*;
@@ -7,7 +6,6 @@ import nz.ac.wgtn.swen225.lc.domain.Entity.*;
 import nz.ac.wgtn.swen225.lc.persistency.*;
 import nz.ac.wgtn.swen225.lc.renderer.*;
 import nz.ac.wgtn.swen225.lc.recorder.*;
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +16,9 @@ import java.io.IOException;
 
 
 /**
- * This is the GUI object that create the entirety of App
- * GUI creates a JFrame that will contain all the key components
- * @author Deveremma (Emmanuel De Vera) 300602434
+ * This is the GUI object that creates the entirety of App
+ * GUI creates a JFrame that will contain all the game's components
+ * @author Deveremma (Emmanuel De Vera) ID: 300602434
  */
 public class GUI {
     private int currentLevel = 1; // Current game level
@@ -31,7 +29,7 @@ public class GUI {
     private boolean testing = false;
 
 
-    private JFrame mainFrame;   // This is the JFrame that contains everything
+    private final JFrame mainFrame;   // This is the JFrame that contains everything
     private JPanel backPanel;   // This contains the background of the App
     private JPanel mapPanel;    // JPanel that contains the Board of the game
     private JPanel sidePanel;   // JPanel that holds all sidePanel subPanels
@@ -41,20 +39,17 @@ public class GUI {
     private JPanel inventoryPanel;  // Shows the keys that the player has collected
 
 
+    // Adding variables of my Dependencies with other Modules
     private Player ch;
     private Level play;
     private Domain d;
     private GameCanvas canvas;
     private GameRenderer  renderer;
     private Tile[][] maze;
-    private SoundManager soundManager;
+    private final SoundManager soundManager;
 
 
     private String levelText = "Level";
-    private String timeText = "Time";
-    private String chipsText = "Chips";
-
-
     private final int tileSize = 68; // Adjust this size as needed for inventory
     private boolean gamePaused = false; // Flag to track if the game is paused
     private boolean showInstructions = false;   // Tracking if Instructions are shown
@@ -77,7 +72,7 @@ public class GUI {
         mainFrame.setLocation(x, y); // Set the location to the center
 
         // Creating the objects of the other modules
-        // The Following are Integrations of previous Modules
+        // The Following are Integrations of dependency Modules
         soundManager = new SoundManager();
         soundManager.playGameStartSound();
 
@@ -132,16 +127,12 @@ public class GUI {
                                 System.exit(0);
                             }
                         }
-                        case KeyEvent.VK_S -> {
-                            // CTRL-S: Save the game state
+                        case KeyEvent.VK_S -> // CTRL-S: Save the game state
                             // Implement game state save logic
-                            writeFile();
-                        }
-                        case KeyEvent.VK_R -> {
-                            // CTRL-R: Resume a saved game
+                                writeFile();
+                        case KeyEvent.VK_R -> // CTRL-R: Resume a saved game
                             // Implement game state loading logic using a file selector
-                            loadFile();
-                        }
+                                loadFile();
                         case KeyEvent.VK_1 -> {
                             // CTRL-1: Start a new game at level 1
                             // Implement logic to start a new game at level 1
@@ -168,68 +159,44 @@ public class GUI {
                             // Implement logic to start a new game at level 2
                             showInstructions = !showInstructions;
                             gamePaused = showInstructions;
+                            levelText = !gamePaused ? "Level" : "Paused";
                         }
                     }
                 } else { // Handle regular key presses
                     if(!gamePaused){
                         switch (keyCode) {
                             case KeyEvent.VK_ESCAPE -> {
-                                gamePaused = true;
+                                gamePaused = true || showInstructions;
                                 levelText = "Paused";
                             }
-                            case KeyEvent.VK_UP -> {
-                                // Handle UP arrow key press (e.g., move up)
-                                moveChecker('w');
-                            }
-                            case KeyEvent.VK_LEFT -> {
-                                // Handle LEFT arrow key press (e.g., move left)
-                                moveChecker('a');
-                            }
-                            case KeyEvent.VK_DOWN -> {
-                                // Handle DOWN arrow key press (e.g., move down)
-                                moveChecker('s');
-                            }
-                            case KeyEvent.VK_RIGHT -> {
-                                // Handle RIGHT arrow key press (e.g., move right)
-                                moveChecker('d');
-                            }
-                            case KeyEvent.VK_W -> {
-                                // Handle UP arrow key press (e.g., move up)
-                                soundManager.playPlayerMoveSound();
-                                moveChecker('w');
-                            }
-                            case KeyEvent.VK_A -> {
-                                // Handle LEFT arrow key press (e.g., move left)
-                                soundManager.playPlayerMoveSound();
-                                moveChecker('a');
-                            }
-                            case KeyEvent.VK_S -> {
-                                // Handle DOWN arrow key press (e.g., move down)
-                                soundManager.playPlayerMoveSound();
-                                moveChecker('s');
-                            }
-                            case KeyEvent.VK_D -> {
-                                // Handle RIGHT arrow key press (e.g., move right)
-                                soundManager.playPlayerMoveSound();
-                                moveChecker('d');
-                            }
+                            case KeyEvent.VK_UP, KeyEvent.VK_W -> // Handle UP arrow key press (e.g., move up)
+                                    moveChecker('w');
+                            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> // Handle LEFT arrow key press (e.g., move left)
+                                    moveChecker('a');
+                            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> // Handle DOWN arrow key press (e.g., move down)
+                                    moveChecker('s');
+                            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> // Handle RIGHT arrow key press (e.g., move right)
+                                    moveChecker('d');
                         }
                     }else{
                         // This is to prevent pause conflicts
                         if (keyCode == KeyEvent.VK_ESCAPE) {
-                            gamePaused = showInstructions;
+                            gamePaused = false || showInstructions;
                             levelText = "Level";
                         }
                     }
                 }
                 redrawGUI();    // always redrawGUI per key input
-                renderer.reDrawBoard();
             }
         });
     }
 
     /**
      * A function for Recorder to send me parsed data to display for Replay functionality
+     * @param Maze is used to provide renderer with the current maze
+     * @param player will give all the player's information at a given pane
+     * @param Time will give the certain time Left of a given pane
+     * @param Level will display the level of the replay
      */
     public void replayPane(Tile[][] Maze, Player player, int Time, int Level) {
         // Remove all components from the content pane
@@ -265,6 +232,7 @@ public class GUI {
 
     /**
      * The code to replay the entire game based on the level choice
+     * @param level of the game that is to be replayed
      */
     public void replay(int level) {
         // Remove all components from the content pane
@@ -286,7 +254,6 @@ public class GUI {
         this.renderer = new GameRenderer(maze, ch, d);
         this.canvas = new GameCanvas(renderer);
 
-
         // Re-create components
         drawBoard();
         createSideBar();
@@ -303,10 +270,10 @@ public class GUI {
         contentPane.repaint();
     }
 
-
     /**
      * A helper method used when character must move.
      * Used to identify key game states like death and instructions
+     * @param key that has been pressed
      */
     public void moveChecker(char key) {
         soundManager.playPlayerMoveSound();
@@ -395,17 +362,15 @@ public class GUI {
                     timer.stop();
                 }
                 redrawGUI();
-                renderer.reDrawBoard();
                 // Using modulus, every second the enemies move and the time decreases
                 if(counter % 50 == 0) {
                     decrementTime();
                     redrawGUI();
                 }
-                if(counter % 20 == 0) {
+                if(counter % 15 == 0) {
                     for (Enemy enemy : Domain.getInstance().getEnemies()) {
                         enemy.updateEnemy();
                         redrawGUI();
-                        renderer.reDrawBoard();
                     }
                 }
             }
@@ -486,14 +451,12 @@ public class GUI {
             gamePaused = true;
             levelText = "Paused";
             redrawGUI();
-            renderer.reDrawBoard();
         });
         resumeMenuItem.addActionListener(e -> {
             // Pressing Resume Menu Item will set the pause boolean false
             gamePaused = false;
             levelText = "Level";
             redrawGUI();
-            renderer.reDrawBoard();
         });
         // Adding the JOptionPane alongside the MenuItem when clicked
         exitMenuItem.addActionListener(e -> {
@@ -519,7 +482,6 @@ public class GUI {
                 timer.stop();
             }
             redrawGUI();
-            renderer.reDrawBoard();
             replay(1);
         });
         level2MenuItem.addActionListener(e -> {
@@ -530,18 +492,17 @@ public class GUI {
                 timer.stop();
             }
             redrawGUI();
-            renderer.reDrawBoard();
             replay(2);
         });
         instructionsMenuItem.addActionListener(e -> {
             // Using a ternary operator to create a toggle and sync with gamePaused
             showInstructions = !showInstructions;
-            gamePaused = gamePaused || showInstructions;
+            gamePaused = showInstructions;
+            levelText = !gamePaused ? "Level" : "Paused";
 
             // if game is paused, and then show instructions.
             // if game is paused it must remain paused, if it is not, then do not be paused.
             redrawGUI();
-            renderer.reDrawBoard();
         });
         replayMenuItem.addActionListener(e -> {
             gamePaused = true;
@@ -553,7 +514,7 @@ public class GUI {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 // Get the selected file
                 File selectedFile = fileChooser.getSelectedFile();
-                Replay replay = new Replay(selectedFile.getName(), this);
+                new Replay(selectedFile.getName(), this);
             } else {
                 System.out.println("No file selected.");
             }
@@ -563,6 +524,7 @@ public class GUI {
     /**
      * A Method to send a JOptionPane Dialog with a background image.
      * Helpful to improve aesthetics
+     * @param filename used for retrieving ImageIcon
      */
     public void dialogBackground(String filename) {
         SwingUtilities.invokeLater(() -> {
@@ -586,7 +548,20 @@ public class GUI {
             okButton.setFocusable(false);
             // Add the "OK" button to the SOUTH position of the BorderLayout
             customDialog.add(okButton, BorderLayout.SOUTH);
-
+            okButton.setBackground(Color.DARK_GRAY);
+            okButton.setForeground(Color.WHITE);
+            okButton.setBorderPainted(false);
+            okButton.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            okButton.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    okButton.setBackground(Color.DARK_GRAY.brighter()); // Change to DARK_GRAY on mouse over
+                }
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    okButton.setBackground(Color.DARK_GRAY); // Change back to WHITE when the mouse exits
+                }
+            });
             JDialog dialog = new JDialog();
             dialog.setUndecorated(true);
             dialog.setContentPane(customDialog);
@@ -598,7 +573,6 @@ public class GUI {
         });
     }
 
-
     /**
      * Basic logic for decrementTime
      * If it hits 0 seconds left a basic JOptionPane is shown
@@ -608,20 +582,16 @@ public class GUI {
         if (timeLeft < 1) {
             timer.stop();
             redrawGUI();
-            renderer.reDrawBoard();
             soundManager.playDeathSound();
             dialogBackground("time");
         }
     }
 
-
     /**
      * Method for creating the level component of the sidebar
      */
     public void createLevelPanel() {
-
         int n = !showInstructions ? 2 : 1;
-
         levelPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -631,7 +601,6 @@ public class GUI {
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-
         // Set the background of levelPanel to be transparent
         levelPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -639,54 +608,43 @@ public class GUI {
         // Centered label at the first row
         if(!showInstructions){
 
-
             JLabel levelLabel = new JLabel(levelText);
             Font font = new Font("Arial", Font.BOLD, 20);
             levelLabel.setFont(font);
-
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 2; // Span two columns
             gbc.insets = new Insets(0, 0, 5, 0); // Add some spacing
             levelPanel.add(levelLabel, gbc);
-
             JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
             sprite2.setOpaque(false);
-
             ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
             for (int i = 0; i < 3; i++) {
                 // Create a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel();
                 cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
-
                 if (i == 2) {
                     imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + currentLevel + ".png")));
                 }
-
                 JLabel sprite = new JLabel();
                 sprite.setIcon(imageIcon);
-
                 cell.setOpaque(false);
                 cell.add(sprite);
                 sprite2.add(cell);
             }
-
             gbc.gridx = 0;
             gbc.gridy = 1; // Start from the second row
             gbc.gridwidth = 1; // Reset grid width to default
             gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
             levelPanel.add(sprite2, gbc);
         }
-
     }
 
     /**
      * Method for creating the Time component of the sidebar
      */
     public void createTimePanel(){
-
         int n = !showInstructions ? 2 : 3;
-
         timePanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -696,16 +654,13 @@ public class GUI {
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-
         timePanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         // Centered label at the first row
-
         if(!showInstructions) {
-            JLabel timeLabel = new JLabel(timeText);
+            JLabel timeLabel = new JLabel("Time");
             Font font = new Font("Arial", Font.BOLD, 20);
             timeLabel.setFont(font);
-
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.gridwidth = 2; // Span two columns
@@ -714,22 +669,18 @@ public class GUI {
 
             JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
             sprite2.setOpaque(false);
-
             ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
             for (int i = 0; i < 3; i++) {
                 // Create a small JPanel square which will contain the content of a Tile.
                 JPanel cell = new JPanel();
                 cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
                 cell.setBackground(Color.WHITE);
-
                 if (i == 1) {
                     imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (timeLeft / 10) + ".png")));
                 }
-
                 if (i == 2) {
                     imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (timeLeft % 10) + ".png")));
                 }
-
                 JLabel sprite = new JLabel();
                 sprite.setIcon(imageIcon);
                 cell.add(sprite);
@@ -743,7 +694,6 @@ public class GUI {
             gbc.gridwidth = 1; // Reset grid width to default
             gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
             timePanel.add(sprite2, gbc);
-
             timePanel.setBackground(Color.WHITE);
         }
 
@@ -753,9 +703,7 @@ public class GUI {
      * Method for creating the Treasure/Keys left component of the sidebar
      */
     public void createChipsPanel(){
-
         int n = !showInstructions ? 2 : 4;
-
         chipsPanel = new JPanel(new GridBagLayout()) {
             @Override
             protected void paintComponent(Graphics g) {
@@ -765,10 +713,8 @@ public class GUI {
                 g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
             }
         };
-
         chipsPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-
         if(!showInstructions) {
             // Centered label at the first row
             JLabel chipsLabel = new JLabel("Relics");
@@ -783,7 +729,6 @@ public class GUI {
 
             JPanel sprite2 = new JPanel(new GridLayout(1, 2)); // Two cells below the label
             sprite2.setOpaque(false);
-
             ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/0.png")));
             int z = (Domain.getInstance().getTreasure().size() - ch.getTreasure().size()) + (Domain.getInstance().getKeys().size() - ch.getKeys().size());
             for (int i = 0; i < 3; i++) {
@@ -791,28 +736,23 @@ public class GUI {
                 JPanel cell = new JPanel();
                 cell.setPreferredSize(new Dimension(tileSize / 2, tileSize / 2 + 10));
                 cell.setBackground(Color.WHITE);
-
                 if (i == 1) {
                     imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (z / 10) + ".png")));
                 }
                 if (i == 2) {
                     imageIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/" + (z % 10) + ".png")));
                 }
-
                 JLabel sprite = new JLabel();
                 sprite.setIcon(imageIcon);
                 cell.add(sprite);
                 cell.setOpaque(false);
-
                 sprite2.add(cell);
             }
-
             gbc.gridx = 0;
             gbc.gridy = 1; // Start from the second row
             gbc.gridwidth = 1; // Reset grid width to default
             gbc.insets = new Insets(0, 0, 0, 0); // Add some spacing
             chipsPanel.add(sprite2, gbc);
-
             chipsPanel.setBackground(Color.WHITE);
         }
     }
@@ -824,8 +764,7 @@ public class GUI {
         inventoryPanel = new JPanel(new GridLayout(2, 4));
         inventoryPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         inventoryPanel.setOpaque(false);
-
-        java.util.ArrayList<Entity> inven = new java.util.ArrayList<Entity>(ch.getKeys());
+        java.util.ArrayList<Entity> inven = new java.util.ArrayList<>(ch.getKeys());
         inven.addAll(ch.getTreasure());
 
         for (int i = 0; i < 8; i++) {
@@ -841,7 +780,6 @@ public class GUI {
                 protected void paintComponent(Graphics g) {
                     super.paintComponent(g);
                     // Load your background image
-
                     if (item instanceof Treasure) {
                         ImageIcon backgroundImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("icons/treasure.png")));
                         g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
@@ -859,7 +797,6 @@ public class GUI {
             inventoryPanel.add(cell);
         }
     }
-
 
     /**
      * Using all the sideBar components to comprise the full SideBar
@@ -886,7 +823,7 @@ public class GUI {
     }
 
     /**
-     * Important Method to Refresh the GUI for movement and sidePanel info
+     * An important method to refresh the GUI for movement and sidePanel info
      */
     public void redrawGUI() {
         // this is the only method to redraw the board
@@ -906,6 +843,7 @@ public class GUI {
         // this is needed to confirm the changes
         mainFrame.revalidate();
         mainFrame.repaint();
+        renderer.reDrawBoard();
     }
 
     /**
@@ -915,7 +853,6 @@ public class GUI {
     public int[] keyInfo(){
         int x = ch.getKeys().size();
         int y = Domain.getInstance().getKeys().size();
-
         return new int[]{x, y};
     }
     /**
@@ -925,7 +862,6 @@ public class GUI {
     public int[] treasureInfo(){
         int x = ch.getTreasure().size();
         int y = Domain.getInstance().getTreasure().size();
-
         return new int[]{x, y};
     }
     /**
@@ -935,7 +871,6 @@ public class GUI {
     public int[] doorInfo(){
         int x = ch.getTreasure().size();
         int y = Domain.getInstance().getTreasure().size();
-
         return new int[]{x, y};
     }
     /**
@@ -945,7 +880,6 @@ public class GUI {
     public int[] playerCoords(){
         int x = ch.getLocation().x();
         int y = ch.getLocation().y();
-
         return new int[]{x, y};
     }
     /**
@@ -955,7 +889,6 @@ public class GUI {
     public Player getPlayer(){
         return ch;
     }
-
     /**
      * Getter method for Fuzz to get the Player
      * @return the Time remaining
@@ -963,15 +896,13 @@ public class GUI {
     public int getTime(){
         return timeLeft;
     }
-
     /**
      * Setter method for Fuzz to set the Time
-     * @param time
+     * @param time This is used to override the time Left
      */
     public void setTime(int time){
         timeLeft = time;
     }
-
     /**
      * Checker method to see if the game is Won
      * @return Domain.getInstance().getGameWon()
@@ -979,7 +910,6 @@ public class GUI {
     public boolean isGameWon() {
         return Domain.getInstance().getGameWon();
     }
-
     /**
      * Determine whether this is Fuzz testing or Main testing
      */
