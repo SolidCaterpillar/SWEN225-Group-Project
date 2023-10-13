@@ -11,7 +11,7 @@ import java.util.List;
  * as a group. It implements the `Renderable` interface, allowing it to be used as a single rendering entity.
  * This class can be used to group and manage a collection of renderable objects and render them collectively on the same
  * graphics context.
- *  * @author Arnav Dogra (@dograarna)
+ *  * @author Arnav Dogra (@dograarna) ID:300630190
  *
  * @see Renderable
  */

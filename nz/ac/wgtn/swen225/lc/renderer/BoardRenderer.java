@@ -16,7 +16,7 @@ import java.awt.*;
  * It implements the `Renderable` interface, which defines the rendering behavior for game elements.
  * The class loads and manages tile icons, maps them to the corresponding tiles and entities, and draws the entire maze
  * on the board
- * @author Arnav Dogra (@dograarna)
+ * @author Arnav Dogra (@dograarna) ID:300630190
  *
  * @see Renderable
  * @see Tile

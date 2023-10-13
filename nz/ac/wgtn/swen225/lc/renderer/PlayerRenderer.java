@@ -13,7 +13,7 @@ import java.awt.*;
  * This class manages the rendering of the player character using provided data such as the player object, tile size, and
  * icon folder. It supports rendering the player character facing different directions.
  *
- * @author Arnav Dogra (@dograarna)
+ * @author Arnav Dogra (@dograarna) ID:300630190
  *
  * @see Renderable
  * @see Player

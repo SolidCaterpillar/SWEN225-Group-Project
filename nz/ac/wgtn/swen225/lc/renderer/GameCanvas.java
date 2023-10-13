@@ -6,7 +6,7 @@ import java.awt.*;
 /**
  * The GameCanvas class represents the canvas where the game is displayed.
  * It extends JPanel and provides focus region.
- * @author Arnav Dogra (@dograarna)
+ * @author Arnav Dogra (@dograarna) ID:300630190
  */
 public class GameCanvas extends JPanel {
 

@@ -10,7 +10,7 @@ import java.util.List;
  * The EnemyRenderer class is responsible for rendering enemy entities on the game board.
  * It implements the `Renderable` interface, which defines the rendering behavior for game elements.
  * This class manages the rendering of enemy entities using provided data such as the list of enemies, tile size, and icon folder.
- *@author Arnav Dogra (@dograarna)
+ *@author Arnav Dogra (@dograarna) ID:300630190
  *
  * @see Renderable
  * @see Enemy

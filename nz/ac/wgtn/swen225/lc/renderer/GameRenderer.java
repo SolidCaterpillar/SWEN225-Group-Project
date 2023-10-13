@@ -14,7 +14,7 @@ import java.util.List;
  * The GameRenderer class is responsible for handling the rendering logic for the game.
  * It renders the game board, player, and enemy actors on the game canvas.
  *
- * @author Arnav Dogra (@dograarna)
+ * @author Arnav Dogra (@dograarna) ID:300630190
  */
 public class GameRenderer extends JPanel implements Renderable {
 
