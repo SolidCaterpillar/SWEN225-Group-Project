@@ -19,8 +19,15 @@ There is also sound in game,it might be loud depending on the volume of testing 
 
 Preferably run on IntelliJ/Eclipse.
 
-Spotbugs:There are false positives for Scariest when Tile instances are compared to their subtypes. 
-This is invalid as we should be able to compare Subtype instances to super Types to confirm the subType is of the right subType.
+Spotbugs:
+
+* There are false positives for Scariest when Tile instances are compared to their subtypes. 
+This is invalid as we should be able to compare Subtype instances to super Types to confirm the subType is of the right subType. This is likely caused by new Java features detected by Spotbugs as ERRORS/Problems such as 
+- instance object declarations all over the code -> for eg. if(Type instanceof SubType Obj) the Obj declaration inside the if statement is picked up as a bug...
+
+* There are two things pulled up by spot bugs for Fuzz, they are both Troubling(14), High Confidence. They state that the two randomized variables are only used once. This is not true as they are randomized each time it loops through the for loop.
+
+* The other bugs are all detected inside the JSON plugins and not in our code or implementations.
 
 
 ## Game Display
