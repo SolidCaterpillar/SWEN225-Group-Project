@@ -28,6 +28,7 @@ public class GUI {
     private int timeLeft = maxTime; // Time left for the current level
     private Timer timer; // Timer for counting down the time
     private int counter = 0; // Used with Modulus to turn milliseconds into seconds
+    private boolean testing = false;
 
 
     private JFrame mainFrame;   // This is the JFrame that contains everything
@@ -227,7 +228,9 @@ public class GUI {
         });
     }
 
-
+    /**
+     * A function for Recorder to send me parsed data to display for Replay functionality
+     */
     public void replayPane(Tile[][] Maze, Player player, int Time, int Level) {
         // Remove all components from the content pane
         Container contentPane = mainFrame.getContentPane();
@@ -260,6 +263,9 @@ public class GUI {
         contentPane.repaint();
     }
 
+    /**
+     * The code to replay the entire game based on the level choice
+     */
     public void replay(int level) {
         // Remove all components from the content pane
         Container contentPane = mainFrame.getContentPane();
@@ -298,6 +304,10 @@ public class GUI {
     }
 
 
+    /**
+     * A helper method used when character must move.
+     * Used to identify key game states like death and instructions
+     */
     public void moveChecker(char key) {
         soundManager.playPlayerMoveSound();
         int stepState = Domain.StateClass.movePlayer(key);
@@ -375,7 +385,7 @@ public class GUI {
                     soundManager.playLevelCompleteSound();
                     currentLevel = 2;
                     timeLeft = 60;
-                }else if(status == 0){
+                }else if(status == 0 && !testing){
                     soundManager.playDeathSound();
                     dialogBackground("died");
                     timer.stop();
@@ -389,6 +399,9 @@ public class GUI {
                 // Using modulus, every second the enemies move and the time decreases
                 if(counter % 50 == 0) {
                     decrementTime();
+                    redrawGUI();
+                }
+                if(counter % 20 == 0) {
                     for (Enemy enemy : Domain.getInstance().getEnemies()) {
                         enemy.updateEnemy();
                         redrawGUI();
@@ -546,6 +559,11 @@ public class GUI {
             }
         });
     }
+
+    /**
+     * A Method to send a JOptionPane Dialog with a background image.
+     * Helpful to improve aesthetics
+     */
     public void dialogBackground(String filename) {
         SwingUtilities.invokeLater(() -> {
             JPanel customDialog = new JPanel(new BorderLayout()) {
@@ -598,7 +616,7 @@ public class GUI {
 
 
     /**
-     *
+     * Method for creating the level component of the sidebar
      */
     public void createLevelPanel() {
 
@@ -663,7 +681,7 @@ public class GUI {
     }
 
     /**
-     *
+     * Method for creating the Time component of the sidebar
      */
     public void createTimePanel(){
 
@@ -732,7 +750,7 @@ public class GUI {
     }
 
     /**
-     *
+     * Method for creating the Treasure/Keys left component of the sidebar
      */
     public void createChipsPanel(){
 
@@ -937,10 +955,35 @@ public class GUI {
     public Player getPlayer(){
         return ch;
     }
+
+    /**
+     * Getter method for Fuzz to get the Player
+     * @return the Time remaining
+     */
     public int getTime(){
         return timeLeft;
     }
+
+    /**
+     * Setter method for Fuzz to set the Time
+     * @param time
+     */
     public void setTime(int time){
         timeLeft = time;
+    }
+
+    /**
+     * Checker method to see if the game is Won
+     * @return Domain.getInstance().getGameWon()
+     */
+    public boolean isGameWon() {
+        return Domain.getInstance().getGameWon();
+    }
+
+    /**
+     * Determine whether this is Fuzz testing or Main testing
+     */
+    public void setTesting(){
+        this.testing = true;
     }
 }
