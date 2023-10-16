@@ -1,0 +1,63 @@
+{
+  "dimension" : {
+    "width" : 20,
+    "length" : 20
+  },
+
+  "tiles" : {
+
+    "exit" : {
+    },
+    "walls" : [
+      {
+        "x" : 10,
+        "y" : 10,
+        "length_down" : 1,
+        "length_up" : 0,
+        "length_right" : 0,
+        "length_left" : 0
+      }
+    ],
+    "lock_Door" : [
+
+    ],
+    "exit_Lock" : [
+
+    ],
+    "question_Block" : [
+
+    ]
+
+  },
+
+  "entites" : {
+
+    "player" : {
+      "x" : 5,
+      "y" : 5,
+
+      "inventory" : {
+        "keys" : [
+
+        ],
+        "treasures" : [
+
+        ]
+      }
+
+    },
+
+    "keys" : [
+
+    ],
+
+    "treasures" : [
+    ],
+
+    "enemies" : [
+
+    ]
+
+  }
+
+}

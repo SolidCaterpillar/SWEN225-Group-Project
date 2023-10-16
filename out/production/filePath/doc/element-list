@@ -1,0 +1,12 @@
+nz.ac.wgtn.swen225.lc.app
+nz.ac.wgtn.swen225.lc.domain
+nz.ac.wgtn.swen225.lc.domain.Entity
+nz.ac.wgtn.swen225.lc.domain.Tile
+nz.ac.wgtn.swen225.lc.fuzz
+nz.ac.wgtn.swen225.lc.persistency
+nz.ac.wgtn.swen225.lc.persistency.plugin.main.java.org.json
+nz.ac.wgtn.swen225.lc.recorder
+nz.ac.wgtn.swen225.lc.recorder.plugin.main.java.org.json
+nz.ac.wgtn.swen225.lc.renderer
+org.json
+test.nz.ac.wgtn.swen225.lc.domain
